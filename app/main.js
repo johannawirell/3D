@@ -27,53 +27,64 @@ const main = () => {
     
       renderer.render(scene, camera)
     }
+    const scene = createScene()
+    const camera = createCamera()
+    const renderer = createRenderer()
+    const controls = createControls(camera, renderer)
 
-    const moveCamera = () => {
-      camera.position.setZ(CAMERA_POSITION_Z)
-      camera.position.setY(CAMERA_POSITION_Y)
-    }
+    animate()
+  } catch (err) {
+    console.log(err)
+  }
+}
 
-    // SCENE
-    const scene = new THREE.Scene()
+function createScene() {
+  const scene = new THREE.Scene()
     scene.add(
       pointLight,
       ambientLight,
       plane,
       tindra
     )
+  return scene
+}
 
-    // CAMERA
-    const camera = new THREE.PerspectiveCamera(
-      FIELD_OF_VIEW,
-      ASPECT_RATIO,
-      VIEW_FRUSTUM1,
-      VIEW_FRUSTUM2
-    )
-    moveCamera()
+function createCamera() {
+  const camera = new THREE.PerspectiveCamera(
+    FIELD_OF_VIEW,
+    ASPECT_RATIO,
+    VIEW_FRUSTUM1,
+    VIEW_FRUSTUM2
+  )
+  camera.position.setZ(CAMERA_POSITION_Z)
+  camera.position.setY(CAMERA_POSITION_Y)
 
-    // RENDERER
-    const renderer = new THREE.WebGL1Renderer({
-      canvas: document.querySelector('#background'),
-      // antialias: true BEHÖVS?
-    })
-    renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
+  return camera
+}
 
-    // CONTROLS
-    const controls = new OrbitControls(
-      camera,
-      renderer.domElement
-    )
-    controls.enableDamping = true
-    controls.minDistance = MIN_DISTANSE
-    controls.maxDistance = MAX_DISTANCE 
-    controls.enablePan = true
-    controls.maxPolarAngle = POLAR_ANGLE
+function createRenderer() {
+  const renderer = new THREE.WebGL1Renderer({
+    canvas: document.querySelector('#background'),
+    // antialias: true BEHÖVS?
+  })
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
 
-    animate()
-  } catch (err) {
-    console.log(err)
-  }
+  return renderer
+}
+
+function createControls(camera, renderer) {
+  const controls = new OrbitControls(
+    camera,
+    renderer.domElement
+  )
+  controls.enableDamping = true
+  controls.minDistance = MIN_DISTANSE
+  controls.maxDistance = MAX_DISTANCE 
+  controls.enablePan = true
+  controls.maxPolarAngle = POLAR_ANGLE
+
+  return controls
 }
 
 main()
