@@ -1,43 +1,33 @@
 import './css/index.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { torus } from './components/objects/object'
-import { createStar } from './components/objects/star'
 import { tindra } from './components/objects/tindra'
+import { plane } from './components/objects/plane'
 import { 
   pointLight,
-  ambientLight,
-  lightHelper
+  ambientLight
 } from './components/light'
-
-import { 
-  gridHelper
-} from './components/helpers'
 
 const FIELD_OF_VIEW = 75
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
 const VIEW_FRUSTUM1 = 0.1
 const VIEW_FRUSTUM2 = 1000
-const CAMERA_POSITION_Z = 30
+const CAMERA_POSITION_Z = 50
+const CAMERA_POSITION_Y = 10
 
 const main = () => {
   try {
     const animate = () => {
       requestAnimationFrame(animate)
     
-      torus.rotation.x += 0.001
-      torus.rotation.y += 0.005
-      torus.rotation.z += 0.01
-    
       controls.update()
     
       renderer.render(scene, camera)
     }
 
-    const addStars = number => {
-      for (let i = 0; i < number; i++) {
-        scene.add(createStar())
-      }
+    const moveCamera = () => {
+      camera.position.setZ(CAMERA_POSITION_Z)
+      camera.position.setY(CAMERA_POSITION_Y)
     }
 
     const scene = new THREE.Scene()
@@ -53,7 +43,6 @@ const main = () => {
 
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
-    camera.position.setZ(CAMERA_POSITION_Z) // Move camera
 
     const controls = new OrbitControls(
       camera,
@@ -61,18 +50,14 @@ const main = () => {
     )
 
     scene.add(
-      torus,
       pointLight,
       ambientLight,
-      lightHelper,
-      gridHelper,
+      plane,
       tindra
-
     )
 
-    addStars(200)
-
     animate()
+    moveCamera()
   } catch (err) {
     console.log(err)
   }
