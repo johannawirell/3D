@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { torus } from './components/objects/object'
 import { createStar } from './components/objects/star'
+import { tindra } from './components/objects/tindra'
 import { 
   pointLight,
   ambientLight,
@@ -65,6 +66,7 @@ const main = () => {
       ambientLight,
       lightHelper,
       gridHelper,
+      tindra
 
     )
 
