@@ -9,8 +9,7 @@ import {
   ambientLight
 } from './components/light'
 
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-const PATH_TO_MODEL = './models/Soldier.glb'
+
 
 const FIELD_OF_VIEW = 10
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
@@ -36,6 +35,7 @@ const main = () => {
     const playerController = new PlayerController()
     const camera = createCamera()
     let scene = createScene()
+    scene = playerController.addPlayerTo(scene)
     const renderer = createRenderer()
     const controls = createControls(camera, renderer)
 
@@ -46,26 +46,14 @@ const main = () => {
 }
 
 function createScene() {
-  const scene = new THREE.Scene()
-   
+  let scene = new THREE.Scene()
 
-    new GLTFLoader()
-      .load(PATH_TO_MODEL, gltf => {
-          const model = gltf.scene
-          model.traverse(obj => {
-              if (obj.isMesh) {
-                  obj.castShadow = true
-              }
-          })
-          scene.add(
-            pointLight,
-            ambientLight,
-            plane,
-            model
-            // tindra
-          )
-  })
-    createPlayer()
+  scene.add(
+    pointLight,
+    ambientLight,
+    plane,
+    // tindra
+  )
   return scene
 }
 
@@ -86,7 +74,7 @@ function createCamera() {
 function createRenderer() {
   const renderer = new THREE.WebGL1Renderer({
     canvas: document.querySelector('#background'),
-    // antialias: true BEHÖVS?
+    antialias: true 
   })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
@@ -106,10 +94,6 @@ function createControls(camera, renderer) {
   controls.maxPolarAngle = POLAR_ANGLE
 
   return controls
-}
-
-function createPlayer() {
-  
 }
 
 main()
