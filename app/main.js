@@ -1,5 +1,6 @@
 import './css/index.css'
 import * as THREE from 'three'
+import { torus } from './components/object'
 
 const FIELD_OF_VIEW = 75
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
@@ -22,4 +23,11 @@ renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
 camera.position.setZ(CAMERA_POSITION_Z) // Move camera
 
-renderer.render(scene, camera)
+scene.add(torus)
+
+function animate (){
+  requestAnimationFrame(animate)
+  renderer.render(scene, camera)
+}
+
+animate()
