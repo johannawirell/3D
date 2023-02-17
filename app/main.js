@@ -19,7 +19,7 @@ const CAMERA_POSITION_Z = 50
 const CAMERA_POSITION_Y = 5
 const CAMERA_POSITION_X = 5
 const MIN_DISTANSE = 5
-const MAX_DISTANCE = 150
+const MAX_DISTANCE = 300
 const POLAR_ANGLE = Math.PI / 2 - 0.05
 
 const main = () => {
