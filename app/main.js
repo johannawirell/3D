@@ -30,17 +30,28 @@ const main = () => {
       camera.position.setY(CAMERA_POSITION_Y)
     }
 
+    // SCENE
     const scene = new THREE.Scene()
+    scene.add(
+      pointLight,
+      ambientLight,
+      plane,
+      tindra
+    )
+
+    // CAMERA
     const camera = new THREE.PerspectiveCamera(
       FIELD_OF_VIEW,
       ASPECT_RATIO,
       VIEW_FRUSTUM1,
       VIEW_FRUSTUM2
-      )
+    )
+    moveCamera()
+
+    // RENDERER
     const renderer = new THREE.WebGL1Renderer({
       canvas: document.querySelector('#background')
     })
-
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
 
@@ -49,15 +60,7 @@ const main = () => {
       renderer.domElement
     )
 
-    scene.add(
-      pointLight,
-      ambientLight,
-      plane,
-      tindra
-    )
-
     animate()
-    moveCamera()
   } catch (err) {
     console.log(err)
   }
