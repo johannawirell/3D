@@ -1,7 +1,8 @@
 import './css/index.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { torus } from './components/object'
+import { torus } from './components/objects/object'
+import { createStar } from './components/objects/star'
 import { 
   pointLight,
   ambientLight,
@@ -20,6 +21,24 @@ const CAMERA_POSITION_Z = 30
 
 const main = () => {
   try {
+    const animate = () => {
+      requestAnimationFrame(animate)
+    
+      torus.rotation.x += 0.001
+      torus.rotation.y += 0.005
+      torus.rotation.z += 0.01
+    
+      controls.update()
+    
+      renderer.render(scene, camera)
+    }
+
+    const addStars = number => {
+      for (let i = 0; i < number; i++) {
+        scene.add(createStar())
+      }
+    }
+
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(
       FIELD_OF_VIEW,
@@ -40,26 +59,16 @@ const main = () => {
       renderer.domElement
     )
 
-    const animate = () => {
-      requestAnimationFrame(animate)
-    
-      torus.rotation.x += 0.001
-      torus.rotation.y += 0.005
-      torus.rotation.z += 0.01
-    
-      controls.update()
-    
-      renderer.render(scene, camera)
-    }
-
     scene.add(
       torus,
       pointLight,
       ambientLight,
       lightHelper,
-      gridHelper
+      gridHelper,
+
     )
 
+    addStars(200)
 
     animate()
   } catch (err) {
