@@ -2,6 +2,7 @@ import './css/index.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { PlayerController } from './components/controllers/playerController'
+import { HorseController } from './components/controllers/horseController'
 import { tindra } from './components/objects/tindra'
 import { plane } from './components/objects/plane'
 import { 
@@ -33,9 +34,12 @@ const main = () => {
     }
 
     const playerController = new PlayerController()
+    const horseController = new HorseController()
+
     const camera = createCamera()
     let scene = createScene()
     scene = playerController.addPlayerTo(scene)
+    scene = horseController.addHorseTo(scene)
     const renderer = createRenderer()
     const controls = createControls(camera, renderer)
 
