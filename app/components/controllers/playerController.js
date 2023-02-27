@@ -5,6 +5,9 @@ const WALK = 'Walk'
 const RUN = 'Run'
 const IDLE = 'Idle'
 
+const runVelocity = 5
+const walkVelocity = 2
+
 export class PlayerController {
     // state
     pressedKeys = {}
@@ -38,20 +41,17 @@ export class PlayerController {
         this.pressedKeys[event.key.toLowerCase()] = false
     }
 
-    #handleMovement() {
-       const angleYCameraDirection = this.#calculateCameraPosition()
-       const directionOffsett = this.#calculateDirectionOfsett()
+    #handleMovement(delta) {
+        const angleYCameraDirection = this.#calculateCameraPosition()
+        const directionOffsett = this.#calculateDirectionOfsett()
 
-       // Rotate model
-       this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffsett)
-       this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+        // Rotate model
+        this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffsett)
+        this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
 
-       this.#setDirection(directionOffsett)
+        this.#setDirection(directionOffsett)
 
-       console.log(this.currentAction)
-    // onst velocity = this.currentAction == 'Run' ? this.runVelocity : this.walkVelocity
-
-
+        this.#moveModel(delta) 
     }
 
     #calculateCameraPosition() {
@@ -96,6 +96,27 @@ export class PlayerController {
         this.direction.applyAxisAngle(this.rotateAngle, directionOffset)
     }
 
+    #moveModel(delta) {
+        const velocity = this.currentAction === RUN ? runVelocity : walkVelocity
+
+        const moveX = this.direction.x * velocity * delta
+        const moveZ = this.direction.z * velocity * delta
+
+        this.model.position.x += moveX
+        this.model.position.z += moveZ
+        
+        this.#updateCameraTarget(moveX, moveZ)
+    }
+
+    #updateCameraTarget(moveX, moveZ) {
+        this.camera.position.x += moveX
+        this.camera.position.z += moveZ
+
+        this.cameraTarget.x = this.model.position.x
+        this.cameraTarget.y = this.model.position.y + 1
+        this.cameraTarget.z = this.model.position.z
+        this.orbitControl.target = this.cameraTarget
+    }
 
     update(delta) {
         const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 
@@ -121,17 +142,11 @@ export class PlayerController {
 
         
         if (this.currentAction === RUN || this.currentAction === WALK) {
-            this.#handleMovement()
+            this.#handleMovement(delta)
         }
 
         this.mixer.update(delta)
-        if (this.currentAction === WALK) {
-            console.log('WALK')
-        } else if (this.currentAction === RUN) {
-            console.log('RUN')
-        } else if (this.currentAction === IDLE) {
-            // console.log('STAND STILL')
-        }
+       
     }
 }
 
