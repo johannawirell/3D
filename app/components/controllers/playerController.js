@@ -1,5 +1,10 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 const PATH_TO_MODEL = '../../models/Soldier.glb'
+
+const WIDTH = 5
+const HEIGHT = 5
+const DEPTH = 5
+
 export class PlayerController {
     constructor() {
         this.pressedKeys = {}
@@ -24,6 +29,7 @@ export class PlayerController {
         new GLTFLoader()
             .load(PATH_TO_MODEL, gltf => {
                 const model = gltf.scene
+                model.scale.set(WIDTH, HEIGHT, DEPTH)
                 model.traverse(obj => {
                     if (obj.isMesh) {
                         obj.castShadow = true
