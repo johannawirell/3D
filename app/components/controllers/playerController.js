@@ -5,7 +5,7 @@ const WALK = 'Walk'
 const RUN = 'Run'
 const IDLE = 'Idle'
 
-const runVelocity = 5
+const runVelocity = 20
 const walkVelocity = 2
 
 export class PlayerController {
@@ -72,7 +72,7 @@ export class PlayerController {
     #calculateDirectionOfsett() {
         const pressedKeys = this.pressedKeys
         let directionOffset = 0 // Forwards
-
+    
         // Forwards
         if (pressedKeys[W]) {
             if (pressedKeys[A]) {
@@ -89,6 +89,8 @@ export class PlayerController {
                 directionOffset = Math.PI / 4 + Math.PI / 2 // Backwards + left
             } else if (pressedKeys[D]) {
                 directionOffset =  -Math.PI / 4 - Math.PI / 2 // Backwards + right
+            } else {
+                directionOffset = Math.PI // Backwards only
             }
         // Leftwards
         } else if (this.pressedKeys[A]) {
@@ -96,6 +98,7 @@ export class PlayerController {
         }
         return directionOffset
     }
+    
 
     #setDirection(directionOffset) {
         this.camera.getWorldDirection(this.direction)
