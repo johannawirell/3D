@@ -1,7 +1,7 @@
 import './css/index.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-// import { PlayerController } from './components/controllers/playerController'
+import { PlayerController } from './components/controllers/playerController'
 import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
 import { 
@@ -41,7 +41,7 @@ const main = () => {
 }
 
 function createScene() {
-  // const playerController = new PlayerController()
+  const playerController = new PlayerController()
   const horseController = new HorseController()
   let scene = new THREE.Scene()
 
@@ -51,7 +51,7 @@ function createScene() {
     plane
   )
 
-  // scene = playerController.addPlayerTo(scene)
+  scene = playerController.addPlayerTo(scene)
   scene = horseController.addHorseTo(scene)
   scene = addSky(scene)
   return scene
