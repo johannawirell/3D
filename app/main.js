@@ -13,11 +13,11 @@ const FIELD_OF_VIEW = 10
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
 const VIEW_FRUSTUM1 = 0.1
 const VIEW_FRUSTUM2 = 1000
-const CAMERA_POSITION_Z = 500
-const CAMERA_POSITION_Y = 50
-const CAMERA_POSITION_X = 50
+const CAMERA_POSITION_Z = 200
+const CAMERA_POSITION_Y = 20
+const CAMERA_POSITION_X = 20
 const MIN_DISTANSE = 5
-const MAX_DISTANCE = 300
+const MAX_DISTANCE = 700
 const POLAR_ANGLE = Math.PI / 2 - 0.05
 const PATH_TO_SKY = './img/sky.jpg'
 
