@@ -10,73 +10,21 @@ export class PlayerController {
     cameraTarget = new THREE.Vector3()
     pressedKeys = {}
 
-    constructor(scene, camera, orbitControl, currentAction) {
-        // this.mixer
-        // this.model
-        
-        // this.camera = camera
-        // this.animationsMap = new Map()
-        // this.orbitControl = orbitControl
-        
-
-        // this.currentAction = currentAction
+    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction) {
+        this.model = model
+        this.mixer = mixer
+        this.animationsMap = animationsMap
+        this.orbitControl = orbitControl
+        this.camera = camera
+        this.currentAction = currentAction
             
-
-        // this.#addEventListeners()
+        this.#addEventListeners()
     }
 
 
     update(mixerUpdateDelta) {
-        const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] == true)
-        let play = ''
-        if (directionPressed && this.toggleRun) {
-            play = 'Run'
-        } else if (directionPressed) {
-            play = 'Walk'
-        } else {
-            play = 'Idle'
-        }
 
-        if (this.currentAction != play) {
-            const toPlay = this.animationsMap.get(play)
-            const current = this.animationsMap.get(this.currentAction)
-
-            current.fadeOut(this.fadeDuration)
-            toPlay.reset().fadeIn(this.fadeDuration).play();
-
-            this.currentAction = play
-        }
-
-        this.mixer.update(delta)
-
-        if (this.currentAction == 'Run' || this.currentAction == 'Walk') {
-            // calculate towards camera direction
-            var angleYCameraDirection = Math.atan2(
-                    (this.camera.position.x - this.model.position.x), 
-                    (this.camera.position.z - this.model.position.z))
-            // diagonal movement angle offset
-            var directionOffset = this.directionOffset(keysPressed)
-
-            // rotate model
-            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
-            this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
-
-            // calculate direction
-            this.camera.getWorldDirection(this.walkDirection)
-            this.walkDirection.y = 0
-            this.walkDirection.normalize()
-            this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
-
-            // run/walk velocity
-            const velocity = this.currentAction == 'Run' ? this.runVelocity : this.walkVelocity
-
-            // move model & camera
-            const moveX = this.walkDirection.x * velocity * delta
-            const moveZ = this.walkDirection.z * velocity * delta
-            this.model.position.x += moveX
-            this.model.position.z += moveZ
-            this.updateCameraTarget(moveX, moveZ)
-        }
+        
     }
 
 
@@ -87,8 +35,15 @@ export class PlayerController {
 
     #handleKeyDown(event) {
         this.pressedKeys[event.key.toLowerCase()] = true
-        if (event.shiftKey) {
+        const directionsPressed = DIRECTIONS.some(key => this.pressedKeys[key] == true)
+        
+        if (directionsPressed) {
+            console.log('handle direction')
+        } else if (event.shiftKey){
             this.#switchRunToggle()
+            console.log('handle run')
+        } else {
+            console.log('do nothing')
         }
     }
     
@@ -98,7 +53,6 @@ export class PlayerController {
 
     #switchRunToggle() {
         this.run = !this.run
-        console.log('run: ' + this.run)
     }
 }
 
