@@ -25,7 +25,7 @@ const PATH_TO_SKY = './img/sky.jpg'
 const PATH_TO_PLAYER = './models/Soldier.glb'
 
 // Public variables
-let clock, camera, scene, renderer, controls
+let clock, camera, scene, renderer, controls, playerController
 
 const main = () => {
   try {
@@ -35,19 +35,20 @@ const main = () => {
     renderer = createRenderer()
     controls = createControls(camera, renderer)
 
-    const playerController = createPlayer()
+    playerController = createPlayer()
     const horseController = new HorseController()
    
     scene = horseController.addHorseTo(scene)
     
     const animate = () => {
       let mixerUpdateDelta = clock.getDelta()
+
       if (playerController) {
         playerController.update(mixerUpdateDelta)
       }
-    controls.update()
-    renderer.render(scene, camera)
-    requestAnimationFrame(animate)
+      controls.update()
+      renderer.render(scene, camera)
+      requestAnimationFrame(animate)
     }
 
     animate()
@@ -117,7 +118,6 @@ function createControls(camera, renderer) {
 }
 
 function createPlayer() {
-  let playerController
   new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
     const model = gltf.scene
     model.scale.set(5, 5, 5)
@@ -134,7 +134,7 @@ function createPlayer() {
     })
 
     playerController = new PlayerController(model, mixer, animationsMap, controls, camera,  'Idle')
-})
+  })
 }
 
 main()
