@@ -39,7 +39,20 @@ export class PlayerController {
     }
 
     #handleMovement() {
-       const directionOfsett = this.#calculateDirectionOfsett()
+       const angleYCameraDirection = this.#calculateCameraPosition()
+       const directionOffsett = this.#calculateDirectionOfsett()
+
+       // Rotate model
+       this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffsett)
+       this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+
+    }
+
+    #calculateCameraPosition() {
+        return Math.atan2(
+            (this.camera.position.x - this.model.position.x), 
+            (this.camera.position.z - this.model.position.z)
+        )
     }
 
     #calculateDirectionOfsett() {
