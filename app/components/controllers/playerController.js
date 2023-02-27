@@ -9,9 +9,8 @@ const runVelocity = 5
 const walkVelocity = 2
 
 export class PlayerController {
-    // state
     pressedKeys = {}
-    run = false
+    shiftPressed = false
     direction = new THREE.Vector3()
     rotateAngle = new THREE.Vector3(0, 1, 0)
     rotateQuarternion = new THREE.Quaternion()
@@ -35,11 +34,20 @@ export class PlayerController {
 
     #handleKeyDown(event) {
         this.pressedKeys[event.key.toLowerCase()] = true
+
+        if (event.key === 'Shift') {
+            this.shiftPressed = true
+        }
     }
 
     #handleKeyUp(event) {
         this.pressedKeys[event.key.toLowerCase()] = false
+
+        if (event.key === 'Shift') {
+            this.shiftPressed = false
+        }
     }
+
 
     #handleMovement(delta) {
         const angleYCameraDirection = this.#calculateCameraPosition()
@@ -97,7 +105,7 @@ export class PlayerController {
     }
 
     #moveModel(delta) {
-        const velocity = this.currentAction === RUN ? runVelocity : walkVelocity
+        const velocity = this.shiftPressed ? runVelocity : walkVelocity
 
         const moveX = this.direction.x * velocity * delta
         const moveZ = this.direction.z * velocity * delta
@@ -122,7 +130,7 @@ export class PlayerController {
         const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 
        
         let play = ''
-        if (directionPressed && this.run) {
+        if (directionPressed && this.shiftPressed) {
             play = RUN
         } else if (directionPressed) {
             play = WALK
