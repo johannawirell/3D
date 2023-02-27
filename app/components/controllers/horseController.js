@@ -1,11 +1,11 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { AnimationMixer } from 'three'
+import { AnimationMixer, SpotLight } from 'three'
 
 const PATH_TO_MODEL = '../../models/Horse.glb'
 
-const WIDTH = 0.2
-const HEIGHT = 0.2
-const DEPTH = 0.2
+const WIDTH = 1
+const HEIGHT = 1
+const DEPTH = 1
 
 export class HorseController {
     constructor() {
@@ -30,18 +30,24 @@ export class HorseController {
                 model.traverse(obj => {
                     if (obj.isMesh) {
                         obj.castShadow = true
+                        obj.material.emissiveIntensity = 1.0
                     }
                 })
+
+                const light = new SpotLight(0xffffff, 10);
+                light.position.set(100, 100, 100)
+                light.target = model
+                scene.add(light)
+
                 this.mixer = new AnimationMixer(model) 
                 this.mixer.clipAction(gltf.animations[0]).play()
                 scene.add(model)
                 const update = () => {
                     requestAnimationFrame(update)
-                    mixer.update(0.0167) // Delta tid för varje frame
+                    mixer.update(0.0167)
                 }
                 update()
-                })
+            })
         return scene
-  
     }
 }
