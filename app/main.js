@@ -1,6 +1,8 @@
 import './css/index.css'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
 import { PlayerController } from './components/controllers/playerController'
 import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
@@ -20,22 +22,22 @@ const MIN_DISTANSE = 5
 const MAX_DISTANCE = 700
 const POLAR_ANGLE = Math.PI / 2 - 0.05
 const PATH_TO_SKY = './img/sky.jpg'
+const PATH_TO_PLAYER = './models/Soldier.glb'
+
+// Public variables
+let clock, camera, scene, renderer, controls
 
 const main = () => {
-  let playerController 
-  let horseController
-  const clock = new THREE.Clock()
-
   try {
-    const camera = createCamera()
-    let scene = createScene()
-    const renderer = createRenderer()
-    const controls = createControls(camera, renderer)
+    clock = new THREE.Clock()
+    camera = createCamera()
+    scene = createScene()
+    renderer = createRenderer()
+    controls = createControls(camera, renderer)
 
-    playerController = new PlayerController(camera, controls, 'Idle')
-    horseController = new HorseController()
+    const playerController = createPlayer()
+    const horseController = new HorseController()
    
-    scene = playerController.addPlayerTo(scene)
     scene = horseController.addHorseTo(scene)
     
     const animate = () => {
@@ -112,6 +114,27 @@ function createControls(camera, renderer) {
   controls.maxPolarAngle = POLAR_ANGLE
 
   return controls
+}
+
+function createPlayer() {
+  let playerController
+  new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
+    const model = gltf.scene
+    model.scale.set(5, 5, 5)
+    model.traverse(obj => {
+        if (obj.isMesh) obj.castShadow = true
+    })
+    scene.add(model)
+
+    const gltfAnimations = gltf.animations
+    const mixer = new THREE.AnimationMixer(model)
+    const animationsMap = new Map()
+    gltfAnimations.filter(a => a.name != 'TPose').forEach(a => {
+        animationsMap.set(a.name, mixer.clipAction(a))
+    })
+
+    playerController = new PlayerController(model, mixer, animationsMap, controls, camera,  'Idle')
+})
 }
 
 main()
