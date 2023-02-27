@@ -22,16 +22,30 @@ const POLAR_ANGLE = Math.PI / 2 - 0.05
 const PATH_TO_SKY = './img/sky.jpg'
 
 const main = () => {
+  let playerController 
+  let horseController
+  const clock = new THREE.Clock()
+
   try {
     const camera = createCamera()
-    const scene = createScene()
+    let scene = createScene()
     const renderer = createRenderer()
     const controls = createControls(camera, renderer)
+
+    playerController = new PlayerController(camera, controls, 'Idle')
+    horseController = new HorseController()
+   
+    scene = playerController.addPlayerTo(scene)
+    scene = horseController.addHorseTo(scene)
     
     const animate = () => {
-      requestAnimationFrame(animate)
-      controls.update()
-      renderer.render(scene, camera)
+      let mixerUpdateDelta = clock.getDelta()
+      if (playerController) {
+        playerController.update(mixerUpdateDelta)
+      }
+    controls.update()
+    renderer.render(scene, camera)
+    requestAnimationFrame(animate)
     }
 
     animate()
@@ -41,8 +55,6 @@ const main = () => {
 }
 
 function createScene() {
-  const playerController = new PlayerController()
-  const horseController = new HorseController()
   let scene = new THREE.Scene()
 
   scene.add(
@@ -50,9 +62,7 @@ function createScene() {
     ambientLight,
     plane
   )
-
-  scene = playerController.addPlayerTo(scene)
-  scene = horseController.addHorseTo(scene)
+  
   scene = addSky(scene)
   return scene
 }
