@@ -9,7 +9,7 @@ export class PlayerController {
     // state
     pressedKeys = {}
     run = false
-    walkDirection = new THREE.Vector3()
+    direction = new THREE.Vector3()
     rotateAngle = new THREE.Vector3(0, 1, 0)
     rotateQuarternion = new THREE.Quaternion()
     cameraTarget = new THREE.Vector3()
@@ -45,6 +45,12 @@ export class PlayerController {
        // Rotate model
        this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffsett)
        this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+
+       this.#setDirection(directionOffsett)
+
+       console.log(this.currentAction)
+    // onst velocity = this.currentAction == 'Run' ? this.runVelocity : this.walkVelocity
+
 
     }
 
@@ -83,10 +89,38 @@ export class PlayerController {
         return directionOffset
     }
 
+    #setDirection(directionOffset) {
+        this.camera.getWorldDirection(this.direction)
+        this.direction.y = 0
+        this.direction.normalize()
+        this.direction.applyAxisAngle(this.rotateAngle, directionOffset)
+    }
+
 
     update(delta) {
-        const isDirectionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 
-        if (isDirectionPressed) {
+        const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 
+       
+        let play = ''
+        if (directionPressed && this.run) {
+            play = RUN
+        } else if (directionPressed) {
+            play = WALK
+        } else {
+            play = IDLE
+        }
+
+        if (this.currentAction != play) {
+            const toPlay = this.animationsMap.get(play)
+            const current = this.animationsMap.get(this.currentAction)
+
+            current.fadeOut(this.fadeDuration)
+            toPlay.reset().fadeIn(this.fadeDuration).play()
+
+            this.currentAction = play
+        }
+
+        
+        if (this.currentAction === RUN || this.currentAction === WALK) {
             this.#handleMovement()
         }
 
