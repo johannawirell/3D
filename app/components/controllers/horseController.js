@@ -41,11 +41,12 @@ export class HorseController {
                 const light = new SpotLight(0xffffff, 10);
                 light.position.set(100, 100, 100)
                 light.target = model
-                scene.add(light)
 
                 this.mixer = new AnimationMixer(model) 
                 this.mixer.clipAction(gltf.animations[0]).play()
-                scene.add(model)
+                
+                scene.add(model, light)
+
                 const update = () => {
                     requestAnimationFrame(update)
                     mixer.update(0.0167)
