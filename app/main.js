@@ -3,14 +3,11 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { PlayerController } from './components/controllers/playerController'
 import { HorseController } from './components/controllers/horseController'
-import { tindra } from './components/objects/tindra'
 import { plane } from './components/objects/plane'
 import { 
   pointLight,
   ambientLight
 } from './components/light'
-
-
 
 const FIELD_OF_VIEW = 10
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
@@ -22,26 +19,20 @@ const CAMERA_POSITION_X = 5
 const MIN_DISTANSE = 5
 const MAX_DISTANCE = 300
 const POLAR_ANGLE = Math.PI / 2 - 0.05
+const PATH_TO_SKY = './img/sky.jpg'
 
 const main = () => {
   try {
-    const animate = () => {
-      requestAnimationFrame(animate)
-    
-      controls.update()
-    
-      renderer.render(scene, camera)
-    }
-
-    const playerController = new PlayerController()
-    const horseController = new HorseController()
-
     const camera = createCamera()
-    let scene = createScene()
-    scene = playerController.addPlayerTo(scene)
-    scene = horseController.addHorseTo(scene)
+    const scene = createScene()
     const renderer = createRenderer()
     const controls = createControls(camera, renderer)
+    
+    const animate = () => {
+      requestAnimationFrame(animate)
+      controls.update()
+      renderer.render(scene, camera)
+    }
 
     animate()
   } catch (err) {
@@ -50,14 +41,27 @@ const main = () => {
 }
 
 function createScene() {
+  const playerController = new PlayerController()
+  const horseController = new HorseController()
   let scene = new THREE.Scene()
 
   scene.add(
     pointLight,
     ambientLight,
-    plane,
-    // tindra
+    plane
   )
+
+  scene = playerController.addPlayerTo(scene)
+  scene = horseController.addHorseTo(scene)
+  scene = addSky(scene)
+  return scene
+}
+
+function addSky(scene) {
+  const loader = new THREE.TextureLoader()
+  const texture = loader.load(PATH_TO_SKY)
+  scene.background = texture
+
   return scene
 }
 

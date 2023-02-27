@@ -1,15 +1,13 @@
 import * as THREE from 'three'
 
-const WIDTH = 200
-const HIEGHT = 200
 const IMAGE = '../../img/plane.jpg'
 
 const texture = new THREE.TextureLoader().load(IMAGE)
 
 export const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(
-        WIDTH,
-        HIEGHT
+        window.innerWidth,
+        window.innerHeight
     ),
     new THREE.MeshBasicMaterial( { map: texture })
 )
