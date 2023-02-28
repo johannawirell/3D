@@ -1,5 +1,6 @@
 import './css/index.css'
 import * as THREE from 'three'
+import { SpotLight } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
@@ -19,13 +20,14 @@ const CAMERA_POSITION_Z = 200
 const CAMERA_POSITION_Y = 20
 const CAMERA_POSITION_X = 20
 const MIN_DISTANSE = 5
-const MAX_DISTANCE = 700
+const MAX_DISTANCE = 500
 const POLAR_ANGLE = Math.PI / 2 - 0.05
 const PATH_TO_SKY = './img/sky.jpg'
+const PATH_TO_HORSE = './models/Horse.glb'
 const PATH_TO_PLAYER = './models/Soldier.glb'
 
 // Public variables
-let clock, camera, scene, renderer, controls, playerController
+let clock, camera, scene, renderer, controls, playerController, horseController
 
 const main = () => {
   try {
@@ -35,16 +37,18 @@ const main = () => {
     renderer = createRenderer()
     controls = createControls(camera, renderer)
 
-    playerController = createPlayer()
-    const horseController = new HorseController()
+    createPlayer()
+    createHorse()
    
-    scene = horseController.addHorseTo(scene)
     
     const animate = () => {
       let mixerUpdateDelta = clock.getDelta()
 
       if (playerController) {
         playerController.update(mixerUpdateDelta)
+      }
+      if (horseController) {
+        horseController.update()
       }
       controls.update()
       renderer.render(scene, camera)
@@ -135,6 +139,36 @@ function createPlayer() {
 
     playerController = new PlayerController(model, mixer, animationsMap, controls, camera,  'Idle')
   })
+}
+
+function createHorse() {
+  new GLTFLoader().load(PATH_TO_HORSE, gltf => {
+    const model = gltf.scene
+    model.scale.set(1, 1, 1)
+    model.traverse(obj => {
+        if (obj.isMesh) obj.castShadow = true
+    })
+
+    const light = new SpotLight(0xffffff, 10);
+    light.position.set(100, 100, 100)
+    light.target = model
+
+    scene.add(model, light)
+    const mixer = new THREE.AnimationMixer(model)
+
+    const update = () => {
+      requestAnimationFrame(update)
+      mixer.update(0.0167)
+    }
+    update()
+    
+
+    horseController = new HorseController(model, mixer, camera)
+  })
+}
+
+function collisionDetection() {
+  const box = new THREE.Box3().setFromObject(horse)
 }
 
 main()
