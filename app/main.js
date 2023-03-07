@@ -7,11 +7,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { PlayerController } from './components/controllers/player/playerController'
 import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
-import {
-  light,
-  pointLight,
-  ambientLight
-} from './components/light'
+import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
 const ASPECT = 1920 / 1080// window.innerWidth / window.innerHeight
@@ -92,10 +88,11 @@ class Main {
 
   #createScene() {
     let scene = new THREE.Scene()
-    // Create light
     scene.background = this.#createTexture()
     scene.add(
       this.#createPlane(),
+      ambientLight,
+      directionaLight
     )
     return scene
   }
@@ -115,11 +112,11 @@ class Main {
   }
 
   #createPlane() {
+    const texture = new THREE.TextureLoader().load('./img/ground/ground2.jpg')
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(100, 100, 10, 10),
-      new THREE.MeshStandardMaterial({
-            color: 0x808080,
-      }))
+      new THREE.MeshBasicMaterial( { map: texture })
+    )
     plane.castShadow = false
     plane.receiveShadow = true
     plane.rotation.x = -Math.PI / 2
