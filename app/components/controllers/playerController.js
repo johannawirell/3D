@@ -1,6 +1,10 @@
 import * as THREE from 'three'
 import { A, D, DIRECTIONS, S, W } from './key'
 
+const CAMERA_POSITION_X = import.meta.env.VITE_CAMERA_POSITION_X
+const CAMERA_POSITION_Y = import.meta.env.VITE_CAMERA_POSITION_Y
+const CAMERA_POSITION_Z = import.meta.env.VITE_CAMERA_POSITION_Z
+
 const WALK = 'Walk'
 const RUN = 'Run'
 const IDLE = 'Idle'
@@ -117,6 +121,7 @@ export class PlayerController {
         this.model.position.z += moveZ
         
         this.#updateCameraTarget(moveX, moveZ)
+        this.#updateCameraPosition()
     }
 
     #updateCameraTarget(moveX, moveZ) {
@@ -128,6 +133,17 @@ export class PlayerController {
         this.cameraTarget.z = this.model.position.z
         this.orbitControl.target = this.cameraTarget
     }
+
+    #updateCameraPosition() {
+        const cameraOffset = new THREE.Vector3(
+            CAMERA_POSITION_X,
+            CAMERA_POSITION_Y,
+            CAMERA_POSITION_Z
+        )
+        this.camera.position.copy(this.model.position).add(cameraOffset)
+        this.cameraTarget.copy(this.model.position)
+        this.orbitControl.target = this.cameraTarget
+    }      
 
     update(delta) {
         const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 

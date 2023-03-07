@@ -17,15 +17,16 @@ const FIELD_OF_VIEW = 10
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
 const VIEW_FRUSTUM1 = 0.1
 const VIEW_FRUSTUM2 = 1000
-const CAMERA_POSITION_Z = 200
-const CAMERA_POSITION_Y = 20
-const CAMERA_POSITION_X = 20
+const CAMERA_POSITION_X = import.meta.env.VITE_CAMERA_POSITION_X
+const CAMERA_POSITION_Y = import.meta.env.VITE_CAMERA_POSITION_Y
+const CAMERA_POSITION_Z = import.meta.env.VITE_CAMERA_POSITION_Z
 const MIN_DISTANSE = 5
 const MAX_DISTANCE = 500
 const POLAR_ANGLE = Math.PI / 2 - 0.05
 const PATH_TO_SKY = './img/sky.jpg'
 const PATH_TO_PLAYER = './models/Soldier.glb'
 const PATH_TO_HORSE = './models/Horse.glb'
+
 
 // Public variables
 let clock, camera, scene, renderer, controls, player, horse
