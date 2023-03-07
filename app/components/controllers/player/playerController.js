@@ -4,26 +4,28 @@ import { InputController } from './inputController.js'
 import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
+const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 
 export class PlayerController {
-    decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
+    deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
     acceleration = new THREE.Vector3(1, 0.25, 50.0)
     velocity = new THREE.Vector3(0, 0, 0)
-    position = new THREE.Vector3()
+    currentPosition = new THREE.Vector3()
 
     constructor(camera, scene) {
         this.animationsMap = new Map()
+        this.inputController = new InputController()
+        this.state = new State()
+        this.currentState = this.state.current
+
         this.camera = camera
         this.scene = scene
-        this.input = new InputController()
-        this.state = new State()
-        this.current = this.state.current
-       
-        this.#loadModel()
+    
+        this.#loadPlayerModel()
     }
 
-    get Position() {
-        return this.position
+    get position() {
+        return this.currentPosition
     }
     
     get rotation() {
@@ -34,11 +36,11 @@ export class PlayerController {
         }
     }
 
-    #loadModel() {
+    #loadPlayerModel() {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             const model = gltf.scene
+            model.scale.copy(PLAYER_SCALE_VECTOR)
 
-            model.scale.set(5, 5, 5)
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
@@ -59,78 +61,89 @@ export class PlayerController {
           
     }
 
-    #animation() {
+    #animatePlayer() {
         let action
-        const directionPressed = this.input.isDirectionsPressed()
-        const shiftPressed = this.input.isShiftPressed()
+        const { states } = this.state
+
+        const directionPressed = this.inputController.isDirectionsPressed()
+        const shiftPressed = this.inputController.isShiftPressed()
+
         if (directionPressed && shiftPressed) {
-            action = this.state.states.run
+            action = states.run
         } else if (directionPressed) {
-            action = this.state.states.walk
+            action = states.walk
         } else {
-            action = this.state.states.idle
+            action = states.idle
         }
 
-        if (this.current != action) {
+        if (this.currentState != action) {
             const toPlay = this.animationsMap.get(action)
-            const current = this.animationsMap.get(this.current)
+            const current = this.animationsMap.get(this.currentState)
 
             current.fadeOut(this.fadeDuration)
             toPlay.reset().fadeIn(this.fadeDuration).play()
         }
     }
 
-    update(time) {
-        const keys = this.input.keys
-        this.#animation()          
-        // If no key action
-        if (!Object.values(keys).some(val => val)) {
-            this.current = this.state.update()
-            return
-        }
-        this.current = this.state.update(keys)
-
+    #updateVelocity(time, deceleration) {
         const velocity = this.velocity
         
-        const frameDecceleration = new THREE.Vector3(
-            velocity.x * this.decceleration.x,
-            velocity.y * this.decceleration.y,
-            velocity.z * this.decceleration.z
+        const frameDeceleration = new THREE.Vector3(
+            velocity.x * deceleration.x,
+            velocity.y * deceleration.y,
+            velocity.z * deceleration.z
         )
 
-        frameDecceleration.multiplyScalar(time)
+        frameDeceleration.multiplyScalar(time)
         
-        frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
-            Math.abs(frameDecceleration.z),
+        frameDeceleration.z = Math.sign(frameDeceleration.z) * Math.min(
+            Math.abs(frameDeceleration.z),
             Math.abs(velocity.z)
         )
         
-        velocity.add(frameDecceleration)
-      
+        velocity.add(frameDeceleration)
+        return velocity
+    }
+
+    update(time) {
+        const keys = this.inputController.keys
+        this.#animatePlayer()          
+
+        // If no key action
+        if (this.#isKeyAction(keys)) {
+            this.currentState = this.state.update()
+            return
+        }
+
+        this.currentState = this.state.update(keys)
+
+        const deceleration = this.deceleration
+        const velocity = this.#updateVelocity(time, deceleration)
         const controlObject = this.target
+
         const _Q = new THREE.Quaternion()
         const _A = new THREE.Vector3()
         const _R = controlObject.quaternion.clone()
       
-        const acc = this.acceleration.clone()
+        const acceleration = this.acceleration.clone()
 
-        if (this.state.current === this.state.states.run){
-            acc.multiplyScalar(2.0) // TODO: ta bort hårdkod
+        if (this.#isRunning()){
+            acceleration.multiplyScalar(2.0)
         }
 
         // TODO swift
         if (keys.forward) {
-            velocity.z -= acc.z * time
+            velocity.z -= acceleration.z * time
         }
         if (keys.backward) {
-            velocity.z += acc.z * time
+            velocity.z += acceleration.z * time
             
         }
         if (keys.left) {
             _A.set(0, 1, 0)
             _Q.setFromAxisAngle(
                 _A, 
-                4.0 * Math.PI * time * this.acceleration.y
+                4.0 * Math.PI * time * acceleration.y
             )
             _R.multiply(_Q)
         }
@@ -138,14 +151,13 @@ export class PlayerController {
             _A.set(0, 1, 0)
             _Q.setFromAxisAngle(
                 _A,
-                4.0 * - Math.PI * time * this.acceleration.y
+                4.0 * - Math.PI * time * acceleration.y
             )
             _R.multiply(_Q)
           }
       
         controlObject.quaternion.copy(_R)
 
-      
         const oldPosition = new THREE.Vector3()
         oldPosition.copy(controlObject.position)
       
@@ -163,10 +175,20 @@ export class PlayerController {
         controlObject.position.add(forward)
         controlObject.position.add(sideways)
       
-        this.position.copy(controlObject.position)
+        this.currentPosition.copy(controlObject.position)
       
         if (this.mixer) {
             this.mixer.update(time)
         }
-    }  
+    }
+
+    #isKeyAction(keys) {
+        return !Object.values(keys).some(val => val)
+    }
+
+    #isRunning() {
+        const { states } = this.state
+
+        return this.state.current === states.run
+    }
 }
