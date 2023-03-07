@@ -18,9 +18,11 @@ export class State {
         } else {
             this.currentState = this.states.idle
         }
+        return this.currentState
       }
 
     get current () {
         return this.currentState
     }
+
 }

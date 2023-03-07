@@ -17,6 +17,7 @@ export class PlayerController {
         this.scene = scene
         this.input = new InputController()
         this.state = new State()
+        this.current = this.state.current
        
         this.#loadModel()
     }
@@ -58,50 +59,37 @@ export class PlayerController {
           
     }
 
-    #calculateDirectionOffset() {
-        let directionOffset = 0
-        const keys = this.input.keys
-
-        if (keys.forward) {
-            if (keys.left) {
-                directionOffset = Math.PI / 4
-            } else if (keys.right) {
-                directionOffset = - Math.PI / 4
-            }
-        } else if (keys.backward) {
-            if (keys.left) {
-                directionOffset =  Math.PI / 4 + Math.PI / 2 
-            } else if (keys.right) {
-                directionOffset =  -Math.PI / 4 - Math.PI / 2
-            } else {
-                directionOffset = Math.PI
-            }
-        } else if (keys.left) {
-            directionOffset = Math.PI / 2 
-        } else if (keys.right) {
-            directionOffset = - Math.PI / 2
+    #animation() {
+        let action
+        const directionPressed = this.input.isDirectionsPressed()
+        const shiftPressed = this.input.isShiftPressed()
+        if (directionPressed && shiftPressed) {
+            action = this.state.states.run
+        } else if (directionPressed) {
+            action = this.state.states.walk
+        } else {
+            action = this.state.states.idle
         }
-        return directionOffset
-    }
 
+        if (this.current != action) {
+            const toPlay = this.animationsMap.get(action)
+            const current = this.animationsMap.get(this.current)
+
+            current.fadeOut(this.fadeDuration)
+            toPlay.reset().fadeIn(this.fadeDuration).play()
+        }
+    }
 
     update(time) {
         const keys = this.input.keys
+        this.#animation()          
         // If no key action
         if (!Object.values(keys).some(val => val)) {
-            this.state.update()
+            this.current = this.state.update()
             return
         }
-        this.state.update(keys)
+        this.current = this.state.update(keys)
 
-        // Animation
-        const currentState = this.state.current
-        const toPlay = this.animationsMap.get(currentState)
-        const current = this.animationsMap.get(currentState)
-        current.fadeOut(this.fadeDuration)
-        toPlay.reset().fadeIn(this.fadeDuration).play()
-
-      
         const velocity = this.velocity
         
         const frameDecceleration = new THREE.Vector3(

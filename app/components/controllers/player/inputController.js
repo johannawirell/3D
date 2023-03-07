@@ -61,4 +61,27 @@ export class InputController {
               break
         }
     }
+
+    isDirectionsPressed() {
+        if (this.keys.forward || this.keys.backward 
+            || this.keys.right || this.keys.left) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    isShiftPressed() {
+        if (this.keys.shift) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    getActiveKeys() {
+        const activeKeys = [...Object.keys(this.keys)]
+            .filter(key => this.keys[key])
+        return activeKeys
+    }
 }
