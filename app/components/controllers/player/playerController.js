@@ -6,7 +6,7 @@ const WALK = 'Walk'
 const RUN = 'Run'
 const IDLE = 'Idle'
 
-const runVelocity = 50
+const runVelocity = 10
 const walkVelocity = 2
 
 export class PlayerController {
