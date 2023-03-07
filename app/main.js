@@ -1,22 +1,22 @@
 import './css/index.css'
 import * as THREE from 'three'
 import { AnimationMixer } from 'three'
-import { SpotLight } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { PlayerController } from './components/controllers/player/playerController'
 import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
-import { 
+import {
+  light,
   pointLight,
   ambientLight
 } from './components/light'
 
-const FIELD_OF_VIEW = 10
+const FIELD_OF_VIEW = 60
 const ASPECT_RATIO = window.innerWidth / window.innerHeight
-const VIEW_FRUSTUM1 = 0.1
-const VIEW_FRUSTUM2 = 1000
+const VIEW_FRUSTUM1 = 1.0
+const VIEW_FRUSTUM2 = 1000.0
 const CAMERA_POSITION_X = import.meta.env.VITE_CAMERA_POSITION_X
 const CAMERA_POSITION_Y = import.meta.env.VITE_CAMERA_POSITION_Y
 const CAMERA_POSITION_Z = import.meta.env.VITE_CAMERA_POSITION_Z
@@ -67,6 +67,7 @@ function createScene() {
   let scene = new THREE.Scene()
 
   scene.add(
+    light,
     pointLight,
     ambientLight,
     plane
@@ -91,10 +92,8 @@ function createCamera() {
     VIEW_FRUSTUM1,
     VIEW_FRUSTUM2
   )
-  camera.position.setZ(CAMERA_POSITION_Z)
-  camera.position.setY(CAMERA_POSITION_Y)
-  camera.position.setX(CAMERA_POSITION_X)
-
+  camera.position.set(CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z)
+  
   return camera
 }
 
