@@ -14,168 +14,125 @@ import {
 } from './components/light'
 
 const FIELD_OF_VIEW = 60
-const ASPECT_RATIO = window.innerWidth / window.innerHeight
-const VIEW_FRUSTUM1 = 1.0
-const VIEW_FRUSTUM2 = 1000.0
-const CAMERA_POSITION_X = import.meta.env.VITE_CAMERA_POSITION_X
-const CAMERA_POSITION_Y = import.meta.env.VITE_CAMERA_POSITION_Y
-const CAMERA_POSITION_Z = import.meta.env.VITE_CAMERA_POSITION_Z
-const MIN_DISTANSE = 5
-const MAX_DISTANCE = 500
-const POLAR_ANGLE = Math.PI / 2 - 0.05
-const PATH_TO_SKY = './img/sky.jpg'
-const PATH_TO_PLAYER = './models/Soldier.glb'
-const PATH_TO_HORSE = './models/Horse.glb'
+const ASPECT = 1920 / 1080// window.innerWidth / window.innerHeight
+const NEAR = 1.0
+const FAR = 1000.0
+const CAMERA_POSITION_X = 25
+const CAMERA_POSITION_Y = 10
+const CAMERA_POSITION_Z = 25
 
+class Main {
+  constructor() {
+    this.renderer = this.#createRenderer()
+    this.camera = this.#createPerspectiveCamera()
+    this.scene = this.#createScene()
+    this.mixers = []
+    this.previousRAF = null
 
-// Public variables
-let clock, camera, scene, renderer, controls, player, horse
+    this.#loadAnimateModel()
+    this.#RAF()
+    this.#addEventListeners()
+  }
 
-const main = () => {
-  try {
-    clock = new THREE.Clock()
-    camera = createCamera()
-    scene = createScene()
-    renderer = createRenderer()
-    controls = createControls(camera, renderer)
-
-    createPlayer()
-    createHorse()
-    
-    const animate = () => {
-      let mixerUpdateDelta = clock.getDelta()
-
-      if (player) {
-        player.update(mixerUpdateDelta)
-      }
-      if (horse) {
-        horse.update(mixerUpdateDelta)
+  #RAF() {
+    requestAnimationFrame(x => {
+      if (this.previousRAF === null) {
+        this.previousRAF = x
       }
 
-      controls.update()
-      renderer.render(scene, camera)
-      requestAnimationFrame(animate)
+      this.#RAF()
+
+      this.renderer.render(this.scene, this.camera)
+      this.#update(x - this._previousRAF)
+      this.previousRAF = x
+    })
+  }
+
+  #update(time) {
+    const seconds = time * 0.001
+    if (this.mixers) {
+      this.mixers.map(m => m.update(seconds))
     }
+    if (this.player) {
+      this.player.update(time) 
+    }
+    // this.thirdPersonCamera.update(time)
+  }
 
-    animate()
-  } catch (err) {
-    console.log(err)
+  #loadAnimateModel() {
+    this.player = new PlayerController(this.camera, this.scene)
+    // this.thirdPersonCamera(this.camera, this.player)
+  }
+
+  #createRenderer() {
+    const renderer = new THREE.WebGL1Renderer({
+      canvas: document.querySelector('#background'),
+      antialias: true 
+    })
+    renderer.outputEncoding = THREE.sRGBEncoding
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
+  
+    return renderer
+  }
+
+  #createPerspectiveCamera() {
+    const camera = new THREE.PerspectiveCamera(
+      FIELD_OF_VIEW,
+      ASPECT,
+      NEAR,
+      FAR
+    )
+    camera.position.set(CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z)
+
+    return camera
+  }
+
+  #createScene() {
+    let scene = new THREE.Scene()
+    // Create light
+    scene.background = this.#createTexture()
+    scene.add(
+      this.#createPlane(),
+    )
+    return scene
+  }
+
+  #createTexture() {
+    const loader = new THREE.CubeTextureLoader()
+    const texture = loader.load([
+      './img/ground/ground1.jpg',
+      './img/ground/ground2.jpg',
+      './img/ground/ground3.jpg',
+      './img/ground/ground4.jpg',
+      './img/ground/ground5.jpg',
+      './img/ground/ground6.jpg'
+    ])
+    texture.encoding = THREE.sRGBEncoding
+    return texture
+  }
+
+  #createPlane() {
+    const plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(100, 100, 10, 10),
+      new THREE.MeshStandardMaterial({
+            color: 0x808080,
+      }))
+    plane.castShadow = false
+    plane.receiveShadow = true
+    plane.rotation.x = -Math.PI / 2
+    return plane
+  }
+
+  #addEventListeners() {
+    window.addEventListener('resize', () => {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    },false)
   }
 }
 
-function createScene() {
-  let scene = new THREE.Scene()
-
-  scene.add(
-    light,
-    pointLight,
-    ambientLight,
-    plane
-  )
-  
-  scene = addSky(scene)
-  return scene
-}
-
-function addSky(scene) {
-  const loader = new THREE.TextureLoader()
-  const texture = loader.load(PATH_TO_SKY)
-  scene.background = texture
-
-  return scene
-}
-
-function createCamera() {
-  const camera = new THREE.PerspectiveCamera(
-    FIELD_OF_VIEW,
-    ASPECT_RATIO,
-    VIEW_FRUSTUM1,
-    VIEW_FRUSTUM2
-  )
-  camera.position.set(CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z)
-
-  return camera
-}
-
-function createRenderer() {
-  const renderer = new THREE.WebGL1Renderer({
-    canvas: document.querySelector('#background'),
-    antialias: true 
-  })
-  renderer.setPixelRatio(window.devicePixelRatio)
-  renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
-
-  return renderer
-}
-
-function createControls(camera, renderer) {
-  const controls = new OrbitControls(
-    camera,
-    renderer.domElement
-  )
-  controls.enableDamping = true
-  controls.minDistance = MIN_DISTANSE
-  controls.maxDistance = MAX_DISTANCE 
-  controls.enablePan = true
-  controls.maxPolarAngle = POLAR_ANGLE
-  return controls
-}
-
-function createPlayer() {
-  new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
-    const model = gltf.scene
-    model.scale.set(5, 5, 5)
-    model.traverse(obj => {
-        if (obj.isMesh) obj.castShadow = true
-    })
-    scene.add(model)
-
-    const gltfAnimations = gltf.animations
-    const mixer = new THREE.AnimationMixer(model)
-    const animationsMap = new Map()
-    gltfAnimations.filter(a => a.name != 'TPose').forEach(a => {
-        animationsMap.set(a.name, mixer.clipAction(a))
-    })
-
-   player = new PlayerController(model, mixer, animationsMap, camera,  'Idle')
-  })
-}
-
-function createHorse() {
-  new GLTFLoader().load(PATH_TO_HORSE, gltf => {
-      const model = gltf.scene
-      model.traverse(obj => {
-        if (obj.isMesh) obj.castShadow = true
-      })
-     scene.add(model)
-
-    let mixer = new AnimationMixer(model)
-
-    gltf.animations.forEach(animation => {
-        mixer.clipAction(animation).play()
-    })
-
-    model.traverse(obj => {
-        if (obj.isMesh) {
-            obj.castShadow = true
-            obj.material.emissiveIntensity = 1.0
-        }
-    })
-
-    mixer = new AnimationMixer(model) 
-    mixer.clipAction(gltf.animations[0]).play()
-    horse = new HorseController(model)
-  
-    const update = () => {
-      requestAnimationFrame(update)
-      mixer.update(0.0167)
-    }
-    update()
-  })
-}
-
-// function collisionDetection() {
-//   const box = new THREE.Box3().setFromObject(horse)
-// }
-
-main()
+new Main()

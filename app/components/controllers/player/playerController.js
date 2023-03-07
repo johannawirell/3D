@@ -1,10 +1,12 @@
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { A, D, DIRECTIONS, S, W } from '../key'
 import { ThirdPersonCamera } from './thirdPersonCamera'
 
 const WALK = 'Walk'
 const RUN = 'Run'
 const IDLE = 'Idle'
+const PATH_TO_PLAYER = '../../models/Soldier.glb'
 
 const runVelocity = 10
 const walkVelocity = 2
@@ -17,14 +19,33 @@ export class PlayerController {
     rotateAngle = new THREE.Vector3(0, 1, 0)
     rotateQuarternion = new THREE.Quaternion()
 
-    constructor(model, mixer, animationsMap, camera, currentAction) {
-        this.model = model
-        this.mixer = mixer
-        this.animationsMap = animationsMap
-        this.camera = new ThirdPersonCamera(camera, model)
-        this.currentAction = currentAction
+    constructor(camera, scene) {
+        this.camera = camera
+        this.scene = scene
+        this.model = this.#createModel()
+        this.currentAction = IDLE
         
         this.#addEventListeners()
+    }
+
+    #createModel() {
+        return new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
+            const model = gltf.scene
+            model.scale.set(5, 5, 5)
+            model.traverse(obj => {
+                if (obj.isMesh) obj.castShadow = true
+            })
+            this.scene.add(model)
+        
+            const gltfAnimations = gltf.animations
+            this.mixer = new THREE.AnimationMixer(model)
+            this.animationsMap = new Map()
+            gltfAnimations.filter(a => a.name != 'TPose').forEach(a => {
+                this.animationsMap.set(a.name, this.mixer.clipAction(a))
+            })
+            return model
+          })
+          
     }
 
     #addEventListeners() {
@@ -48,7 +69,7 @@ export class PlayerController {
         }
     }
 
-    #handleMovement(delta) {
+    #handleMovement(time) {
         const directionOffsett = this.#calculateDirectionOfsett()
         this.#setDirection(directionOffsett)
         const angleYCameraDirection = this.camera.calculateCameraPosition()
@@ -58,7 +79,7 @@ export class PlayerController {
         this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
 
         this.camera.move()
-        this.#moveModel(delta)        
+        this.#moveModel(time)        
     }
 
     #calculateDirectionOfsett() {
@@ -99,17 +120,17 @@ export class PlayerController {
         this.direction.applyAxisAngle(this.rotateAngle, directionOffset)
     }
 
-    #moveModel(delta) {
+    #moveModel(time) {
         const velocity = this.shiftPressed ? runVelocity : walkVelocity
 
-        const moveX = this.direction.x * velocity * delta
-        const moveZ = this.direction.z * velocity * delta
+        const moveX = this.direction.x * velocity * time
+        const moveZ = this.direction.z * velocity * time
 
         this.model.position.x += moveX
         this.model.position.z += moveZ
     }
 
-    update(delta) {
+    update(time) {
         const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 
        
         let play = ''
@@ -133,9 +154,9 @@ export class PlayerController {
 
         
         if (this.currentAction === RUN || this.currentAction === WALK) {
-            this.#handleMovement(delta)
+            this.#handleMovement(time)
         }
 
-        this.mixer.update(delta)
+        // this.mixer.update(time)
     }
 }
