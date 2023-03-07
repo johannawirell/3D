@@ -39,7 +39,7 @@ class Main {
       this.#RAF()
 
       this.renderer.render(this.scene, this.camera)
-      this.#update(x - this._previousRAF)
+      this.#update(x - this.previousRAF)
       this.previousRAF = x
     })
   }
@@ -50,7 +50,7 @@ class Main {
       this.mixers.map(m => m.update(seconds))
     }
     if (this.player) {
-      this.player.update(time) 
+      this.player.update(seconds) 
     }
     // this.thirdPersonCamera.update(time)
   }
