@@ -93,7 +93,7 @@ function createCamera() {
     VIEW_FRUSTUM2
   )
   camera.position.set(CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z)
-  
+
   return camera
 }
 
@@ -118,7 +118,6 @@ function createControls(camera, renderer) {
   controls.maxDistance = MAX_DISTANCE 
   controls.enablePan = true
   controls.maxPolarAngle = POLAR_ANGLE
-
   return controls
 }
 
