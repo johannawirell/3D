@@ -1,10 +1,11 @@
 import './css/index.css'
 import * as THREE from 'three'
+import { AnimationMixer } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { PlayerController } from './components/controllers/playerController'
-// import { HorseController } from './components/controllers/horseController'
+import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
 import { 
   pointLight,
@@ -23,7 +24,7 @@ const MAX_DISTANCE = 700
 const POLAR_ANGLE = Math.PI / 2 - 0.05
 const PATH_TO_SKY = './img/sky.jpg'
 const PATH_TO_PLAYER = './models/Soldier.glb'
-const PATH_TO_HORSE = './models/daffy(2).glb'
+const PATH_TO_HORSE = './models/Horse.glb'
 
 // Public variables
 let clock, camera, scene, renderer, controls, player, horse
@@ -38,15 +39,16 @@ const main = () => {
 
     createPlayer()
     createHorse()
-    // const horseController = new HorseController()
-   
-    // scene = horseController.addHorseTo(scene)
     
     const animate = () => {
       let mixerUpdateDelta = clock.getDelta()
 
       if (player) {
         player.update(mixerUpdateDelta)
+      }
+
+      if (horse) {
+        horse.update(mixerUpdateDelta)
       }
       controls.update()
       renderer.render(scene, camera)
@@ -135,7 +137,7 @@ function createPlayer() {
         animationsMap.set(a.name, mixer.clipAction(a))
     })
 
-   player =  new PlayerController(model, mixer, animationsMap, controls, camera,  'Idle')
+   player = new PlayerController(model, mixer, animationsMap, controls, camera,  'Idle')
   })
 }
 
@@ -147,33 +149,29 @@ function createHorse() {
       })
      scene.add(model)
 
-      // const mixer = new AnimationMixer(model)
+    let mixer = new AnimationMixer(model)
 
-      // gltf.animations.forEach(animation => {
-      //     mixer.clipAction(animation).play()
-      // })
-      // model.traverse(obj => {
-      //     if (obj.isMesh) {
-      //         obj.castShadow = true
-      //         obj.material.emissiveIntensity = 1.0
-      //     }
-      // })
+    gltf.animations.forEach(animation => {
+        mixer.clipAction(animation).play()
+    })
 
-      // const light = new SpotLight(0xffffff, 10);
-      // light.position.set(100, 100, 100)
-      // light.target = model
+    model.traverse(obj => {
+        if (obj.isMesh) {
+            obj.castShadow = true
+            obj.material.emissiveIntensity = 1.0
+        }
+    })
 
-      // this.mixer = new AnimationMixer(model) 
-      // this.mixer.clipAction(gltf.animations[0]).play()
-    
-
-      // const update = () => {
-      //     requestAnimationFrame(update)
-      //     mixer.update(0.0167)
-      // }
-      // update()
+    mixer = new AnimationMixer(model) 
+    mixer.clipAction(gltf.animations[0]).play()
+    horse = new HorseController(model)
+  
+    const update = () => {
+      requestAnimationFrame(update)
+      mixer.update(0.0167)
+    }
+    update()
   })
-return scene
 }
 
 main()
