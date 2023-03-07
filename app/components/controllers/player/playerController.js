@@ -93,6 +93,14 @@ export class PlayerController {
             return
         }
         this.state.update(keys)
+
+        // Animation
+        const currentState = this.state.current
+        const toPlay = this.animationsMap.get(currentState)
+        const current = this.animationsMap.get(currentState)
+        current.fadeOut(this.fadeDuration)
+        toPlay.reset().fadeIn(this.fadeDuration).play()
+
       
         const velocity = this.velocity
         
@@ -124,10 +132,11 @@ export class PlayerController {
 
         // TODO swift
         if (keys.forward) {
-            velocity.z += acc.z * time
+            velocity.z -= acc.z * time
         }
         if (keys.backward) {
-            velocity.z -= acc.z * time
+            velocity.z += acc.z * time
+            
         }
         if (keys.left) {
             _A.set(0, 1, 0)
