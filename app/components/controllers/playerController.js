@@ -64,6 +64,7 @@ export class PlayerController {
         this.#setDirection(directionOffsett)
 
         this.#moveModel(delta) 
+        this.camera.lookAt(this.model.position)
     }
 
     #calculateCameraPosition() {
@@ -140,9 +141,14 @@ export class PlayerController {
             CAMERA_POSITION_Y,
             CAMERA_POSITION_Z
         )
+        // this.camera.position.copy(this.model.position).add(cameraOffset)
+        // this.cameraTarget.copy(this.model.position)
+        // this.orbitControl.target = this.cameraTarget
+        cameraOffset.applyAxisAngle(this.rotateAngle, this.#calculateCameraPosition())
+
+        // Set camera position and target
         this.camera.position.copy(this.model.position).add(cameraOffset)
-        this.cameraTarget.copy(this.model.position)
-        this.orbitControl.target = this.cameraTarget
+        this.camera.lookAt(this.model.position)
     }      
 
     update(delta) {
@@ -176,4 +182,3 @@ export class PlayerController {
        
     }
 }
-
