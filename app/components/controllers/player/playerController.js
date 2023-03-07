@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { InputController } from './inputController.js'
+import { ThirdPersonCamera } from './thirdPersonCamera.js'
 import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
@@ -57,6 +58,13 @@ export class PlayerController {
             gltfAnimations.filter(a => a.name != 'TPose').forEach(a => {
                 this.animationsMap.set(a.name, this.mixer.clipAction(a))
             })
+          })
+
+          this.thirdPersonCamera = new ThirdPersonCamera({
+            camera: this.camera,
+            target: this.target,
+            rotation: this.rotation,
+            position: this.position
           })
           
     }
@@ -176,6 +184,8 @@ export class PlayerController {
             if (this.mixer) {
                 this.mixer.update(time)
             }
+
+            this.thirdPersonCamera.update(time)
         }
 
       
