@@ -1,13 +1,12 @@
 import * as THREE from 'three'
 
-const CAMERA_POSITION_X = import.meta.env.VITE_CAMERA_POSITION_X
-const CAMERA_POSITION_Y = import.meta.env.VITE_CAMERA_POSITION_Y
-const CAMERA_POSITION_Z = import.meta.env.VITE_CAMERA_POSITION_Z
-
 export class ThirdPersonCamera {
+    direction = new THREE.Vector3()
     constructor(camera, model) {
         this.camera = camera
         this.model = model
+        
+
     }
 
     getWorldDirection(direction) {
@@ -22,35 +21,20 @@ export class ThirdPersonCamera {
     }
 
     move() {
-        
+        const cameraOffset = new THREE.Vector3(20, 10, 0)
+        const newCameraPosition = this.model.position.clone().add(cameraOffset)
+        newCameraPosition.addScaledVector(
+            this.direction, 500, 500
+            // -10,
+            // // 1 * Math.sin(this.direction.y),
+            // 20 * Math.cos(this.direction.y
+        )
 
-        // this.camera.lookAt(this.model.position)
-
+        this.camera.position.copy(newCameraPosition)
+        this.camera.lookAt(this.model.position)
     }
-
-      // #updateCameraTarget(moveX, moveZ) {
-    //     this.camera.position.x += moveX
-    //     this.camera.position.z += moveZ
-
-    //     this.cameraTarget.x = this.model.position.x
-    //     this.cameraTarget.y = this.model.position.y + 1
-    //     this.cameraTarget.z = this.model.position.z
-    //     this.orbitControl.target = this.cameraTarget
-    // }
-
-    // #updateCameraPosition() {
-    //     const cameraOffset = new THREE.Vector3(
-    //         CAMERA_POSITION_X,
-    //         CAMERA_POSITION_Y,
-    //         CAMERA_POSITION_Z
-    //     )
-    //     // this.camera.position.copy(this.model.position).add(cameraOffset)
-    //     // this.cameraTarget.copy(this.model.position)
-    //     // this.orbitControl.target = this.cameraTarget
-    //     cameraOffset.applyAxisAngle(this.rotateAngle, this.#calculateCameraPosition())
-
-    //     // Set camera position and target
-    //     this.camera.position.copy(this.model.position).add(cameraOffset)
+    //     const cameraOffset = new THREE.Vector3(20, 10, 0)
+    //     // this.camera.position.copy(this.model.posiwtion).add(cameraOffset)
     //     this.camera.lookAt(this.model.position)
-    // } 
+    // }
 }

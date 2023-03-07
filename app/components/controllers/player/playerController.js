@@ -58,7 +58,7 @@ export class PlayerController {
         this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
 
         this.camera.move()
-        this.#moveModel(delta)         
+        this.#moveModel(delta)        
     }
 
     #calculateDirectionOfsett() {
