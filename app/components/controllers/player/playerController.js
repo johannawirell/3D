@@ -1,9 +1,6 @@
 import * as THREE from 'three'
-import { A, D, DIRECTIONS, S, W } from './key'
-
-const CAMERA_POSITION_X = import.meta.env.VITE_CAMERA_POSITION_X
-const CAMERA_POSITION_Y = import.meta.env.VITE_CAMERA_POSITION_Y
-const CAMERA_POSITION_Z = import.meta.env.VITE_CAMERA_POSITION_Z
+import { A, D, DIRECTIONS, S, W } from '../key'
+import { ThirdPersonCamera } from './thirdPersonCamera'
 
 const WALK = 'Walk'
 const RUN = 'Run'
@@ -16,16 +13,15 @@ export class PlayerController {
     pressedKeys = {}
     shiftPressed = false
     direction = new THREE.Vector3()
+    target = new THREE.Vector3()
     rotateAngle = new THREE.Vector3(0, 1, 0)
     rotateQuarternion = new THREE.Quaternion()
-    cameraTarget = new THREE.Vector3()
 
-    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction) {
+    constructor(model, mixer, animationsMap, camera, currentAction) {
         this.model = model
         this.mixer = mixer
         this.animationsMap = animationsMap
-        this.orbitControl = orbitControl
-        this.camera = camera
+        this.camera = new ThirdPersonCamera(camera, model)
         this.currentAction = currentAction
         
         this.#addEventListeners()
@@ -52,26 +48,17 @@ export class PlayerController {
         }
     }
 
-
     #handleMovement(delta) {
-        const angleYCameraDirection = this.#calculateCameraPosition()
         const directionOffsett = this.#calculateDirectionOfsett()
+        this.#setDirection(directionOffsett)
+        const angleYCameraDirection = this.camera.calculateCameraPosition()
 
         // Rotate model
         this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffsett)
         this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
 
-        this.#setDirection(directionOffsett)
-
-        this.#moveModel(delta) 
-        this.camera.lookAt(this.model.position)
-    }
-
-    #calculateCameraPosition() {
-        return Math.atan2(
-            (this.camera.position.x - this.model.position.x), 
-            (this.camera.position.z - this.model.position.z)
-        )
+        this.camera.move()
+        this.#moveModel(delta)         
     }
 
     #calculateDirectionOfsett() {
@@ -120,36 +107,7 @@ export class PlayerController {
 
         this.model.position.x += moveX
         this.model.position.z += moveZ
-        
-        this.#updateCameraTarget(moveX, moveZ)
-        this.#updateCameraPosition()
     }
-
-    #updateCameraTarget(moveX, moveZ) {
-        this.camera.position.x += moveX
-        this.camera.position.z += moveZ
-
-        this.cameraTarget.x = this.model.position.x
-        this.cameraTarget.y = this.model.position.y + 1
-        this.cameraTarget.z = this.model.position.z
-        this.orbitControl.target = this.cameraTarget
-    }
-
-    #updateCameraPosition() {
-        const cameraOffset = new THREE.Vector3(
-            CAMERA_POSITION_X,
-            CAMERA_POSITION_Y,
-            CAMERA_POSITION_Z
-        )
-        // this.camera.position.copy(this.model.position).add(cameraOffset)
-        // this.cameraTarget.copy(this.model.position)
-        // this.orbitControl.target = this.cameraTarget
-        cameraOffset.applyAxisAngle(this.rotateAngle, this.#calculateCameraPosition())
-
-        // Set camera position and target
-        this.camera.position.copy(this.model.position).add(cameraOffset)
-        this.camera.lookAt(this.model.position)
-    }      
 
     update(delta) {
         const directionPressed = DIRECTIONS.some(key => this.pressedKeys[key] === true) 
@@ -179,6 +137,5 @@ export class PlayerController {
         }
 
         this.mixer.update(delta)
-       
     }
 }

@@ -5,7 +5,7 @@ import { SpotLight } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-import { PlayerController } from './components/controllers/playerController'
+import { PlayerController } from './components/controllers/player/playerController'
 import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
 import { 
@@ -139,7 +139,7 @@ function createPlayer() {
         animationsMap.set(a.name, mixer.clipAction(a))
     })
 
-   player = new PlayerController(model, mixer, animationsMap, controls, camera,  'Idle')
+   player = new PlayerController(model, mixer, animationsMap, camera,  'Idle')
   })
 }
 
