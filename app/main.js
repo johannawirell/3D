@@ -21,6 +21,7 @@ class Main {
     this.renderer = this.#createRenderer()
     this.camera = this.#createPerspectiveCamera()
     this.scene = this.#createScene()
+    this.controls = this.#createOrbitControls()
     this.mixers = []
     this.previousRAF = null
 
@@ -106,6 +107,10 @@ class Main {
     scene.background = sky
   
     return scene
+  }
+
+  #createOrbitControls() {
+    // const controls = new OrbitControls(this.camera, )
   }
 
   
