@@ -8,8 +8,10 @@ import { plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
+const WINDOW_WIDTH = window.innerWidth
+const WINDOW_HEIGHT = window.innerHeight
 const FIELD_OF_VIEW = 60
-const ASPECT = window.innerWidth / window.innerHeight
+const ASPECT = WINDOW_WIDTH / WINDOW_HEIGHT
 const NEAR = 1.0
 const FAR = 1000.0
 const CAMERA_POSITION_X = 25
@@ -25,7 +27,14 @@ class Main {
     this.previousRAF = null
 
     this.#loadAnimateModel()
+    this.#addEventListeners()
     this.#RAF()
+  }
+
+  #addEventListeners() {
+    window.addEventListener('resize', () => {
+       this.renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
+    })
   }
 
   #RAF() {
@@ -70,8 +79,8 @@ class Main {
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
-  
+    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setSize(WINDOW_WIDTH, WINDOW_HEIGHT) 
     return renderer
   }
 
@@ -100,6 +109,8 @@ class Main {
   
     return scene
   }
+
+  
 }
 
 new Main()

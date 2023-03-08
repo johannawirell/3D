@@ -1,5 +1,8 @@
 import * as THREE from 'three'
 
+const WINDOW_WIDTH = window.innerWidth
+const WINDOW_HEIGHT = window.innerHeight
+
 export class ThirdPersonCamera {
 
     constructor(params) {
@@ -9,8 +12,9 @@ export class ThirdPersonCamera {
         this.currentPosition = new THREE.Vector3()
         this.currentLookat = new THREE.Vector3()
 
-        // Lägg till en lyssnare för "wheel" händelsen
-        document.addEventListener('wheel', this.#onMouseWheel.bind(this))
+        this.#addEventListeners()
+
+      
       }
 
       #calculateIdeal(x, y, z) {
@@ -36,10 +40,15 @@ export class ThirdPersonCamera {
         this.camera.lookAt(this.currentLookat)
       }
 
-      #onMouseWheel(e) {
-        const delta = e.deltaY
-        const zoomStep = 2
-        const idealOffset = this.#calculateIdeal(-1 - (delta / 100) * zoomStep, 2, -2 - (delta / 100) * zoomStep)
-        this.currentPosition.copy(idealOffset)
+      #addEventListeners() {
+        // Lägg till en lyssnare för "wheel" händelsen
+        document.addEventListener('click', this.#onDrag.bind(this))
       }
+
+      #onDrag(e) {
+        console.log('hej')
+      }
+
+
+   
     }
