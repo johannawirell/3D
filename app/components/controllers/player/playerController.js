@@ -202,8 +202,6 @@ export class PlayerController {
 
             this.thirdPersonCamera.update(time)
         }
-
-      
     }
 
     #isKeyAction(keys) {
