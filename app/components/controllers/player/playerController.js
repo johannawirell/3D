@@ -1,13 +1,10 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { InputController } from './inputController.js'
-import { ThirdPersonCamera } from './thirdPersonCamera.js'
 import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
-const WINDOW_WIDTH = window.innerWidth
-const WINDOW_HEIGHT = window.innerHeight
 
 export class PlayerController {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
@@ -62,17 +59,7 @@ export class PlayerController {
             })
           })
 
-          this.#createThirdPersonCamera()
           this.#updateInitialPosition()
-    }
-
-    #createThirdPersonCamera() {
-        this.thirdPersonCamera = new ThirdPersonCamera({
-            camera: this.camera,
-            target: this.target,
-            rotation: this.rotation,
-            position: this.position
-          })
     }
 
     #updateInitialPosition(model) {
@@ -199,8 +186,6 @@ export class PlayerController {
             if (this.mixer) {
                 this.mixer.update(time)
             }
-
-            this.thirdPersonCamera.update(time)
         }
     }
 

@@ -1,12 +1,11 @@
 import './css/index.css'
 import * as THREE from 'three'
-import { AnimationMixer } from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { PlayerController } from './components/controllers/player/playerController'
+import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
 import { HorseController } from './components/controllers/horseController'
 import { plane } from './components/objects/plane'
+import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
@@ -31,16 +30,16 @@ class Main {
   }
 
   #RAF() {
-    requestAnimationFrame(x => {
+    requestAnimationFrame(time => {
       if (this.previousRAF === null) {
-        this.previousRAF = x
+        this.previousRAF = time
       }
 
       this.#RAF()
 
       this.renderer.render(this.scene, this.camera)
-      this.#update(x - this.previousRAF)
-      this.previousRAF = x
+      this.#update(time - this.previousRAF)
+      this.previousRAF = time
     })
   }
 
@@ -52,12 +51,19 @@ class Main {
     if (this.player) {
       this.player.update(seconds) 
     }
-    // this.thirdPersonCamera.update(time)
+    this.thirdPersonCamera.update(seconds)
   }
 
   #loadAnimateModel() {
+    const params = {
+      camera: this.camera,
+      scene: this.scene
+    }
     this.player = new PlayerController(this.camera, this.scene)
-    // this.thirdPersonCamera(this.camera, this.player)
+    this.thirdPersonCamera = new ThirdPersonCamera({
+      camera: this.camera,
+      target: this.player
+    })
   }
 
   #createRenderer() {
@@ -88,39 +94,16 @@ class Main {
 
   #createScene() {
     let scene = new THREE.Scene()
-    scene.background = this.#createTexture()
+
     scene.add(
-      this.#createPlane(),
       ambientLight,
-      directionaLight
+      directionaLight,
+      plane
     )
+
+    scene.background = sky
+  
     return scene
-  }
-
-  #createTexture() {
-    const loader = new THREE.CubeTextureLoader()
-    const texture = loader.load([
-      './img/ground/ground1.jpg',
-      './img/ground/ground2.jpg',
-      './img/ground/ground3.jpg',
-      './img/ground/ground4.jpg',
-      './img/ground/ground5.jpg',
-      './img/ground/ground6.jpg'
-    ])
-    texture.encoding = THREE.sRGBEncoding
-    return texture
-  }
-
-  #createPlane() {
-    const texture = new THREE.TextureLoader().load('./img/ground/ground2.jpg')
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(100, 100, 10, 10),
-      new THREE.MeshBasicMaterial( { map: texture })
-    )
-    plane.castShadow = false
-    plane.receiveShadow = true
-    plane.rotation.x = -Math.PI / 2
-    return plane
   }
 
   #addEventListeners() {
