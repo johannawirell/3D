@@ -39,7 +39,6 @@ export class PlayerController {
     #loadPlayerModel() {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
-            // model.rotateY(Math.PI)
             model = this.#updateInitialPosition(model)
 
             model.traverse(obj => {

@@ -9,7 +9,7 @@ import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
-const ASPECT = 1920 / 1080// window.innerWidth / window.innerHeight
+const ASPECT = window.innerWidth / window.innerHeight
 const NEAR = 1.0
 const FAR = 1000.0
 const CAMERA_POSITION_X = 25
@@ -26,7 +26,6 @@ class Main {
 
     this.#loadAnimateModel()
     this.#RAF()
-    this.#addEventListeners()
   }
 
   #RAF() {
@@ -55,10 +54,6 @@ class Main {
   }
 
   #loadAnimateModel() {
-    const params = {
-      camera: this.camera,
-      scene: this.scene
-    }
     this.player = new PlayerController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
@@ -104,14 +99,6 @@ class Main {
     scene.background = sky
   
     return scene
-  }
-
-  #addEventListeners() {
-    window.addEventListener('resize', () => {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    },false)
   }
 }
 
