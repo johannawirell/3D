@@ -6,6 +6,8 @@ import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
+const WINDOW_WIDTH = window.innerWidth
+const WINDOW_HEIGHT = window.innerHeight
 
 export class PlayerController {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
@@ -39,8 +41,8 @@ export class PlayerController {
 
     #loadPlayerModel() {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
-            const model = gltf.scene
-            model.scale.copy(PLAYER_SCALE_VECTOR)
+            let model = gltf.scene
+            model = this.#updateInitialPosition(model)
 
             model.traverse(obj => {
                 if (obj.isMesh) {
@@ -60,14 +62,27 @@ export class PlayerController {
             })
           })
 
-          this.thirdPersonCamera = new ThirdPersonCamera({
+          this.#createThirdPersonCamera()
+          this.#updateInitialPosition()
+    }
+
+    #createThirdPersonCamera() {
+        this.thirdPersonCamera = new ThirdPersonCamera({
             camera: this.camera,
             target: this.target,
             rotation: this.rotation,
             position: this.position
           })
-          
     }
+
+    #updateInitialPosition(model) {
+        if (model) {
+            model.scale.copy(PLAYER_SCALE_VECTOR)       
+            model.position.set(25, 5, 10) // TODO: Ta bort hårdkod
+        }
+       
+        return model
+    }     
 
     #animatePlayer() {
         // TODO: fixa
