@@ -185,6 +185,8 @@ export class PlayerController {
             if (this.mixer) {
                 this.mixer.update(time)
             }
+        } else {
+            this.currentState = this.state.update()
         }
     }
 
