@@ -10,7 +10,12 @@ export class Movement {
 
     constructor() {
         this.waypoints = [
-             FORWARDS, RIGHTWARDS, BACKWARDS, LEFTWARDS
+            FORWARDS,
+            new THREE.Vector3(25, 0, 0),
+            RIGHTWARDS,
+            BACKWARDS,
+            new THREE.Vector3(25, 0, -125),
+            LEFTWARDS
         ]
         this.speed = 0.5
         this.waypointIndex = 0
@@ -41,7 +46,6 @@ export class Movement {
 
         if (newPosition.distanceTo(nextWaypoint) < 10) {
             this.waypointIndex = (this.waypointIndex + 1) % this.waypoints.length
-            
         }
 
         return newPosition
