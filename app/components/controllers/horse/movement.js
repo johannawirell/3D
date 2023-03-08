@@ -7,6 +7,7 @@ const LEFTWARDS = new THREE.Vector3(-5, 0, -100)
 export class Movement {
     velocity = new THREE.Vector3(0, 0, 2)
     currentPosition = new THREE.Vector3()
+    startPosition = {x: -5, z: -100}
 
     constructor() {
         this.waypoints = [
