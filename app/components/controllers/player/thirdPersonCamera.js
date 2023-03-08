@@ -23,14 +23,8 @@ export class ThirdPersonCamera {
       }
    
       update(timeElapsed) {
-     
-
-        // BÄSTA VÄRDENA!
-        //  const idealOffset = this.#calculateIdeal(0, 2, -2)
-        // const idealLookat = this.#calculateIdeal(1, 1, 0)
-
-        const idealOffset = this.#calculateIdeal(0, 2, -2)
-        const idealLookat = this.#calculateIdeal(1, 1, 0)
+        const idealOffset = this.#calculateIdeal(-1, 2, -2)
+        const idealLookat = this.#calculateIdeal(0, 1, 0)
   
     
         const t = 1.0 - Math.pow(0.001, timeElapsed);

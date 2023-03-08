@@ -65,7 +65,6 @@ export class PlayerController {
     #updateInitialPosition(model) {
         if (model) {
             model.scale.copy(PLAYER_SCALE_VECTOR)       
-            model.position.set(-10, 5, 0) // TODO: Ta bort hårdkod
         }
        
         return model
