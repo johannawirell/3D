@@ -1,5 +1,7 @@
 
 import * as THREE from 'three'
+const MIDDLE_WIDTH = window.innerWidth / 2 
+const MIDDLE_HEIGHT = window.innerHeight / 2 
 export class ThirdPersonCamera {
 
     constructor(params) {
@@ -8,15 +10,15 @@ export class ThirdPersonCamera {
     
         this.currentPosition = new THREE.Vector3()
         this.currentLookat = new THREE.Vector3()
-        this.prevMousePos = { x: 0, y: 0 }
+        this.prevMousePos = { x: MIDDLE_WIDTH, y: MIDDLE_HEIGHT }
       }
        
     mouseMove(event) {
-        const currMousePos = { x: event.clientX, y: event.clientY }
-        const mouseDiff = {
-            x: currMousePos.x - this.prevMousePos.x,
-            y: currMousePos.y - this.prevMousePos.y
-        }
+      const currMousePos = { x: event.clientX, y: event.clientY }
+      const mouseDiff = {
+          x: currMousePos.x - this.prevMousePos.x,
+          y: currMousePos.y - this.prevMousePos.y
+      }
     
         // adjust rotation speed as needed
         const rotationSpeed = 0.005
