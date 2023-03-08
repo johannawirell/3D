@@ -40,20 +40,17 @@ export class PlayerController {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
             model = this.#updateInitialPosition(model)
-
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
                 }
             })
-            this.target = gltf.scene
-        
             this.scene.add(model)
+
+            this.target = gltf.scene           
         
             const gltfAnimations = gltf.animations
-
             this.mixer = new THREE.AnimationMixer(model)
-
             gltfAnimations.filter(a => a.name != 'TPose').forEach(a => {
                 this.animationsMap.set(a.name, this.mixer.clipAction(a))
             })
@@ -66,12 +63,10 @@ export class PlayerController {
         if (model) {
             model.scale.copy(PLAYER_SCALE_VECTOR)       
         }
-       
         return model
     }     
 
     #animatePlayer() {
-        // TODO: fixa
         let action
         const { states } = this.state
 
@@ -94,7 +89,6 @@ export class PlayerController {
             toPlay.reset().fadeIn(this.fadeDuration).play()
         }
     }
-
 
     #updateVelocity(time) {
         const deceleration = this.deceleration
@@ -170,8 +164,7 @@ export class PlayerController {
         controlObject.position.add(forward)
         controlObject.position.add(sideways)
 
-        this.currentPosition.copy(controlObject.position)
-      
+        this.currentPosition.copy(controlObject.position) 
     }
 
     #handleMovement(time, keys) {
