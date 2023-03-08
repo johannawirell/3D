@@ -36,10 +36,24 @@ export class ThirdPersonCamera {
       #calculateIdeal(x, y, z) {
         const ideal = new THREE.Vector3(x, y, z)
         const targetRotation = this.params.target.rotation.clone()
-        targetRotation.y += Math.PI // Rotera 180 grader för att få en bakifrånvy
+
+        if (this.#isFacingCamera(targetRotation)) {
+          targetRotation.y += Math.PI
+        } else {
+          // Rotera kameran åt andra hållet
+          const cameraRotation = targetRotation.clone()
+          cameraRotation.y += Math.PI
+          ideal.applyQuaternion(cameraRotation)
+          
+        }
+           
         ideal.applyQuaternion(targetRotation)
         ideal.add(this.params.target.position)
         return ideal
+      }
+
+      #isFacingCamera(targetRotation) {
+        return targetRotation.y < Math.PI/4 && targetRotation.y > -Math.PI/4
       }
    
       update(timeElapsed) {
@@ -53,5 +67,5 @@ export class ThirdPersonCamera {
     
         this.camera.position.copy(this.currentPosition)
         this.camera.lookAt(this.currentLookat)
-      }   
+      }
     }
