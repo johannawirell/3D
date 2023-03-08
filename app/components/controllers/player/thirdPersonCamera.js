@@ -2,6 +2,8 @@
 import * as THREE from 'three'
 const MIDDLE_WIDTH = window.innerWidth / 2 
 const MIDDLE_HEIGHT = window.innerHeight / 2 
+const ROTATION_SPEED = 0.005
+
 export class ThirdPersonCamera {
 
     constructor(params) {
@@ -10,28 +12,29 @@ export class ThirdPersonCamera {
     
         this.currentPosition = new THREE.Vector3()
         this.currentLookat = new THREE.Vector3()
-        this.prevMousePos = { x: MIDDLE_WIDTH, y: MIDDLE_HEIGHT }
+        this.previousMousePosition = { 
+          x: MIDDLE_WIDTH,
+          y: MIDDLE_HEIGHT
+        }
       }
        
     mouseMove(event) {
-      const currMousePos = { x: event.clientX, y: event.clientY }
+      const currentMousePosition = { x: event.clientX, y: event.clientY }
       const mouseDiff = {
-          x: currMousePos.x - this.prevMousePos.x,
-          y: currMousePos.y - this.prevMousePos.y
+          x: currentMousePosition.x - this.previousMousePosition.x,
+          y: currentMousePosition.y - this.previousMousePosition.y
       }
-    
-        // adjust rotation speed as needed
-        const rotationSpeed = 0.005
-    
-        // update camera rotation based on mouse difference
         const euler = new THREE.Euler(0, 0, 0, 'XYZ')
         euler.setFromQuaternion(this.camera.quaternion.clone(), 'YXZ')
-        euler.y -= mouseDiff.x * rotationSpeed
-        euler.x -= mouseDiff.y * rotationSpeed
-        euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x)) // limit pitch angle
+        euler.y -= mouseDiff.x * ROTATION_SPEED
+        euler.x -= mouseDiff.y * ROTATION_SPEED
+        euler.x = Math.max(
+          -Math.PI / 2,
+          Math.min(Math.PI / 2, euler.x)
+        )
         this.camera.quaternion.setFromEuler(euler)
     
-        this.prevMousePos = currMousePos      
+        this.previousMousePosition = currentMousePosition      
     }
 
 
