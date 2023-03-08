@@ -8,10 +8,8 @@ import { plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
-const WINDOW_WIDTH = window.innerWidth
-const WINDOW_HEIGHT = window.innerHeight
 const FIELD_OF_VIEW = 60
-const ASPECT = WINDOW_WIDTH / WINDOW_HEIGHT
+const ASPECT = window.innerWidth / window.innerHeight
 const NEAR = 1.0
 const FAR = 1000.0
 const CAMERA_POSITION_X = 25
@@ -80,7 +78,7 @@ class Main {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(WINDOW_WIDTH, WINDOW_HEIGHT) 
+    renderer.setSize(window.innerWidth, window.innerHeight) 
     return renderer
   }
 
