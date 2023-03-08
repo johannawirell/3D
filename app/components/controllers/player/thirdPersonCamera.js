@@ -37,10 +37,9 @@ export class ThirdPersonCamera {
       }
 
       #onMouseWheel(e) {
-        console.log('zoom')
         const delta = e.deltaY
-        const idealOffset = this.#calculateIdeal(20 + delta, 15, -50)
+        const zoomStep = 2
+        const idealOffset = this.#calculateIdeal(-1 - (delta / 100) * zoomStep, 2, -2 - (delta / 100) * zoomStep)
         this.currentPosition.copy(idealOffset)
-    
       }
     }

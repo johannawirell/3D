@@ -86,7 +86,7 @@ export class PlayerController {
             action = states.idle
         }
 
-        if (this.currentState != action) {
+        if (this.currentState !== action) {
             const toPlay = this.animationsMap.get(action)
             const current = this.animationsMap.get(this.currentState)
 
