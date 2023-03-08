@@ -39,6 +39,7 @@ export class PlayerController {
     #loadPlayerModel() {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
+            // model.rotateY(Math.PI)
             model = this.#updateInitialPosition(model)
 
             model.traverse(obj => {
@@ -65,7 +66,7 @@ export class PlayerController {
     #updateInitialPosition(model) {
         if (model) {
             model.scale.copy(PLAYER_SCALE_VECTOR)       
-            model.position.set(25, 5, 10) // TODO: Ta bort hårdkod
+            model.position.set(-10, 5, 0) // TODO: Ta bort hårdkod
         }
        
         return model
