@@ -6,17 +6,29 @@ const WIDTH = 0.4
 const HEIGHT = 0.4
 const DEPTH = 0.4
 
-const X_POSITION = 100
+const X_POSITION = -5
 const Y_POSITION = 0
 const Z_POSITION = -100
 
+
 export class HorseController {
+    velocity = new THREE.Vector3(0, 0, 5)
+    currentPosition = new THREE.Vector3()
+
     constructor(camera, scene) {
         this.camera = camera
         this.scene = scene
 
+        // this.angle = 10
+        // this.radius = 1
+
         this.#loadHorseModel()
     }
+
+    get position() {
+        return this.currentPosition
+    }
+
 
     #loadHorseModel() {
         new GLTFLoader().load(PATH_TO_HORSE, gltf => {
@@ -38,10 +50,50 @@ export class HorseController {
           })
     }
 
+    #forward(time, controlObject) {
+        const velocity = this.velocity
+        const forward = new THREE.Vector3(0, 0, -5)
+        forward.applyQuaternion(controlObject.quaternion)
+        forward.normalize()
+        forward.multiplyScalar(velocity.z * time)
+        controlObject.position.add(forward)
+    }
+
+    #move(time) {
+        if (this.target) {
+            const velocity = this.velocity
+            const controlObject = this.target
+            let rotation = controlObject.quaternion.clone()
+
+
+            controlObject.quaternion.copy(rotation)
+            
+            // 
+            this.#forward(time, controlObject)
+            
+
+        
+            // const sideways = new THREE.Vector3(10, 0, 0)
+            // sideways.applyQuaternion(controlObject.quaternion)
+            // sideways.normalize()
+        
+            // sideways.multiplyScalar(velocity.x * time)
+            
+        
+            
+            // controlObject.position.add(sideways)
+
+            this.currentPosition.copy(controlObject.position) 
+
+        }
+    }
+
     update(time) {
         if (this.mixer) {
             this.mixer.update(time)
         }
+
+        this.#move(time)
     }
 
    #updateInitialPosition(model) {
