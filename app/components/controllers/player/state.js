@@ -8,10 +8,10 @@ export class State {
         this.currentState = this.states.idle
     }
     
-      update(input) {
-        if (input) {
+      update(input, isDirectionsPressed) {
+        if (isDirectionsPressed) {
             if (input.shift) {
-                this.currentState = this.states.run    
+                this.currentState = this.states.run
             } else {
                 this.currentState = this.states.walk
             }

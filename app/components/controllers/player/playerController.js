@@ -96,7 +96,8 @@ export class PlayerController {
     }
 
 
-    #updateVelocity(time, deceleration) {
+    #updateVelocity(time) {
+        const deceleration = this.deceleration
         const velocity = this.velocity
         
         const frameDeceleration = new THREE.Vector3(
@@ -116,77 +117,101 @@ export class PlayerController {
         return velocity
     }
 
+    #turn(left, right, rotation, time, acceleration) {
+        const quaternion = new THREE.Quaternion()
+        const axis = new THREE.Vector3()
+
+        if (left) {
+            axis.set(0, 1, 0)
+            quaternion.setFromAxisAngle(
+                axis, 
+                4.0 * Math.PI * time * acceleration.y
+            )
+            rotation.multiply(quaternion)
+        }
+
+        if (right) {
+            axis.set(0, 1, 0)
+            quaternion.setFromAxisAngle(
+                axis,
+                4.0 * - Math.PI * time * acceleration.y
+            )
+            rotation.multiply(quaternion)
+          }
+
+        return rotation
+    }
+
+    #move(forwards, velocity, time, acceleration) {
+        if (forwards) {
+            if (this.#isRunning()) {
+                acceleration.multiplyScalar(2.0)
+            }
+            velocity.z -= acceleration.z * time
+        } else {
+            velocity.z += acceleration.z * time
+        }
+    }
+
+    #updatePosition(rotation, velocity, time, controlObject) {
+        controlObject.quaternion.copy(rotation)
+              
+        const forward = new THREE.Vector3(0, 0, 1)
+        forward.applyQuaternion(controlObject.quaternion)
+        forward.normalize()
+      
+        const sideways = new THREE.Vector3(1, 0, 0)
+        sideways.applyQuaternion(controlObject.quaternion)
+        sideways.normalize()
+      
+        sideways.multiplyScalar(velocity.x * time)
+        forward.multiplyScalar(velocity.z * time)
+      
+        controlObject.position.add(forward)
+        controlObject.position.add(sideways)
+
+        this.currentPosition.copy(controlObject.position)
+      
+    }
+
+    #handleMovement(time, keys) {
+        this.currentState = this.state.update(keys, this.inputController.isDirectionsPressed())
+
+        const velocity = this.#updateVelocity(time)
+
+        const controlObject = this.target
+        let rotation = controlObject.quaternion.clone()
+        const acceleration = this.acceleration.clone()
+
+        if (keys.left || keys.right) {
+            rotation = this.#turn(keys.left, keys.right, rotation, time, acceleration)
+        }
+
+        if (this.#isRunning()){
+            acceleration.multiplyScalar(2.0)
+        }
+
+        if (keys.forward) {
+            this.#move(true, velocity, time, acceleration)
+        } else if (keys.backward) {
+            this.#move(false, velocity, time, acceleration)
+        }
+
+        this.#updatePosition(rotation, velocity, time, controlObject)
+    }
+
     update(time) {
         const keys = this.inputController.keys
         this.#animatePlayer()          
 
         if (this.#isKeyAction(keys)) {
-            this.currentState = this.state.update(keys)
-
-            const deceleration = this.deceleration
-            const velocity = this.#updateVelocity(time, deceleration)
-
-            const controlObject = this.target
-    
-            const quaternion = new THREE.Quaternion()
-            const axis = new THREE.Vector3()
-            const rotation = controlObject.quaternion.clone()
-          
-            const acceleration = this.acceleration.clone()
-    
-            if (this.#isRunning()){
-                acceleration.multiplyScalar(2.0)
-            }
-    
-            if (keys.forward) {
-                velocity.z -= acceleration.z * time
-            }
-            if (keys.backward) {
-                velocity.z += acceleration.z * time
-            }
-            if (keys.left) {
-                axis.set(0, 1, 0)
-                quaternion.setFromAxisAngle(
-                    axis, 
-                    4.0 * Math.PI * time * acceleration.y
-                )
-                rotation.multiply(quaternion)
-            }
-            if (keys.right) {
-                axis.set(0, 1, 0)
-                quaternion.setFromAxisAngle(
-                    axis,
-                    4.0 * - Math.PI * time * acceleration.y
-                )
-                rotation.multiply(quaternion)
-              }
-          
-            controlObject.quaternion.copy(rotation)
-    
-            const oldPosition = new THREE.Vector3()
-            oldPosition.copy(controlObject.position)
-          
-            const forward = new THREE.Vector3(0, 0, 1)
-            forward.applyQuaternion(controlObject.quaternion)
-            forward.normalize()
-          
-            const sideways = new THREE.Vector3(1, 0, 0)
-            sideways.applyQuaternion(controlObject.quaternion)
-            sideways.normalize()
-          
-            sideways.multiplyScalar(velocity.x * time)
-            forward.multiplyScalar(velocity.z * time)
-          
-            controlObject.position.add(forward)
-            controlObject.position.add(sideways)
-          
-            this.currentPosition.copy(controlObject.position)
-          
-            if (this.mixer) {
-                this.mixer.update(time)
-            }
+            this.#handleMovement(time, keys)
         } else {
             this.currentState = this.state.update()
+        }
+
+        if (this.mixer) {
+            this.mixer.update(time)
         }
     }
 
