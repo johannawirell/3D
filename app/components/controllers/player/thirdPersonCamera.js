@@ -40,7 +40,7 @@ export class ThirdPersonCamera {
         if (this.#isFacingCamera(targetRotation)) {
           targetRotation.y += Math.PI
         } else {
-          // Rotera kameran åt andra hållet
+          // Rotate camera in the other direction
           const cameraRotation = targetRotation.clone()
           cameraRotation.y += Math.PI
           ideal.applyQuaternion(cameraRotation)
