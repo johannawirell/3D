@@ -1,8 +1,5 @@
+
 import * as THREE from 'three'
-
-const WINDOW_WIDTH = window.innerWidth
-const WINDOW_HEIGHT = window.innerHeight
-
 export class ThirdPersonCamera {
 
     constructor(params) {
@@ -11,11 +8,30 @@ export class ThirdPersonCamera {
     
         this.currentPosition = new THREE.Vector3()
         this.currentLookat = new THREE.Vector3()
-
-        this.#addEventListeners()
-
-      
+        this.prevMousePos = { x: 0, y: 0 }
       }
+       
+    mouseMove(event) {
+        const currMousePos = { x: event.clientX, y: event.clientY }
+        const mouseDiff = {
+            x: currMousePos.x - this.prevMousePos.x,
+            y: currMousePos.y - this.prevMousePos.y
+        }
+    
+        // adjust rotation speed as needed
+        const rotationSpeed = 0.005
+    
+        // update camera rotation based on mouse difference
+        const euler = new THREE.Euler(0, 0, 0, 'XYZ')
+        euler.setFromQuaternion(this.camera.quaternion.clone(), 'YXZ')
+        euler.y -= mouseDiff.x * rotationSpeed
+        euler.x -= mouseDiff.y * rotationSpeed
+        euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x)) // limit pitch angle
+        this.camera.quaternion.setFromEuler(euler)
+    
+        this.prevMousePos = currMousePos      
+    }
+
 
       #calculateIdeal(x, y, z) {
         const ideal = new THREE.Vector3(x, y, z)
@@ -28,27 +44,14 @@ export class ThirdPersonCamera {
    
       update(timeElapsed) {
         const idealOffset = this.#calculateIdeal(-1, 2, -2)
-        const idealLookat = this.#calculateIdeal(0, 1, 0)
-  
+        const idealLookat = this.#calculateIdeal(0, 1, 0) 
     
-        const t = 1.0 - Math.pow(0.001, timeElapsed);
+        const t = 1.0 - Math.pow(0.001, timeElapsed)
     
         this.currentPosition.lerp(idealOffset, t)
         this.currentLookat.lerp(idealLookat, t)
     
         this.camera.position.copy(this.currentPosition)
         this.camera.lookAt(this.currentLookat)
-      }
-
-      #addEventListeners() {
-        // Lägg till en lyssnare för "wheel" händelsen
-        document.addEventListener('click', this.#onDrag.bind(this))
-      }
-
-      #onDrag(e) {
-        console.log('hej')
-      }
-
-
-   
+      }   
     }

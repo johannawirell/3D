@@ -24,6 +24,8 @@ class Main {
     this.controls = this.#createOrbitControls()
     this.mixers = []
     this.previousRAF = null
+    this.isMouseMoving = false
+    this.event
 
     this.#loadAnimateModel()
     this.#addEventListeners()
@@ -33,6 +35,20 @@ class Main {
   #addEventListeners() {
     window.addEventListener('resize', () => {
        this.renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
+    })
+    window.addEventListener('mousemove', e => {
+      if (e.button === 1) {
+        this.event = e
+        this.isMouseMoving = true
+      } else {
+        this.event = null
+        this.isMouseMoving = false
+      }
+    })
+
+    window.addEventListener('mouseup', () => {
+      this.isMouseMoving = false
+      this.event = null
     })
   }
 
@@ -58,7 +74,12 @@ class Main {
     if (this.player) {
       this.player.update(seconds) 
     }
-    this.thirdPersonCamera.update(seconds)
+
+    if (this.isMouseMoving) {
+      this.thirdPersonCamera.mouseMove(this.event)
+    } else {
+      this.thirdPersonCamera.update(seconds)
+    }
   }
 
   #loadAnimateModel() {
