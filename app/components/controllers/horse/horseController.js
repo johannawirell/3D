@@ -10,13 +10,12 @@ const X_POSITION = -5
 const Y_POSITION = 0
 const Z_POSITION = -100
 
-const WAYPOINTS = [
-    new THREE.Vector3(-50, 0, -100),
-    new THREE.Vector3(0, 0, -100),
-    new THREE.Vector3(50, 0, -100),
-    new THREE.Vector3(0, 0, -50),
-    new THREE.Vector3(-50, 0, -50)
-]
+const FORWARDS = new THREE.Vector3(-5, 0, -50)
+const RIGHTWARDS =  new THREE.Vector3(50, 0, -50)
+const BACKWARDS = new THREE.Vector3(50, 0, -100)
+const LEFTWARDS = new THREE.Vector3(-5, 0, -100)
+
+const WAYPOINTS = [FORWARDS, RIGHTWARDS, BACKWARDS, LEFTWARDS]
 
 const SPEED = 1
 
@@ -29,9 +28,6 @@ export class HorseController {
         this.scene = scene
 
         this.waypointIndex = 0
-
-        // this.angle = 10
-        // this.radius = 50
 
         this.#loadHorseModel()
     }
@@ -61,7 +57,21 @@ export class HorseController {
           })
     }
 
- 
+    #rotate(newPosition) {
+        const forward = newPosition.clone().sub(this.target.position).normalize()
+        const up =  new THREE.Vector3(0, 1, 0)
+        const right = new THREE.Vector3().crossVectors(forward, up).normalize()
+
+        const lookRotation = new THREE.Matrix4()
+        lookRotation.set(
+          right.x, up.x, -forward.x, 0,
+          right.y, up.y, -forward.y, 0,
+          right.z, up.z, -forward.z, 0,
+          0, 0, 0, 1
+        )
+      
+        this.target.rotation.setFromRotationMatrix(lookRotation)
+      } 
     
     #move(time) {
         if (this.target) {
@@ -69,9 +79,12 @@ export class HorseController {
             const currentPosition = this.target.position
             const newPosition = currentPosition.clone().lerp(nextWaypoint, SPEED * time)
 
+            this.#rotate(nextWaypoint)
+
             if (newPosition.distanceTo(nextWaypoint) < 0.1) {
                 // hästen har nått en waypoint, gå till nästa waypoint
                 this.waypointIndex = (this.waypointIndex + 1) % WAYPOINTS.length
+                
             }
 
             this.target.position.copy(newPosition)
@@ -95,30 +108,3 @@ export class HorseController {
         return model
     }
 }
-
-// #circle(time) {
-//     const controlObject = this.target
-//     const velocity = this.velocity
-          
-//     const forward = new THREE.Vector3(0, 0, 1)
-//     forward.applyQuaternion(controlObject.quaternion)
-//     forward.normalize()
-  
-//     const radius = 50
-//     const angle = time / 1000 * Math.PI / 2  // Vi använder tid (time) för att beräkna vinkeln
-
-//     const x = Math.sin(angle) * radius
-//     const y = 0  
-//     const z = Math.cos(angle) * radius 
-//     const circle = new THREE.Vector3(x, y, z)
-//     circle.applyQuaternion(controlObject.quaternion)
-//     circle.normalize()
-  
-//     circle.multiplyScalar(velocity.x * time)
-//     forward.multiplyScalar(velocity.z * time)
-  
-//     controlObject.position.add(forward)
-//     controlObject.position.add(circle)
- 
-//     return controlObject
-// }
