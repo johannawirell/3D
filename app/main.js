@@ -3,7 +3,7 @@ import * as THREE from 'three'
 
 import { PlayerController } from './components/controllers/player/playerController'
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
-import { HorseController } from './components/controllers/horseController'
+import { HorseController } from './components/controllers/horse/horseController'
 import { plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
@@ -21,7 +21,6 @@ class Main {
     this.renderer = this.#createRenderer()
     this.camera = this.#createPerspectiveCamera()
     this.scene = this.#createScene()
-    this.controls = this.#createOrbitControls()
     this.mixers = []
     this.previousRAF = null
     this.isMouseMoving = false
@@ -75,6 +74,10 @@ class Main {
       this.player.update(seconds) 
     }
 
+    if (this.horse) {
+      this.horse.update(seconds)
+    }
+
     if (this.isMouseMoving) {
       this.thirdPersonCamera.mouseMove(this.event)
     } else {
@@ -84,6 +87,7 @@ class Main {
 
   #loadAnimateModel() {
     this.player = new PlayerController(this.camera, this.scene)
+    this.horse = new HorseController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player
@@ -128,13 +132,7 @@ class Main {
     scene.background = sky
   
     return scene
-  }
-
-  #createOrbitControls() {
-    // const controls = new OrbitControls(this.camera, )
-  }
-
-  
+  }  
 }
 
 new Main()
