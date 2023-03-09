@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { PlayerController } from './components/controllers/player/playerController'
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
 import { HorseController } from './components/controllers/horse/horseController'
-import { plane } from './components/objects/plane'
+import { Plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
@@ -26,6 +26,7 @@ class Main {
     this.isMouseMoving = false
     this.event
 
+    this.#createPlane()
     this.#loadAnimateModel()
     this.#addEventListeners()
     this.#RAF()
@@ -94,6 +95,10 @@ class Main {
     })
   }
 
+  #createPlane() {
+    this.plane = new Plane(this.scene)
+  }
+
   #createRenderer() {
     const renderer = new THREE.WebGL1Renderer({
       canvas: document.querySelector('#background'),
@@ -126,7 +131,7 @@ class Main {
     scene.add(
       ambientLight,
       directionaLight,
-      plane
+      // plane
     )
 
     scene.background = sky
