@@ -25,7 +25,7 @@ class Main {
     this.isMouseMoving = false
     this.event
 
-    // this.#loadAnimateModel()
+    this.#loadAnimateModel()
     this.#createMeadow()
     this.#addEventListeners()
     this.#RAF()
@@ -78,11 +78,14 @@ class Main {
       this.horse.update(seconds)
     }
 
-    if (this.isMouseMoving) {
-      this.thirdPersonCamera.mouseMove(this.event)
-    } else if (this.thirdPersonCamera) {
-      this.thirdPersonCamera.update(seconds)
+    if (this.thirdPersonCamera) {
+      if (this.isMouseMoving) {
+        this.thirdPersonCamera.mouseMove(this.event)
+      } else {
+        this.thirdPersonCamera.update(seconds)
+      }
     }
+  
   }
 
   #loadAnimateModel() {
@@ -96,7 +99,6 @@ class Main {
 
   #createMeadow() {
     this.meadow = new Meadow(this.scene)
-    this.meadow.hello()
   }
 
   #createRenderer() {
