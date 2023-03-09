@@ -4,8 +4,7 @@ import * as THREE from 'three'
 import { PlayerController } from './components/controllers/player/playerController'
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
 import { HorseController } from './components/controllers/horse/horseController'
-import { plane } from './components/objects/plane'
-import { sky } from './components/objects/sky'
+import { Meadow } from './components/meadow/Meadow'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
@@ -27,6 +26,7 @@ class Main {
     this.event
 
     // this.#loadAnimateModel()
+    this.#createMeadow()
     this.#addEventListeners()
     this.#RAF()
   }
@@ -92,6 +92,11 @@ class Main {
       camera: this.camera,
       target: this.player
     })
+  }
+
+  #createMeadow() {
+    this.meadow = new Meadow(this.scene)
+    this.meadow.hello()
   }
 
   #createRenderer() {
