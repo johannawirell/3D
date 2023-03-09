@@ -8,6 +8,8 @@ import { plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
+const TerrainWorker = './components/workers/terrain'
+
 const FIELD_OF_VIEW = 60
 const ASPECT = window.innerWidth / window.innerHeight
 const NEAR = 1.0
@@ -92,6 +94,19 @@ class Main {
       camera: this.camera,
       target: this.player
     })
+
+    this.worker = new Worker(TerrainWorker)
+    this.#postMessage({
+      subject: 'dosomething',
+      data: [1, 2, 3]
+    })
+  }
+
+  #postMessage(message) {
+    this.worker.postMessage(message)
+    this.worker.onmessage = (message) => {
+      console.log(message.data)
+    }
   }
 
   #createRenderer() {
