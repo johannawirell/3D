@@ -10,8 +10,8 @@ export class Plane {
 
     get position () {
         return {
-            x: this.plane.geometry.parameters.width / 2,
-            z: this.plane.geometry.parameters.height / 2
+            x: this.plane.geometry.parameters.width / 4,
+            z: this.plane.geometry.parameters.height / 4
         }
     }
 
@@ -27,8 +27,8 @@ export class Plane {
         const texture = this.#createTexture()
         this.plane = new THREE.Mesh(
             new THREE.PlaneGeometry(
-                window.innerWidth,
-                window.innerHeight,
+                window.innerWidth * 2,
+                window.innerHeight * 2,
             ),
             new THREE.MeshBasicMaterial( { map: texture })
         )

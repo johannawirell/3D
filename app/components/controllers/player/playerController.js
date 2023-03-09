@@ -5,7 +5,6 @@ import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
-const OFFSET = 50
 
 export class PlayerController {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
@@ -167,13 +166,18 @@ export class PlayerController {
             controlObject.position.add(forward)
             controlObject.position.add(sideways)
     
-            this.currentPosition.copy(controlObject.position) 
-        }
-        
+            this.currentPosition.copy(controlObject.position)   
+        } 
     }
 
     #isOverEdge() {
-        if (this.currentPosition.z < (this.planePosition.z) * -1 + OFFSET) {
+        if (this.currentPosition.z < (this.planePosition.z) * -1) {
+            return true
+        } else if (this.currentPosition.z > this.planePosition.z) {
+            return true
+        } else if (this.currentPosition.x < (this.planePosition.x) * -1) {
+            return true
+        } else if (this.currentPosition.x > this.planePosition.z) {
             return true
         }
     }
@@ -204,7 +208,7 @@ export class PlayerController {
         this.#updatePosition(rotation, velocity, time, controlObject)
     }
 
-    update(time, planePosition) {
+    update(time) {
         // console.log(planePosition)
         const keys = this.inputController.keys
         this.#animatePlayer()          
