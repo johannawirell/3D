@@ -8,6 +8,13 @@ export class Plane {
         this.#createPlane()
     }
 
+    get position () {
+        return {
+            x: this.plane.geometry.parameters.width / 2,
+            z: this.plane.geometry.parameters.height / 2
+        }
+    }
+
     #createTexture() {
        const texture = new THREE.TextureLoader().load(IMAGE)
         texture.wrapS = THREE.RepeatWrapping
@@ -27,8 +34,7 @@ export class Plane {
         )
 
         this.#position()
-        this.scene.add(this.plane)
-        
+        this.scene.add(this.plane)        
     }
 
     #position() {

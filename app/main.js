@@ -72,7 +72,7 @@ class Main {
       this.mixers.map(m => m.update(seconds))
     }
     if (this.player) {
-      this.player.update(seconds, this.plane.position) 
+      this.player.update(seconds) 
     }
 
     if (this.horse) {
@@ -86,11 +86,10 @@ class Main {
         this.thirdPersonCamera.update(seconds)
       }
     }
-    
   }
 
   #loadAnimateModel() {
-    this.player = new PlayerController(this.camera, this.scene)
+    this.player = new PlayerController(this.camera, this.scene, this.plane.position)
     this.horse = new HorseController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,

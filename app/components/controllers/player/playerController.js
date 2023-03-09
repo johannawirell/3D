@@ -5,6 +5,7 @@ import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
+const OFFSET = 50
 
 export class PlayerController {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
@@ -12,7 +13,7 @@ export class PlayerController {
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
-    constructor(camera, scene) {
+    constructor(camera, scene, planePosition) {
         this.animationsMap = new Map()
         this.inputController = new InputController()
         this.state = new State()
@@ -20,6 +21,7 @@ export class PlayerController {
 
         this.camera = camera
         this.scene = scene
+        this.planePosition = planePosition
     
         this.#loadPlayerModel()
     }
@@ -148,23 +150,32 @@ export class PlayerController {
     }
 
     #updatePosition(rotation, velocity, time, controlObject) {
-        controlObject.quaternion.copy(rotation)
+        if (!this.#isOverEdge()) {
+            controlObject.quaternion.copy(rotation)
               
-        const forward = new THREE.Vector3(0, 0, 1)
-        forward.applyQuaternion(controlObject.quaternion)
-        forward.normalize()
-      
-        const sideways = new THREE.Vector3(1, 0, 0)
-        sideways.applyQuaternion(controlObject.quaternion)
-        sideways.normalize()
-      
-        sideways.multiplyScalar(velocity.x * time)
-        forward.multiplyScalar(velocity.z * time)
-      
-        controlObject.position.add(forward)
-        controlObject.position.add(sideways)
+            const forward = new THREE.Vector3(0, 0, 1)
+            forward.applyQuaternion(controlObject.quaternion)
+            forward.normalize()
+          
+            const sideways = new THREE.Vector3(1, 0, 0)
+            sideways.applyQuaternion(controlObject.quaternion)
+            sideways.normalize()
+          
+            sideways.multiplyScalar(velocity.x * time)
+            forward.multiplyScalar(velocity.z * time)
+          
+            controlObject.position.add(forward)
+            controlObject.position.add(sideways)
+    
+            this.currentPosition.copy(controlObject.position) 
+        }
+        
+    }
 
-        this.currentPosition.copy(controlObject.position) 
+    #isOverEdge() {
+        if (this.currentPosition.z < (this.planePosition.z) * -1 + OFFSET) {
+            return true
+        }
     }
 
     #handleMovement(time, keys) {
@@ -193,7 +204,8 @@ export class PlayerController {
         this.#updatePosition(rotation, velocity, time, controlObject)
     }
 
-    update(time) {
+    update(time, planePosition) {
+        // console.log(planePosition)
         const keys = this.inputController.keys
         this.#animatePlayer()          
 
