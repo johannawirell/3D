@@ -8,6 +8,8 @@ import { plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
 import { ambientLight, directionaLight } from './components/light'
 
+import { TerrainManager } from './components/terrain/TerrianManager'
+
 const TerrainWorker = './components/workers/terrain'
 
 const FIELD_OF_VIEW = 60
@@ -29,6 +31,7 @@ class Main {
     this.event
 
     this.#loadAnimateModel()
+    this.#generateTerrain()
     this.#addEventListeners()
     this.#RAF()
   }
@@ -93,21 +96,25 @@ class Main {
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player
-    })
-
-    this.worker = new Worker(TerrainWorker)
-    this.#postMessage({
-      subject: 'dosomething',
-      data: [1, 2, 3]
-    })
+    })   
   }
 
-  #postMessage(message) {
-    this.worker.postMessage(message)
-    this.worker.onmessage = (message) => {
-      console.log(message.data)
-    }
+  #generateTerrain() {
+    this.terrainManager = new TerrainManager(this.scene)
+
+    // this.worker = new Worker(TerrainWorker)
+    // this.#postMessage({
+    //   subject: 'dosomething',
+    //   data: [1, 2, 3]
+    // })
   }
+
+  // #postMessage(message) {
+  //   this.worker.postMessage(message)
+  //   this.worker.onmessage = (message) => {
+  //     console.log(message.data)
+  //   }
+  // }
 
   #createRenderer() {
     const renderer = new THREE.WebGL1Renderer({
@@ -140,8 +147,8 @@ class Main {
 
     scene.add(
       ambientLight,
-      directionaLight,
-      plane
+      directionaLight
+      // plane
     )
 
     scene.background = sky
