@@ -26,7 +26,7 @@ class Main {
     this.isMouseMoving = false
     this.event
 
-    this.#loadAnimateModel()
+    // this.#loadAnimateModel()
     this.#addEventListeners()
     this.#RAF()
   }
@@ -80,7 +80,7 @@ class Main {
 
     if (this.isMouseMoving) {
       this.thirdPersonCamera.mouseMove(this.event)
-    } else {
+    } else if (this.thirdPersonCamera) {
       this.thirdPersonCamera.update(seconds)
     }
   }
@@ -125,11 +125,10 @@ class Main {
 
     scene.add(
       ambientLight,
-      directionaLight,
-      plane
+      directionaLight
     )
 
-    scene.background = sky
+    // scene.background = sky
   
     return scene
   }  
