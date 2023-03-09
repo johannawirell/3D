@@ -150,25 +150,25 @@ export class PlayerController {
 
     #updatePosition(rotation, velocity, time, controlObject) {
         if (this.#isOverEdge()) {
-            this.#handleOverEdge()
+            this.#handleOverEdge(controlObject, rotation)
         } else {
-        controlObject.quaternion.copy(rotation)
-        
-        const forward = new THREE.Vector3(0, 0, 1)
-        forward.applyQuaternion(controlObject.quaternion)
-        forward.normalize()
-        
-        const sideways = new THREE.Vector3(1, 0, 0)
-        sideways.applyQuaternion(controlObject.quaternion)
-        sideways.normalize()
-        
-        sideways.multiplyScalar(velocity.x * time)
-        forward.multiplyScalar(velocity.z * time)
-        
-        controlObject.position.add(forward)
-        controlObject.position.add(sideways)
+            controlObject.quaternion.copy(rotation)
+            
+            const forward = new THREE.Vector3(0, 0, 1)
+            forward.applyQuaternion(controlObject.quaternion)
+            forward.normalize()
+            
+            const sideways = new THREE.Vector3(1, 0, 0)
+            sideways.applyQuaternion(controlObject.quaternion)
+            sideways.normalize()
+            
+            sideways.multiplyScalar(velocity.x * time)
+            forward.multiplyScalar(velocity.z * time)
+            
+            controlObject.position.add(forward)
+            controlObject.position.add(sideways)
 
-        this.currentPosition.copy(controlObject.position)
+            this.currentPosition.copy(controlObject.position)
         }
     }
 
@@ -199,7 +199,6 @@ export class PlayerController {
     }
 
     update(time) {
-        // console.log(planePosition)
         const keys = this.inputController.keys
         this.#animatePlayer()          
 
@@ -225,7 +224,6 @@ export class PlayerController {
     }
 
     #isOverEdge() {
-        // console.log('player: ' + this.currentPosition.z)
         if (this.currentPosition.z < (this.planePosition.z) * -1) {
             return true
         } else if (this.currentPosition.z > this.planePosition.z) {
@@ -237,14 +235,31 @@ export class PlayerController {
         }
     }
 
-    #handleOverEdge() {
-        // Move the player slightly backwards to avoid getting stuck in the object
-        const backwards = new THREE.Vector3(0, 0, 1)
-        backwards.applyQuaternion(this.target.quaternion)
-        backwards.negate().normalize().multiplyScalar(0.5)
-        this.currentPosition.add(backwards)
+    #handleOverEdge(controlObject, rotation) {
+        controlObject.quaternion.copy(rotation)
+            
+        const backwards = new THREE.Vector3(-10, 0, -10)
+        backwards.applyQuaternion(controlObject.quaternion)
+        backwards
+            .negate()
+            .normalize()
+            .multiplyScalar(0.5)
+        
+    
+        console.log(controlObject.position)
+        controlObject.position.add(backwards)
+
+        this.currentPosition.copy(controlObject.position)
+
+
+        // // Move the player slightly backwards to avoid getting stuck in the object
+        // const backwards = new THREE.Vector3(0, 0, 1)
+        // backwards.applyQuaternion(this.target.quaternion)
+        // backwards.negate().normalize().multiplyScalar(0.5)
+        // this.currentPosition.add(backwards)
       
-        // Reset the velocity to 0 so the player stops moving
-        this.velocity.set(0, 0, 0)
+        // // Reset the velocity to 0 so the player stops moving
+        // this.velocity.set(0, 0, 0)
+        // this.currentPosition.copy(controlObject.position)
     }
 }

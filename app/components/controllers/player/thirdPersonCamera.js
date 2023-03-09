@@ -4,11 +4,16 @@ const MIDDLE_WIDTH = window.innerWidth / 2
 const MIDDLE_HEIGHT = window.innerHeight / 2 
 const ROTATION_SPEED = 0.005
 
-const marginal = 10
+  // Define the bounds of the camera volume
+  const VOLUME_BOUNDS = {
+    minX: -250,
+    maxX: 250,
+    minZ: -220,
+    maxZ: 220
+  }
 
-// Implements iscolliding
+
 export class ThirdPersonCamera {
-
     constructor(params) {
         this.params = params
         this.camera = params.camera
@@ -65,27 +70,48 @@ export class ThirdPersonCamera {
       }
 
       #isOverEdge() {
+        const pos = this.currentPosition
         return (
-          this.currentPosition.z < -220 
-          || this.currentPosition.z > 220 
-          || this.currentPosition.x > 250
-          || this.currentPosition.x < -250
+          pos.x < VOLUME_BOUNDS.minX || pos.x > VOLUME_BOUNDS.maxX ||
+          pos.z < VOLUME_BOUNDS.minZ || pos.z > VOLUME_BOUNDS.maxZ
         )
     }
    
-      update(timeElapsed) {
-        if (!this.#isOverEdge()) {
-          const idealOffset = this.#calculateIdeal(-1, 2, -2)
-          const idealLookat = this.#calculateIdeal(0, 1, 0) 
-
-          const t = 1.0 - Math.pow(0.001, timeElapsed)
-      
-          this.currentPosition.lerp(idealOffset, t)
-          this.currentLookat.lerp(idealLookat, t)
-  
-          this.camera.position.copy(this.currentPosition)
-          this.camera.lookAt(this.currentLookat)
-        } 
-        
+    update(timeElapsed) {
+      // Check if the camera is outside the volume
+      const isOverEdge = this.#isOverEdge();
+      if (isOverEdge) {
+        if (!this.isOverEdge) {
+          // Store previous position and lookat
+          this.previousPosition = this.currentPosition.clone();
+          this.previousLookat = this.currentLookat.clone();
+        }
+        this.isOverEdge = true;
+      } else {
+        this.isOverEdge = false;
       }
-    }
+
+      // Calculate the ideal offset and lookat position
+      let idealOffset, idealLookat;
+      if (!isOverEdge) {
+        idealOffset = this.#calculateIdeal(-1, 2, -2);
+        idealLookat = this.#calculateIdeal(0, 1, 0);
+      } else {
+        // Move the camera and lookat positions towards the closest edge of the volume
+        idealOffset = this.currentPosition.clone();
+        idealOffset.x = Math.max(VOLUME_BOUNDS.minX, Math.min(VOLUME_BOUNDS.maxX, idealOffset.x));
+        idealOffset.z = Math.max(VOLUME_BOUNDS.minZ, Math.min(VOLUME_BOUNDS.maxZ, idealOffset.z));
+        idealLookat = this.params.target.position.clone();
+        idealLookat.y = Math.max(this.params.target.position.y, this.previousLookat.y);
+      }
+
+      // Interpolate the camera position and lookat towards the ideal positions
+      const t = 1.0 - Math.pow(0.001, timeElapsed);
+      this.currentPosition.lerp(idealOffset, t);
+      this.currentLookat.lerp(idealLookat, t);
+
+      // Set the camera position and lookat
+      this.camera.position.copy(this.currentPosition);
+      this.camera.lookAt(this.currentLookat);
+  }
+}
