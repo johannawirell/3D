@@ -4,6 +4,9 @@ const MIDDLE_WIDTH = window.innerWidth / 2
 const MIDDLE_HEIGHT = window.innerHeight / 2 
 const ROTATION_SPEED = 0.005
 
+const marginal = 10
+
+// Implements iscolliding
 export class ThirdPersonCamera {
 
     constructor(params) {
@@ -60,17 +63,29 @@ export class ThirdPersonCamera {
       #isFacingCamera(targetRotation) {
         return targetRotation.y < Math.PI/4 && targetRotation.y > -Math.PI/4
       }
+
+      #isOverEdge() {
+        return (
+          this.currentPosition.z < -220 
+          || this.currentPosition.z > 220 
+          || this.currentPosition.x > 250
+          || this.currentPosition.x < -250
+        )
+    }
    
       update(timeElapsed) {
-        const idealOffset = this.#calculateIdeal(-1, 2, -2)
-        const idealLookat = this.#calculateIdeal(0, 1, 0) 
-    
-        const t = 1.0 - Math.pow(0.001, timeElapsed)
-    
-        this.currentPosition.lerp(idealOffset, t)
-        this.currentLookat.lerp(idealLookat, t)
-    
-        this.camera.position.copy(this.currentPosition)
-        this.camera.lookAt(this.currentLookat)
+        if (!this.#isOverEdge()) {
+          const idealOffset = this.#calculateIdeal(-1, 2, -2)
+          const idealLookat = this.#calculateIdeal(0, 1, 0) 
+
+          const t = 1.0 - Math.pow(0.001, timeElapsed)
+      
+          this.currentPosition.lerp(idealOffset, t)
+          this.currentLookat.lerp(idealLookat, t)
+  
+          this.camera.position.copy(this.currentPosition)
+          this.camera.lookAt(this.currentLookat)
+        } 
+        
       }
     }
