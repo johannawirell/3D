@@ -151,7 +151,7 @@ class Main {
       // plane
     )
 
-    scene.background = sky
+    // scene.background = sky
   
     return scene
   }  

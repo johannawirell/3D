@@ -1,80 +1,78 @@
 import * as THREE from 'three'
-import { GUI } from 'dat.gui'
-import { TerrainChunk } from './TerrainChunk'
+import { HeightMap } from './height/HeightMap'
+
+const TEXTURE = '../../img/plane.jpg'
 
 export class TerrainManager {
-    chunkSize = 500
-    constructor(scene) {
+    constructor(scene, options = {}) {
         this.scene = scene
+
+        this.options = {
+          width: 500,
+          height: 500,
+          minHeight: 0,
+          maxHeight: 100,
+          segments: 128,
+          wireframe: false,
+          texture: TEXTURE,
+          ...options,
+        }
         
-        this.#createGUI()
+        this.#generateHeightMap()
+        this.#generateGeometry()
         this.#initTerrain()
     }
 
-    #createGUI() {
-        this.guiParams = {
-            general: {
-            },
-          }
-          this.gui = new GUI()
-      
-          const generalRollup = this.gui.addFolder('General')
-          this.gui.close()
+    #generateHeightMap() {
+      const { width, height, minHeight, maxHeight } = this.options
+      this.heightMap = new HeightMap(width, height, minHeight, maxHeight)
     }
+
+    #generateGeometry() {
+      const { width, height, segments } = this.options
+      
+      this.geometry = new THREE.PlaneGeometry(width, height, segments - 1, segments - 1)
+      
+      this.#updateGeometyOnHeightMap()
+      this.#createMesh()
+    
+    }
+
+    #updateGeometyOnHeightMap() {
+      const heightData = this.heightMap.heightdata
+      const { segments } = this.options
+      const positions = this.geometry.attributes.position
+      
+      for (let i = 0; i < positions.count; i++) {
+        const x = positions.getX(i)
+        const y = positions.getY(i)
+        const height = heightData[Math.floor(y) * segments + Math.floor(x)]
+        positions.setZ(i, isNaN(height) ? 0 : height)
+      }
+    }
+
+    #createMesh() {
+      const { texture, wireframe } = this.options
+
+      const textureLoader = new THREE.TextureLoader()
+      const textureMap = textureLoader.load(texture)
+
+      const material = new THREE.MeshBasicMaterial({
+          map: textureMap,
+          wireframe,
+      })
+
+      this.mesh = new THREE.Mesh(this.geometry, material)
+      this.#position()      
+    }
+
+    #position () {
+      // this.mesh.rotation.x = - Math.PI / 2
+    }
+     
 
     #initTerrain() {
-        this.guiParams.terrain = {
-            wireframe: false
-        }
-
-        this.group = new THREE.Group()
-        this.group.rotation.x = - Math.PI / 2
-        this.scene.add(this.group)
-
-        const terrainRollup = this.gui.addFolder('Terrain')
-        terrainRollup.add(this.guiParams.terrain, "wireframe")
-            .onChange(() => {
-                for (let i in this.chunks) {
-                    this.chunks[i].chunk.plane.material.wireframe = this.guiParams.terrain.wireframe
-                }
-            });
-    
-        this.chunks = {}
-        for (let x = -1; x <= 1; x++) {
-            for (let z = -1; z <= 1; z++) {
-              this.#addChunk(x, z)
-            }
-          }
+      this.scene.add(this.mesh)
     }
 
-    #addChunk(x, z) {
-        const offset = new THREE.Vector2(x * this.chunkSize, z * this.chunkSize)
-        const chunk = new TerrainChunk({
-          group: this.group,
-          offset: new THREE.Vector3(offset.x, offset.y, 0),
-          scale: 1,
-          width: this.chunkSize
-        //   heightGenerators: [new HeightGenerator(this._noise, offset, 100000, 100000 + 1)],
-        });
-    
-        const k = this.#key(x, z)
-        const edges = [];
-        for (let xi = -1; xi <= 1; xi++) {
-          for (let zi = -1; zi <= 1; zi++) {
-            if (xi == 0 || zi == 0) {
-              continue
-            }
-            edges.push(this.#key(x + xi, z + zi));
-          }
-        }
-    
-        this.chunks[k] = {
-          chunk: chunk,
-          edges: edges
-        };
-    }
-
-    #key(x, z) {
-        return x + '.' + z
-    }
 }
