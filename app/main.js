@@ -72,18 +72,21 @@ class Main {
       this.mixers.map(m => m.update(seconds))
     }
     if (this.player) {
-      this.player.update(seconds) 
+      this.player.update(seconds, this.plane.position) 
     }
 
     if (this.horse) {
       this.horse.update(seconds)
     }
 
-    if (this.isMouseMoving) {
-      this.thirdPersonCamera.mouseMove(this.event)
-    } else {
-      this.thirdPersonCamera.update(seconds)
+    if (this.thirdPersonCamera) {
+      if (this.isMouseMoving) {
+        this.thirdPersonCamera.mouseMove(this.event)
+      } else {
+        this.thirdPersonCamera.update(seconds)
+      }
     }
+    
   }
 
   #loadAnimateModel() {
@@ -130,8 +133,7 @@ class Main {
 
     scene.add(
       ambientLight,
-      directionaLight,
-      // plane
+      directionaLight
     )
 
     scene.background = sky
