@@ -1,3 +1,4 @@
+@import './gameDescription.css';
 canvas {
     position: fixed;
     top: 0;

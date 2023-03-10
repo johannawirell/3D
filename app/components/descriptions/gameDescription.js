@@ -1,6 +1,6 @@
 import { Description } from './description'
 
-export class StartDescrition extends Description {
+export class GameDescrition extends Description {
     constructor(params) {
         super(params)
     }

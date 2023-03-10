@@ -6,7 +6,7 @@ import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCa
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
-import { StartDescrition } from './components/descriptions/startDescription'
+import { GameDescrition } from './components/descriptions/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
@@ -31,7 +31,7 @@ class Main {
     this.#loadAnimateModel()
     this.#addEventListeners()
     this.#RAF()
-    this.#createStartDescription()
+    this.#createGameDescription()
   }
 
   #addEventListeners() {
@@ -54,8 +54,8 @@ class Main {
     })
   }
 
-  #createStartDescription() {
-    this.startDescrition = new StartDescrition({
+  #createGameDescription() {
+    this.startDescrition = new GameDescrition({
       scene: this.scene,
       width: window.innerWidth / 2,
       height: window.innerHeight / 2
