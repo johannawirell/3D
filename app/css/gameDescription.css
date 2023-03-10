@@ -21,9 +21,28 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.game-description-container p {
+.description {
   height: 50%;
   color: white;
+}
+
+.description-keys {
+  width: 350px;
+  height: 50px;
+  margin: 0 auto;
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  align-items: flex-start;
+}
+
+.description-keys >* {
+  margin: 0;
+  padding: 0;
+  width: 150px;
+  height: 20px;
+  text-align: start;
 }
 
 .game-description-container button {
