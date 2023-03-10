@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { Movement } from './movement'
 
-const PATH_TO_HORSE = '../../models/Horse.glb'
+const PATH_TO_HORSE = '../../models/daffy(7).glb'
 const WIDTH = 0.4
 const HEIGHT = 0.4
 const DEPTH = 0.4
@@ -16,6 +16,7 @@ export class HorseController {
     currentPosition = new THREE.Vector3()
 
     constructor(camera, scene) {
+        this.animationsMap = new Map()
         this.camera = camera
         this.scene = scene
         this.move = true
@@ -48,11 +49,15 @@ export class HorseController {
             })
             this.scene.add(model)
 
-            const gltfAnimation = gltf.animations[0]
-            console.log(gltf.animations)
+            this.gltfAnimation = gltf.animations
+
             this.mixer = new THREE.AnimationMixer(model)
-            const action = this.mixer.clipAction(gltfAnimation)
-            action.play()
+            for (const action of this.gltfAnimation) {
+                if (action.name !== 'Idle') {
+                    console.log(action.name)
+                    this.animationsMap.set(action.name, this.mixer.clipAction(action))
+                }
+            }
 
             this.target = gltf.scene
           })
@@ -60,10 +65,13 @@ export class HorseController {
 
     #move(time) {
         if (this.target) {
+            const toPlay = this.animationsMap.get('Walk')
+            // console.log(toPlay)
             const newPosition = this.movement.move(time, this.target)
+            toPlay.play()
             this.target.position.copy(newPosition)
             this.currentPosition = newPosition
-        }
+        } 
     }
     
     update(time) {
@@ -72,6 +80,9 @@ export class HorseController {
                 this.mixer.update(time)
             }
             this.#move(time)
+        } else {
+            const toPlay = this.animationsMap.get('Armature')
+            toPlay.play()
         }
     }
 
