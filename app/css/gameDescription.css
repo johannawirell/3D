@@ -7,7 +7,38 @@
   position: absolute;
   margin: 0;
   padding: 0;
-  border: red solid;
+  border: 1px solid;
+  border-radius: 10px;
+  color: rgb(9, 26, 93);
+  background-color: rgba(9, 26, 93, 0.502);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.game-description-container h1 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.game-description-container p {
+  height: 50%;
+  color: white;
+}
+
+.game-description-container button {
+  font-family: inherit;
+  margin: 0 auto;
+  width: 25%;
+  cursor: pointer;
+  color: white;
+  height: 40px;
+  border: 1px solid rgb(9, 26, 93);
+  border-radius: 10px;
+  background-color: rgb(9, 26, 93);
+}
+
+.game-description-container button:hover {
+  background-color: rgba(6, 22, 88, 0.8);
 }
 
