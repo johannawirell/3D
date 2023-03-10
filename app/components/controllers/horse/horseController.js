@@ -18,6 +18,7 @@ export class HorseController {
     constructor(camera, scene) {
         this.camera = camera
         this.scene = scene
+        this.move = true
 
         this.movement = new Movement()
 
@@ -28,6 +29,13 @@ export class HorseController {
         return this.currentPosition
     }
 
+    stopMovement() {
+        this.move = false
+    }
+
+    startMovement() {
+        this.move = true
+    }
 
     #loadHorseModel() {
         new GLTFLoader().load(PATH_TO_HORSE, gltf => {
@@ -41,6 +49,7 @@ export class HorseController {
             this.scene.add(model)
 
             const gltfAnimation = gltf.animations[0]
+            console.log(gltf.animations)
             this.mixer = new THREE.AnimationMixer(model)
             const action = this.mixer.clipAction(gltfAnimation)
             action.play()
@@ -58,11 +67,12 @@ export class HorseController {
     }
     
     update(time) {
-        if (this.mixer) {
-            this.mixer.update(time)
+        if (this.move) {
+            if (this.mixer) {
+                this.mixer.update(time)
+            }
+            this.#move(time)
         }
-    
-        this.#move(time)
     }
 
    #updateInitialPosition(model) {

@@ -112,6 +112,21 @@ class Main {
     if (this.gameDescrition) {
       this.gameDescrition.update(this.camera)
     }
+
+    if (this.#isNearHorse()) {
+      this.horse.stopMovement()
+    } else {
+      this.horse.startMovement()
+    }
+  }
+
+  #isNearHorse() {
+    const playerPosition = this.player.position
+    const horsePosition = this.horse.position
+    const distance = playerPosition.distanceTo(horsePosition)
+    if (distance <= 10 && distance > 0) {
+      return true
+    } 
   }
 
   #loadAnimateModel() {
