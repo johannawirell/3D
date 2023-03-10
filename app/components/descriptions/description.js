@@ -10,10 +10,6 @@ export class Description {
         this.#createDiv()
     }
 
-    updateWidthAndHeight (newWidth, newHeight) {
-        this.CSS2DRenderer.setSize(newWidth, newHeight)
-    }
-
     #createRenderer() {
         const { width, height } = this.params
         this.CSS2DRenderer = new CSS2DRenderer()
@@ -23,6 +19,8 @@ export class Description {
 
     #createDiv() {
         this.div = document.createElement('div')
+
+        this.addContent()
 
         const object = new CSS2DObject(this.div)
         this.scene.add(object)

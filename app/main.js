@@ -37,7 +37,10 @@ class Main {
   #addEventListeners() {
     window.addEventListener('resize', () => {
       if (this.gameDescrition) {
-        this.gameDescrition.updateWidthAndHeight(window.innerWidth -20, window.innerHeight -20)
+        this.gameDescrition.updateWidthAndHeight(
+          window.innerWidth / 2,
+          window.innerHeight / 2
+        )
       }
       this.renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
    })
