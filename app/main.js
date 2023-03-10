@@ -55,7 +55,7 @@ class Main {
   }
 
   #createStartDescription() {
-    this.start = new StartDescrition({
+    this.startDescrition = new StartDescrition({
       scene: this.scene,
       width: window.innerWidth,
       height: window.innerHeight
@@ -95,6 +95,10 @@ class Main {
       } else {
         this.thirdPersonCamera.update(seconds)
       }
+    }
+
+    if(this.startDescrition) {
+      this.startDescrition.update(this.camera)
     }
   }
 
