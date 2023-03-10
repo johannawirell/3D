@@ -6,6 +6,14 @@ export class GameDescrition extends Description {
         this.#updateDiv()
     }
 
+    handleStart(handler) {
+        this.button.addEventListener('click', handler)
+    }
+
+    hide() {
+        this.div.style.display = 'none'
+    }
+
     #updateDiv() {
         this.div.classList.add('game-description-container')
     }
@@ -54,12 +62,12 @@ export class GameDescrition extends Description {
         p9.textContent = '... och akta dig för monstret!'
         descriptionDiv.appendChild(p9)
 
-        const button = document.createElement('button')
-        button.textContent = 'Starta'
+        this.button = document.createElement('button')
+        this.button.textContent = 'Starta'
 
         this.div.appendChild(h1)
         this.div.appendChild(descriptionDiv)
-        this.div.appendChild(button)
+        this.div.appendChild(this.button)
 
     }
 }

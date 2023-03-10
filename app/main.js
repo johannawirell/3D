@@ -66,6 +66,12 @@ class Main {
       width: window.innerWidth / 2,
       height: window.innerHeight / 2
     })
+
+    this.gameDescrition.handleStart(() => {
+      this.player.enableMovement()
+      this.gameDescrition.hide()
+      this.gameDescrition = null
+    })
   }
 
   #RAF() {

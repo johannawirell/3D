@@ -37,6 +37,10 @@ export class PlayerController {
         }
     }
 
+    enableMovement() {
+        this.move = true
+    }
+
     #loadPlayerModel() {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
@@ -248,21 +252,8 @@ export class PlayerController {
             .normalize()
             .multiplyScalar(0.5)
         
-    
-        console.log(controlObject.position)
         controlObject.position.add(backwards)
 
         this.currentPosition.copy(controlObject.position)
-
-
-        // // Move the player slightly backwards to avoid getting stuck in the object
-        // const backwards = new THREE.Vector3(0, 0, 1)
-        // backwards.applyQuaternion(this.target.quaternion)
-        // backwards.negate().normalize().multiplyScalar(0.5)
-        // this.currentPosition.add(backwards)
-      
-        // // Reset the velocity to 0 so the player stops moving
-        // this.velocity.set(0, 0, 0)
-        // this.currentPosition.copy(controlObject.position)
     }
 }
