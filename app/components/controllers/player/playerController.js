@@ -200,14 +200,17 @@ export class PlayerController {
 
     update(time) {
         const keys = this.inputController.keys
-        this.#animatePlayer()          
+        if (this.move) {
+            this.#animatePlayer()          
 
-        if (this.#isKeyAction(keys)) {
-            this.#handleMovement(time, keys)
-        } else {
-            this.currentState = this.state.update()
+            if (this.#isKeyAction(keys)) {
+                this.#handleMovement(time, keys)
+            } else {
+                this.currentState = this.state.update()
+            }
+    
         }
-
+        
         if (this.mixer) {
             this.mixer.update(time)
         }

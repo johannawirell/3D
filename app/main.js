@@ -115,8 +115,7 @@ class Main {
     this.horse = new HorseController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
-      target: this.player,
-      move: false
+      target: this.player
     })
   }
 
