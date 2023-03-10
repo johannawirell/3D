@@ -57,8 +57,8 @@ class Main {
   #createStartDescription() {
     this.startDescrition = new StartDescrition({
       scene: this.scene,
-      width: window.innerWidth,
-      height: window.innerHeight
+      width: window.innerWidth / 2,
+      height: window.innerHeight / 2
     })
   }
 

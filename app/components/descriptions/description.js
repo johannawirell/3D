@@ -19,12 +19,8 @@ export class Description {
 
     #createDiv() {
         this.div = document.createElement('div')
-        this.div.style.width = '100px';
-        this.div.style.height = '100px';
-        this.div.style.backgroundColor = 'red';
 
         const object = new CSS3DObject(this.div)
-        object.position.set(0, 0, 0)
         this.scene.add(object)
     }
 
