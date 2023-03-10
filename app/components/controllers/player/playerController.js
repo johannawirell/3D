@@ -12,15 +12,15 @@ export class PlayerController {
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
-    constructor(camera, scene, planePosition) {
+    constructor(params) {
         this.animationsMap = new Map()
         this.inputController = new InputController()
         this.state = new State()
         this.currentState = this.state.current
 
-        this.camera = camera
-        this.scene = scene
-        this.planePosition = planePosition
+        this.camera = params.camera
+        this.scene = params.scene
+        this.planePosition = params.planePosition
     
         this.#loadPlayerModel()
     }

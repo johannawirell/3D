@@ -100,17 +100,23 @@ class Main {
       }
     }
 
-    if(this.gameDescrition) {
+    if (this.gameDescrition) {
       this.gameDescrition.update(this.camera)
     }
   }
 
   #loadAnimateModel() {
-    this.player = new PlayerController(this.camera, this.scene, this.plane.position)
+    this.player = new PlayerController({
+      camera: this.camera,
+      scene: this.scene,
+      planePosition: this.plane.position,
+      move: false
+    })
     this.horse = new HorseController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
-      target: this.player
+      target: this.player,
+      move: false
     })
   }
 
