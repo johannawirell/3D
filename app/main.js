@@ -57,8 +57,8 @@ class Main {
   #createGameDescription() {
     this.startDescrition = new GameDescrition({
       scene: this.scene,
-      width: window.innerWidth / 2,
-      height: window.innerHeight / 2
+      width: window.innerWidth -20,
+      height: window.innerHeight -20
     })
   }
 
