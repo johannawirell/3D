@@ -1,4 +1,4 @@
-.game-description {
+.game-description-container {
   width: 90%;
   height: 90%;
   left: 25%;
@@ -8,4 +8,6 @@
   margin: 0;
   padding: 0;
   border: red solid;
+  text-align: center;
 }
+
