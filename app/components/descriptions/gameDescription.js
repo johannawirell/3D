@@ -9,5 +9,6 @@ export class GameDescrition extends Description {
     #updateDiv() {
         console.log(this.div)
         this.div.classList.add('game-description')
+        this.div.innerText = 'hej'
     }
 }
