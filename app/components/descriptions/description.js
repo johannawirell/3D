@@ -10,6 +10,10 @@ export class Description {
         this.#createDiv()
     }
 
+    updateWidthAndHeight (newWidth, newHeight) {
+        this.CSS3DRenderer.setSize(newWidth, newHeight)
+    }
+
     #createRenderer() {
         const { width, height } = this.params
         this.CSS3DRenderer = new CSS3DRenderer()

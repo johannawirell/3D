@@ -36,8 +36,11 @@ class Main {
 
   #addEventListeners() {
     window.addEventListener('resize', () => {
-       this.renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
-    })
+      if (this.gameDescrition) {
+        this.gameDescrition.updateWidthAndHeight(window.innerWidth -20, window.innerHeight -20)
+      }
+      this.renderer.setSize(window.innerWidth, window.innerHeight) // Set to full screen
+   })
     window.addEventListener('mousemove', e => {
       if (e.button === 1) {
         this.event = e
@@ -55,7 +58,7 @@ class Main {
   }
 
   #createGameDescription() {
-    this.startDescrition = new GameDescrition({
+    this.gameDescrition = new GameDescrition({
       scene: this.scene,
       width: window.innerWidth -20,
       height: window.innerHeight -20
@@ -97,8 +100,8 @@ class Main {
       }
     }
 
-    if(this.startDescrition) {
-      this.startDescrition.update(this.camera)
+    if(this.gameDescrition) {
+      this.gameDescrition.update(this.camera)
     }
   }
 
