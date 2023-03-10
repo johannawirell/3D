@@ -53,6 +53,7 @@ export class HorseController {
         if (this.target) {
             const newPosition = this.movement.move(time, this.target)
             this.target.position.copy(newPosition)
+            this.currentPosition = newPosition
         }
     }
     
