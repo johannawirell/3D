@@ -68,14 +68,6 @@ export class ThirdPersonCamera {
       #isFacingCamera(targetRotation) {
         return targetRotation.y < Math.PI/4 && targetRotation.y > -Math.PI/4
       }
-
-      #isOverEdge() {
-        const pos = this.currentPosition
-        return (
-          pos.x < VOLUME_BOUNDS.minX || pos.x > VOLUME_BOUNDS.maxX ||
-          pos.z < VOLUME_BOUNDS.minZ || pos.z > VOLUME_BOUNDS.maxZ
-        )
-    }
    
     update(timeElapsed) {
       const playerPosition = this.params.target.position.clone();
