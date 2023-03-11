@@ -6,10 +6,10 @@ const ROTATION_SPEED = 0.005
 
   // Define the bounds of the camera volume
   const VOLUME_BOUNDS = {
-    minX: -250,
-    maxX: 250,
-    minZ: -220,
-    maxZ: 220
+    minX: -300,
+    maxX: 3000,
+    minZ: -320,
+    maxZ: 320
   }
 
 
@@ -86,17 +86,21 @@ export class ThirdPersonCamera {
     
       // If the player is outside the volume bounds, adjust the camera position and lookat position
       if (playerPosition.x < VOLUME_BOUNDS.minX) {
+        console.log('over edge')
         idealOffset.x += playerPosition.x - VOLUME_BOUNDS.minX
         idealLookat.x += playerPosition.x - VOLUME_BOUNDS.minX
       } else if (playerPosition.x > VOLUME_BOUNDS.maxX) {
+        console.log('over edge')
         idealOffset.x += playerPosition.x - VOLUME_BOUNDS.maxX
         idealLookat.x += playerPosition.x - VOLUME_BOUNDS.maxX
       }
     
       if (playerPosition.z < VOLUME_BOUNDS.minZ) {
+        console.log('over edge')
         idealOffset.z += playerPosition.z - VOLUME_BOUNDS.minZ
         idealLookat.z += playerPosition.z - VOLUME_BOUNDS.minZ
       } else if (playerPosition.z > VOLUME_BOUNDS.maxZ) {
+        console.log('over edge')
         idealOffset.z += playerPosition.z - VOLUME_BOUNDS.maxZ
         idealLookat.z += playerPosition.z - VOLUME_BOUNDS.maxZ
       }
