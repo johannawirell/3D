@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { Movement } from './movement'
 
-const PATH_TO_HORSE = '../../models/daffy(7).glb'
+const PATH_TO_HORSE = '../../models/Daffy.glb'
 const WIDTH = 0.4
 const HEIGHT = 0.4
 const DEPTH = 0.4
@@ -10,6 +10,9 @@ const DEPTH = 0.4
 const X_POSITION = -5
 const Y_POSITION = 0
 const Z_POSITION = -100
+
+const WALK_STATE = 'Walk'
+const IDLE_STATE = 'Idle'
 
 export class HorseController {
     velocity = new THREE.Vector3(0, 0, 2)
@@ -20,7 +23,7 @@ export class HorseController {
         this.camera = camera
         this.scene = scene
         this.move = true
-
+        this.currentState = WALK_STATE
         this.movement = new Movement()
 
         this.#loadHorseModel()
@@ -53,10 +56,7 @@ export class HorseController {
 
             this.mixer = new THREE.AnimationMixer(model)
             for (const action of this.gltfAnimation) {
-                if (action.name !== 'Idle') {
-                    console.log(action.name)
-                    this.animationsMap.set(action.name, this.mixer.clipAction(action))
-                }
+                this.animationsMap.set(action.name, this.mixer.clipAction(action))
             }
 
             this.target = gltf.scene
@@ -65,24 +65,37 @@ export class HorseController {
 
     #move(time) {
         if (this.target) {
-            const toPlay = this.animationsMap.get('Walk')
-            // console.log(toPlay)
+            const toPlay = this.animationsMap.get(this.currentState)
             const newPosition = this.movement.move(time, this.target)
             toPlay.play()
             this.target.position.copy(newPosition)
             this.currentPosition = newPosition
         } 
     }
+
+    #idle() {
+        const newAction = IDLE_STATE     
+
+        if (this.currentState !== newAction) {
+            this.currentState = newAction
+            const toPlay = this.animationsMap.get(newAction)
+            const current = this.animationsMap.get(this.currentState)
+
+            current.fadeOut(this.fadeDuration)
+            toPlay.reset().fadeIn(this.fadeDuration).play()
+        }        
+    }
     
     update(time) {
-        if (this.move) {
-            if (this.mixer) {
-                this.mixer.update(time)
-            }
+        if (this.move){
             this.#move(time)
         } else {
-            const toPlay = this.animationsMap.get('Armature')
-            toPlay.play()
+            this.#idle()
+        }
+        
+
+        if (this.mixer) {
+            this.mixer.update(time)
         }
     }
 
