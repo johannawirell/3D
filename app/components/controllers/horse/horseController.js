@@ -16,7 +16,7 @@ const IDLE_STATE = 'Idle'
 
 export class HorseController {
     velocity = new THREE.Vector3(0, 0, 2)
-    currentPosition = new THREE.Vector3()
+    currentPosition = new THREE.Vector3(X_POSITION, Y_POSITION, Z_POSITION)
 
     constructor(camera, scene) {
         this.animationsMap = new Map()

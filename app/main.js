@@ -125,7 +125,7 @@ class Main {
     const playerPosition = this.player.position
     const horsePosition = this.horse.position
     const distance = playerPosition.distanceTo(horsePosition)
-    if (distance < 20 && distance !== 0) {
+    if (distance < 20) {
       return true
     } 
   }
