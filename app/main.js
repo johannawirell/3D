@@ -6,6 +6,7 @@ import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCa
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
+import { Tree } from './components/objects/tree'
 import { GameDescrition } from './components/descriptions/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
@@ -146,6 +147,8 @@ class Main {
 
   #createPlane() {
     this.plane = new Plane(this.scene)
+    // For loop
+    new Tree(this.scene, { scale: 1})
   }
 
   #createRenderer() {
