@@ -6,6 +6,7 @@ import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCa
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { sky } from './components/objects/sky'
+import { Tree } from './components/objects/tree'
 import { GameDescrition } from './components/descriptions/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
@@ -61,17 +62,18 @@ class Main {
   }
 
   #createGameDescription() {
-    this.gameDescrition = new GameDescrition({
-      scene: this.scene,
-      width: window.innerWidth / 2,
-      height: window.innerHeight / 2
-    })
+    this.player.enableMovement()
+    // this.gameDescrition = new GameDescrition({
+    //   scene: this.scene,
+    //   width: window.innerWidth / 2,
+    //   height: window.innerHeight / 2
+    // })
 
-    this.gameDescrition.handleStart(() => {
-      this.player.enableMovement()
-      this.gameDescrition.hide()
-      this.gameDescrition = null
-    })
+    // this.gameDescrition.handleStart(() => {
+    //   this.player.enableMovement()
+    //   this.gameDescrition.hide()
+    //   this.gameDescrition = null
+    // })
   }
 
   #RAF() {
@@ -146,6 +148,8 @@ class Main {
 
   #createPlane() {
     this.plane = new Plane(this.scene)
+    // For
+    new Tree(this.scene, { scale: 5 })
   }
 
   #createRenderer() {
