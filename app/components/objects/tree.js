@@ -25,6 +25,9 @@ export class Tree {
     }
 
     #position(model) {
+        const { scale, x, y, z } = this.position
+        model.scale.set(scale, scale, scale)
+        model.position.set(x, -4, z)
         return model
     }
 }

@@ -17,6 +17,7 @@ const FAR = 1000.0
 const CAMERA_POSITION_X = 25
 const CAMERA_POSITION_Y = 10
 const CAMERA_POSITION_Z = 25
+const NUMBER_OF_TREES = 10
 
 class Main {
   constructor() {
@@ -148,8 +149,24 @@ class Main {
 
   #createPlane() {
     this.plane = new Plane(this.scene)
-    // For
-    new Tree(this.scene, { scale: 5 })
+    for (let i = 0; i < NUMBER_OF_TREES; i++) {
+      new Tree(this.scene, { 
+        scale: this.#generateRandomNumber(5, 3),
+        x: this.#generateRandomNumber(200, -200),
+        y: this.#generateRandomNumber(-4, -5),
+        z: this.#generateRandomNumber(200, -200),
+      })
+    }
+    new Tree(this.scene, { 
+      scale: 5,
+      x: 100,
+      y: 100,
+      z: 0
+    })
+  }
+
+  #generateRandomNumber(max, min) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   #createRenderer() {
