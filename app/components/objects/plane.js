@@ -1,4 +1,7 @@
 import * as THREE from 'three'
+import { NatureObject } from './nature/natureObject'
+
+const TREES = [ '../../../models/Oak.glb']
 
 const SKYBOX = [
     '../../img/skybox/posx.jpg',
@@ -10,6 +13,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
+    numberOfTrees = 1
     constructor(scene) {
         this.textureLoader = new THREE.CubeTextureLoader()
         this.scene = scene
@@ -52,7 +56,26 @@ export class Plane {
         this.plane.receiveShadow = true
         this.#position()
 
+        this.#addTrees()
         this.scene.add(this.plane)    
+    }
+
+    #addTrees() {
+        for (let i = 0; i < this.numberOfTrees; i++) {
+            const treeToCreate = this.#randomTree()
+            new NatureObject(
+                treeToCreate,
+                this.scene, 
+                { scale: 5, x: 1, y: 1, z: 1 }
+            )
+        }
+    }
+
+    #randomTree() {
+        const randomIndex = Math.floor(Math.random() * TREES.length)
+        const tree = TREES[randomIndex]
+
+        return tree
     }
 
     #position() {
