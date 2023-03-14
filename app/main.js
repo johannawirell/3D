@@ -5,8 +5,8 @@ import { PlayerController } from './components/controllers/player/playerControll
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
-import { sky } from './components/objects/sky'
-import { GameDescrition } from './components/descriptions/gameDescription'
+// import { sky } from './components/objects/sky'
+// import { GameDescrition } from './components/descriptions/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
@@ -61,17 +61,18 @@ class Main {
   }
 
   #createGameDescription() {
-    this.gameDescrition = new GameDescrition({
-      scene: this.scene,
-      width: window.innerWidth / 2,
-      height: window.innerHeight / 2
-    })
+    this.player.enableMovement()
+    // this.gameDescrition = new GameDescrition({
+    //   scene: this.scene,
+    //   width: window.innerWidth / 2,
+    //   height: window.innerHeight / 2
+    // })
 
-    this.gameDescrition.handleStart(() => {
-      this.player.enableMovement()
-      this.gameDescrition.hide()
-      this.gameDescrition = null
-    })
+    // this.gameDescrition.handleStart(() => {
+    //   this.player.enableMovement()
+    //   this.gameDescrition.hide()
+    //   this.gameDescrition = null
+    // })
   }
 
   #RAF() {
@@ -99,6 +100,11 @@ class Main {
 
     if (this.horse) {
       this.horse.update(seconds)
+      if (this.#isNearHorse()) {
+        this.horse.stopMovement()
+      } else {
+        this.horse.startMovement()
+      }
     }
 
     if (this.thirdPersonCamera) {
@@ -111,17 +117,10 @@ class Main {
 
     if (this.gameDescrition) {
       this.gameDescrition.update(this.camera)
-    }
-
-    if (this.#isNearHorse()) {
-      this.horse.stopMovement()
-    } else {
-      this.horse.startMovement()
-    }
+    }   
   }
 
   #isNearHorse() {
-    
     const playerPosition = this.player.position
     const horsePosition = this.horse.position
     const distance = playerPosition.distanceTo(horsePosition)
@@ -137,7 +136,7 @@ class Main {
       planePosition: this.plane.position,
       move: false
     })
-    this.horse = new HorseController(this.camera, this.scene)
+    // this.horse = new HorseController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player
@@ -181,8 +180,6 @@ class Main {
       ambientLight,
       directionaLight
     )
-
-    scene.background = sky
   
     return scene
   }  
