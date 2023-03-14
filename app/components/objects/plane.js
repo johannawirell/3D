@@ -13,7 +13,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 1
+    numberOfTrees = 100
     constructor(scene) {
         this.textureLoader = new THREE.CubeTextureLoader()
         this.scene = scene
@@ -61,12 +61,20 @@ export class Plane {
     }
 
     #addTrees() {
+        const windowWidth = window.innerWidth
+        const windowHeight = window.innerHeight
+       
         for (let i = 0; i < this.numberOfTrees; i++) {
             const treeToCreate = this.#randomTree()
             new NatureObject(
                 treeToCreate,
                 this.scene, 
-                { scale: 5, x: 1, y: 1, z: 1 }
+                { 
+                    scale: this.#generateRandomNumber(4, 6),
+                    x: this.#generateRandomNumber(-windowWidth, windowWidth),
+                    y: this.#generateRandomNumber(1, 0),
+                    z: this.#generateRandomNumber(-windowHeight, windowHeight)
+                }
             )
         }
     }
@@ -76,6 +84,10 @@ export class Plane {
         const tree = TREES[randomIndex]
 
         return tree
+    }
+
+    #generateRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
     #position() {
