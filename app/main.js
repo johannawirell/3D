@@ -17,7 +17,7 @@ const FAR = 1000.0
 const CAMERA_POSITION_X = 25
 const CAMERA_POSITION_Y = 10
 const CAMERA_POSITION_Z = 25
-const NUMBER_OF_TREES = 10
+const NUMBER_OF_TREES = 20
 
 class Main {
   constructor() {
