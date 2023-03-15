@@ -24,8 +24,8 @@ export class HorseController extends CollisonHandler {
         this.camera = params.camera
         this.scene = params.scene
         this.move = true
+        this.movement = new Movement()
         this.currentState = WALK_STATE
-        this.movement = new Movement(this.#createWayPoints())
 
         this.#loadHorseModel()
     }
@@ -66,52 +66,22 @@ export class HorseController extends CollisonHandler {
           })
     }
 
-    #createWayPoints() {
-        const start = new THREE.Vector3(X_POSITION, Y_POSITION, Z_POSITION)
-        const end = new THREE.Vector3(-X_POSITION, Y_POSITION, Z_POSITION)
-        const control1 = new THREE.Vector3(Math.random() * X_POSITION, Y_POSITION, Math.random() * Z_POSITION)
-        const control2 = new THREE.Vector3(Math.random() * -X_POSITION, Y_POSITION, Math.random() * Z_POSITION)
-    
-        const curve = new THREE.CubicBezierCurve3(start, control1, control2, end)
-    
-        const points = curve.getPoints(6)
-        return points.map(point => new THREE.Vector3(point.x, point.y, point.z))
-    }
-
-
     #move(time) {
         if (this.target) {
             const toPlay = this.animationsMap.get(this.currentState)
             toPlay.play()
             this.collidingObject = this.getCollidingObject(COLLIDING_OBJECT_NAMES)
-            if (!this.collidingObject) {
-                const newPosition = this.movement.move(time, this.target)    
-                this.target.position.copy(newPosition)
-                this.currentPosition = newPosition
-            } else {
-                console.log('colliding')
+            if (this.collidingObject) {
                 this.#handleCollison()
-            }            
+            }
+            // const newPosition = this.movement.move(time, this.target)    
+            // this.target.position.copy(newPosition)
+            // this.currentPosition = newPosition     
         } 
     }
 
     #handleCollison() {
-        // Reverse the velocity vector
-        this.velocity.negate()
-
-        this.#aviodCollison()
-    }
-
-    #aviodCollison() {
-        if (this.collidingObject) {
-            // Calculate a new set of waypoints that avoid the colliding object
-            const newWaypoints = this.movement.calculateAvoidanceWaypoints(
-            this.collidingObject.position,
-            this.currentPosition,
-            this.#createWayPoints()
-            )
-            this.movement.updateWayPoints(newWaypoints)
-        }
+        console.log('handle collison')
     }
 
     #idle() {

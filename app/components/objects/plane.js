@@ -98,7 +98,7 @@ export class Plane {
             this.loadingManager,
             { 
                 scale: 5,
-                x: 50,
+                x: -60,
                 y: 0,
                 z: -100
             }
