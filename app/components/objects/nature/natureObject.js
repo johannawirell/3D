@@ -12,10 +12,10 @@ export class NatureObject {
         this.loadingManager = loadingManager
         this.position = position
 
-        this.#loadOak()
+        this.#loadTree()
     }
 
-    #loadOak() {
+    #loadTree() {
         const gltfLoader = new GLTFLoader(this.loadingManager)
         gltfLoader.setDRACOLoader(dracoLoader)
 
@@ -27,6 +27,7 @@ export class NatureObject {
                     obj.castShadow = true
                 }
             })
+            model.name = 'Tree'
 
             this.scene.add(model)
             this.target = gltf.scene

@@ -47,7 +47,7 @@ export class PlayerController extends CollisonHandler {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
             model = this.#updateInitialPosition(model)
-            model = this.createBoundingBox(model, PLAYER_SCALE_VECTOR)
+            model = this.createBoundingBox(model)
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
@@ -155,7 +155,7 @@ export class PlayerController extends CollisonHandler {
 
     #updatePosition(rotation, velocity, time, controlObject) {
         if (this.#isOverEdge()) {
-            this.#handleOverEdge(controlObject, rotation)
+            this.handleOverEdge(controlObject, rotation)
         } else {
             controlObject.quaternion.copy(rotation)
             
@@ -200,7 +200,13 @@ export class PlayerController extends CollisonHandler {
             this.#move(false, velocity, time, acceleration)
         }
 
-        this.#updatePosition(rotation, velocity, time, controlObject)
+        if (!this.isColliding()) {
+            this.#updatePosition(rotation, velocity, time, controlObject)
+        } else {
+            this.handleOverEdge(controlObject, rotation)
+        }
+
+       
     }
 
     update(time) {
@@ -210,7 +216,7 @@ export class PlayerController extends CollisonHandler {
 
             if (this.#isKeyAction(keys)) {
                 this.#handleMovement(time, keys)
-                this.updateBoundingBox(this.target, PLAYER_SCALE_VECTOR)
+                this.updateBoundingBox(this.target)
             } else {
                 this.currentState = this.state.update()
             }
@@ -244,7 +250,7 @@ export class PlayerController extends CollisonHandler {
         }
     }
 
-    #handleOverEdge(controlObject, rotation) {
+    handleOverEdge(controlObject, rotation) {
         controlObject.quaternion.copy(rotation)
             
         const backwards = new THREE.Vector3(-10, 0, -10)

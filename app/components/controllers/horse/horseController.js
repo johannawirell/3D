@@ -48,6 +48,7 @@ export class HorseController {
                     obj.castShadow = true
                 }
             })
+            model.name = 'Daffy'
             this.scene.add(model)
 
             this.gltfAnimation = gltf.animations

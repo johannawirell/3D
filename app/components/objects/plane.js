@@ -16,7 +16,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 150
+    numberOfTrees = 10
     constructor(scene, loadingManager) {
         this.scene = scene
         this.loadingManager = loadingManager
