@@ -5,14 +5,16 @@ const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
 
 export class NatureObject {
-    constructor(glbPath, scene, loadingManager, entityManager, position) {
-        this.glbPath = glbPath
-        this.scene = scene
-        this.loadingManager = loadingManager
-        this.position = position
-        this.entityManager = entityManager
+    constructor(params) {
+        this.glbPath = params.glbPath
+        this.scene = params.scene
+        this.loadingManager = params.loadingManager
+        this.entityManager = params.entityManager
+        this.position = params.position
+        
 
         this.#loadTree()
+        this.#createObstacle()
     }
 
     #loadTree() {
@@ -28,9 +30,10 @@ export class NatureObject {
                 }
             })
             model.name = 'Tree'
-
+            this.target = model
+            this.#createObstacle()
             this.scene.add(model)
-            this.target = gltf.scene
+            
         })
     }
 
@@ -39,5 +42,12 @@ export class NatureObject {
         model.scale.set(scale, scale, scale)
         model.position.set(x, y, z)
         return model
+    }
+
+    #createObstacle() {
+        if (this.target) {
+            console.log(this.target)
+            console.log('target')
+        }
     }
 }

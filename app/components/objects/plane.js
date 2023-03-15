@@ -80,31 +80,35 @@ export class Plane {
             } else if (treeToCreate === TREES[2]) {
                 
             }
-            new NatureObject(
-                treeToCreate,
-                this.scene,
-                this.loadingManager,
-                this.entityManager,
-                { 
+            new NatureObject({
+                glbPath: treeToCreate,
+                scene: this.scene,
+                loadingManager: this.loadingManager,
+                entityManager: this.entityManager,
+                position: { 
                     scale: scale,
                     x: this.#generateRandomNumber(-windowWidth, windowWidth),
                     y: this.#generateRandomNumber(1, 0),
                     z: this.#generateRandomNumber(-windowHeight, windowHeight)
                 }
+            }
+               
             )
         }
 
-        new NatureObject(
-            TREES[0],
-            this.scene,
-            this.loadingManager,
-            this.entityManager,
-            { 
+        new NatureObject({
+            glbPath: TREES[0],
+            scene: this.scene,
+            loadingManager: this.loadingManager,
+            entityManager: this.entityManager,
+            position: { 
                 scale: 5,
                 x: -60,
                 y: 0,
                 z: -100
             }
+        }
+            
         )
 
     }

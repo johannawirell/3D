@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { CollisonHandler } from '../collisonHandler/collisonHandler.js'
 import { InputController } from './inputController.js'
 import { State } from './state.js'
 
@@ -8,14 +7,13 @@ const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const COLLIDING_OBJECT_NAMES = ['Tree', 'Daffy']
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 
-export class PlayerController extends CollisonHandler {
+export class PlayerController {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
     acceleration = new THREE.Vector3(1, 0.25, 50.0)
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
     constructor(params) {
-        super(params)
         this.animationsMap = new Map()
         this.inputController = new InputController()
         this.state = new State()
@@ -48,7 +46,7 @@ export class PlayerController extends CollisonHandler {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
             model = this.#updateInitialPosition(model)
-            model = this.createBoundingBox(model)
+
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
@@ -201,13 +199,7 @@ export class PlayerController extends CollisonHandler {
             this.#move(false, velocity, time, acceleration)
         }
 
-        if (!this.getCollidingObject(COLLIDING_OBJECT_NAMES)) {
-            this.#updatePosition(rotation, velocity, time, controlObject)
-        } else {
-            this.handleOverEdge(controlObject, rotation)
-        }
-
-       
+        this.#updatePosition(rotation, velocity, time, controlObject)       
     }
 
     update(time) {
@@ -217,7 +209,6 @@ export class PlayerController extends CollisonHandler {
 
             if (this.#isKeyAction(keys)) {
                 this.#handleMovement(time, keys)
-                this.updateBoundingBox(this.target)
             } else {
                 this.currentState = this.state.update()
             }

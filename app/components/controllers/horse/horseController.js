@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { CollisonHandler } from '../collisonHandler/collisonHandler'
+// import { CollisonHandler } from '../collisonHandler/collisonHandler'
 import { Movement } from './movement'
 
 const PATH_TO_HORSE = '../../models/Daffy.glb'
@@ -14,12 +14,11 @@ const Z_POSITION = -100
 const WALK_STATE = 'Walk'
 const IDLE_STATE = 'Idle'
 
-export class HorseController extends CollisonHandler {
+export class HorseController {
     velocity = new THREE.Vector3(0, 0, 2)
     currentPosition = new THREE.Vector3(X_POSITION, Y_POSITION, Z_POSITION)
 
     constructor(params) {
-        super(params)
         this.entityManager = params.entityManager
         this.camera = params.camera
         this.scene = params.scene
@@ -46,7 +45,6 @@ export class HorseController extends CollisonHandler {
         new GLTFLoader().load(PATH_TO_HORSE, gltf => {
             let model = gltf.scene
             model = this.#updateInitialPosition(model)
-            model = this.createBoundingBox(model)
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
@@ -68,7 +66,9 @@ export class HorseController extends CollisonHandler {
     }
 
     #createMovement() {
-        this.movement = new Movement(this.target, this.entityManager)
+        if (this.target) {
+            this.movement = new Movement(this.target, this.entityManager)
+        }        
     }
 
     #move(time) {
@@ -108,8 +108,6 @@ export class HorseController extends CollisonHandler {
         } else {
             this.#idle()
         }
-        
-        this.updateBoundingBox(this.target)
 
         if (this.mixer) {
             this.mixer.update(time)
