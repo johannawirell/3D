@@ -89,6 +89,7 @@ export class HorseController extends CollisonHandler {
                 this.target.position.copy(newPosition)
                 this.currentPosition = newPosition
             } else {
+                console.log('colliding')
                 this.#handleCollison()
             }            
         } 
@@ -112,7 +113,6 @@ export class HorseController extends CollisonHandler {
             this.movement.updateWayPoints(newWaypoints)
         }
     }
-
 
     #idle() {
         const newAction = IDLE_STATE     

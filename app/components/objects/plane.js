@@ -16,7 +16,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 150
+    numberOfTrees = 0
     constructor(scene, loadingManager) {
         this.scene = scene
         this.loadingManager = loadingManager
@@ -91,6 +91,19 @@ export class Plane {
                 }
             )
         }
+
+        new NatureObject(
+            TREES[0],
+            this.scene,
+            this.loadingManager,
+            { 
+                scale: 5,
+                x: 50,
+                y: 0,
+                z: -100
+            }
+        )
+
     }
 
     #randomTree() {

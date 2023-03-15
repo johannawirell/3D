@@ -3,7 +3,6 @@ import * as THREE from 'three'
 export class Movement {
     velocity = new THREE.Vector3(0, 0, 2)
     currentPosition = new THREE.Vector3()
-    startPosition = {x: -5, z: -100}
 
     constructor(waypoints) {
         this.waypoints = waypoints
