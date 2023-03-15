@@ -5,7 +5,7 @@ import { PlayerController } from './components/controllers/player/playerControll
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
-// import { sky } from './components/objects/sky'
+import { CollisonHandler } from './components/controllers/collisonHandler/collisonHandler'
 // import { GameDescrition } from './components/descriptions/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
@@ -136,11 +136,13 @@ class Main {
       planePosition: this.plane.position,
       move: false
     })
-    this.horse = new HorseController(this.caWmera, this.scene)
+    this.horse = new HorseController(this.camera, this.scene)
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player
     })
+
+    this.collisonHandler = new CollisonHandler(this.scene)
   }
 
   #createPlane() {
