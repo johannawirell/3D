@@ -24,7 +24,6 @@ export class HorseController extends CollisonHandler {
         this.camera = params.camera
         this.scene = params.scene
         this.move = true
-        this.movement = new Movement()
         this.currentState = WALK_STATE
 
         this.#loadHorseModel()
@@ -53,6 +52,9 @@ export class HorseController extends CollisonHandler {
                 }
             })
             model.name = 'Daffy'
+            
+            this.target = model
+            this.#createMovement()
             this.scene.add(model)
 
             this.gltfAnimation = gltf.animations
@@ -61,19 +63,21 @@ export class HorseController extends CollisonHandler {
             for (const action of this.gltfAnimation) {
                 this.animationsMap.set(action.name, this.mixer.clipAction(action))
             }
-
-            this.target = gltf.scene
           })
+    }
+
+    #createMovement() {
+        this.movement = new Movement(this.target)
     }
 
     #move(time) {
         if (this.target) {
             const toPlay = this.animationsMap.get(this.currentState)
             toPlay.play()
-            this.collidingObject = this.getCollidingObject(COLLIDING_OBJECT_NAMES)
-            if (this.collidingObject) {
-                this.#handleCollison()
-            }
+            // this.collidingObject = this.getCollidingObject(COLLIDING_OBJECT_NAMES)
+            // if (this.collidingObject) {
+            //     this.#handleCollison()
+            // }
             // const newPosition = this.movement.move(time, this.target)    
             // this.target.position.copy(newPosition)
             // this.currentPosition = newPosition     
