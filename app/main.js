@@ -1,5 +1,7 @@
-import './css/index.css'
+import * as YUKA from 'yuka'
 import * as THREE from 'three'
+
+import './css/index.css'
 
 import { LoadingManager } from './components/loader/loaderManager'
 import { PlayerController } from './components/controllers/player/playerController'
@@ -151,7 +153,8 @@ class Main {
   }
 
   #createPlane() {
-    this.plane = new Plane(this.scene, this.loadingManager.loader)
+    this.entityManager = new YUKA.EntityManager()
+    this.plane = new Plane(this.scene, this.loadingManager.loader, this.entityManager)
   }
 
   #createRenderer() {

@@ -17,10 +17,11 @@ const SKYBOX = [
 
 export class Plane {
     numberOfTrees = 0
-    constructor(scene, loadingManager) {
+    constructor(scene, loadingManager, entityManager) {
         this.scene = scene
         this.loadingManager = loadingManager
         this.textureLoader = new THREE.CubeTextureLoader(this.loadingManager)
+        this.entityManager = entityManager
         
         this.#createPlane()
     }
@@ -83,6 +84,7 @@ export class Plane {
                 treeToCreate,
                 this.scene,
                 this.loadingManager,
+                this.entityManager,
                 { 
                     scale: scale,
                     x: this.#generateRandomNumber(-windowWidth, windowWidth),
@@ -96,6 +98,7 @@ export class Plane {
             TREES[0],
             this.scene,
             this.loadingManager,
+            this.entityManager,
             { 
                 scale: 5,
                 x: -60,

@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
@@ -6,11 +5,12 @@ const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
 
 export class NatureObject {
-    constructor(glbPath, scene, loadingManager, position, l) {
+    constructor(glbPath, scene, loadingManager, entityManager, position) {
         this.glbPath = glbPath
         this.scene = scene
         this.loadingManager = loadingManager
         this.position = position
+        this.entityManager = entityManager
 
         this.#loadTree()
     }
