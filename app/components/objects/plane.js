@@ -17,9 +17,11 @@ const SKYBOX = [
 
 export class Plane {
     numberOfTrees = 150
-    constructor(scene) {
-        this.textureLoader = new THREE.CubeTextureLoader()
+    constructor(scene, loadingManager) {
         this.scene = scene
+        this.loadingManager = loadingManager
+        this.textureLoader = new THREE.CubeTextureLoader(this.loadingManager)
+        
         this.#createPlane()
     }
 
@@ -36,7 +38,7 @@ export class Plane {
     }
 
     #createTexturePlane() {
-        const texture = new THREE.TextureLoader().load(SKYBOX[3])
+        const texture = new THREE.TextureLoader(this.loadingManager).load(SKYBOX[3])
         texture.wrapS = THREE.MirroredRepeatWrapping;
         texture.wrapT = THREE.MirroredRepeatWrapping;
         
@@ -79,7 +81,8 @@ export class Plane {
             }
             new NatureObject(
                 treeToCreate,
-                this.scene, 
+                this.scene,
+                this.loadingManager,
                 { 
                     scale: scale,
                     x: this.#generateRandomNumber(-windowWidth, windowWidth),

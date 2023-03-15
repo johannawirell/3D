@@ -6,16 +6,17 @@ const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
 
 export class NatureObject {
-    constructor(glbPath, scene, position) {
+    constructor(glbPath, scene, loadingManager, position, l) {
         this.glbPath = glbPath
         this.scene = scene
+        this.loadingManager = loadingManager
         this.position = position
 
         this.#loadOak()
     }
 
     #loadOak() {
-        const gltfLoader = new GLTFLoader()
+        const gltfLoader = new GLTFLoader(this.loadingManager)
         gltfLoader.setDRACOLoader(dracoLoader)
 
         gltfLoader.load(this.glbPath, gltf => {

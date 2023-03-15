@@ -1,12 +1,13 @@
 import './css/index.css'
 import * as THREE from 'three'
 
+import { LoadingManager } from './components/loader/loaderManager'
 import { PlayerController } from './components/controllers/player/playerController'
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { CollisonHandler } from './components/controllers/collisonHandler/collisonHandler'
-// import { GameDescrition } from './components/descriptions/gameDescription'
+import { GameDescrition } from './components/descriptions/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
@@ -22,6 +23,7 @@ class Main {
     this.renderer = this.#createRenderer()
     this.camera = this.#createPerspectiveCamera()
     this.scene = this.#createScene()
+    this.loadingManager = new LoadingManager()
     this.mixers = []
     this.previousRAF = null
     this.isMouseMoving = false
@@ -61,18 +63,17 @@ class Main {
   }
 
   #createGameDescription() {
-    this.player.enableMovement()
-    // this.gameDescrition = new GameDescrition({
-    //   scene: this.scene,
-    //   width: window.innerWidth / 2,
-    //   height: window.innerHeight / 2
-    // })
+    this.gameDescrition = new GameDescrition({
+      scene: this.scene,
+      width: window.innerWidth / 2,
+      height: window.innerHeight / 2
+    })
 
-    // this.gameDescrition.handleStart(() => {
-    //   this.player.enableMovement()
-    //   this.gameDescrition.hide()
-    //   this.gameDescrition = null
-    // })
+    this.gameDescrition.handleStart(() => {
+      this.player.enableMovement()
+      this.gameDescrition.hide()
+      this.gameDescrition = null
+    })
   }
 
   #RAF() {
@@ -81,13 +82,21 @@ class Main {
         this.previousRAF = time
       }
 
-      this.#RAF()
-
+    if (this.loadingManager.isDoneLoading) {
       this.renderer.render(this.scene, this.camera)
       this.#update(time - this.previousRAF)
       this.previousRAF = time
+      console.log('done loading')
+    } else {
+      console.log('not done loading')
+      //Fortsätt att ladda resurser och visa en loader eller meddelande
+    }
+
+      this.#RAF()
+
     })
   }
+
 
   #update(time) {
     const seconds = time * 0.001
@@ -146,7 +155,7 @@ class Main {
   }
 
   #createPlane() {
-    this.plane = new Plane(this.scene)
+    this.plane = new Plane(this.scene, this.loadingManager.loader)
   }
 
   #createRenderer() {
