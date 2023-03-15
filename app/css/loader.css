@@ -1,16 +1,21 @@
 .loader {
-    font-size: large;
-    font-family: 'Montserrat', sans-serif;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   
   #loading-bar {
-    display: block;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    height: 2%;
+  }
+
+  label {
+    font-size: 1rem;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
   }

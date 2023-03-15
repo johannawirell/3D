@@ -1,6 +1,7 @@
 @import './gameDescription.css';
 @import './loader.css';
 body {
+    background-color: black;
     overflow: hidden;
 }
 canvas {

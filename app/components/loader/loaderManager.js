@@ -8,6 +8,7 @@ export class LoadingManager {
         
         this.#addContent()
         this.#getLoaded()
+        this.#handleProgress()
     }
 
     get loader () {
@@ -25,6 +26,13 @@ export class LoadingManager {
         }
     }
 
+    #handleProgress() {
+        console.log(this.progressBar)
+        this.loadingManager.onProgress = (url, loaded, total) => {
+            this.progressBar.value = (loaded / total) * 100
+        }
+    }
+
     #hide() {
         this.container.style.display = 'none'
     }
@@ -38,11 +46,11 @@ export class LoadingManager {
         label.setAttribute('for', 'loading-bar')
         this.container.appendChild(label)
 
-        const progressBar = document.createElement('progress')
-        progressBar.setAttribute('id', 'loading-bar')
-        progressBar.setAttribute('value', '0')
-        progressBar.setAttribute('max', '100')
-        this.container.appendChild(progressBar)
+        this.progressBar = document.createElement('progress')
+        this.progressBar.setAttribute('id', 'loading-bar')
+        this.progressBar.setAttribute('value', '0')
+        this.progressBar.setAttribute('max', '100')
+        this.container.appendChild(this.progressBar)
 
         document.body.appendChild(this.container)
     }
