@@ -105,7 +105,7 @@ export class HorseController extends CollisonHandler {
         if (this.collidingObject) {
             // Calculate a new set of waypoints that avoid the colliding object
             const newWaypoints = this.movement.calculateAvoidanceWaypoints(
-            collidingObject.position,
+            this.collidingObject.position,
             this.currentPosition,
             this.#createWayPoints()
             )
