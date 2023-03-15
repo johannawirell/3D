@@ -5,8 +5,9 @@ export class Movement {
     velocity = new THREE.Vector3(0, 0, 2)
     currentPosition = new THREE.Vector3()
 
-    constructor(target) {
+    constructor(target, entityManager ) {
         this.target = target
+        this.entityManager = entityManager
         
         this.#createVehicle()
     }

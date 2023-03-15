@@ -20,9 +20,10 @@ export class HorseController extends CollisonHandler {
 
     constructor(params) {
         super(params)
-        this.animationsMap = new Map()
+        this.entityManager = params.entityManager
         this.camera = params.camera
         this.scene = params.scene
+        this.animationsMap = new Map()
         this.move = true
         this.currentState = WALK_STATE
 
@@ -67,7 +68,7 @@ export class HorseController extends CollisonHandler {
     }
 
     #createMovement() {
-        this.movement = new Movement(this.target)
+        this.movement = new Movement(this.target, this.entityManager)
     }
 
     #move(time) {

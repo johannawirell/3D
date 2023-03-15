@@ -144,7 +144,8 @@ class Main {
     })
     this.horse = new HorseController({
       camera: this.camera, 
-      scene: this.scene
+      scene: this.scene,
+      entityManager: this.entityManager
     })
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
