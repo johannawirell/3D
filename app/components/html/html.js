@@ -1,7 +1,7 @@
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 
-export class Description {
+export class HTMLElement {
     constructor(params) {
         this.params = params
         this.scene = params.scene

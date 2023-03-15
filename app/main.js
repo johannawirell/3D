@@ -7,7 +7,7 @@ import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCa
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { CollisonHandler } from './components/controllers/collisonHandler/collisonHandler'
-import { GameDescrition } from './components/descriptions/gameDescription'
+import { GameDescrition } from './components/html/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
 
 const FIELD_OF_VIEW = 60
@@ -23,7 +23,7 @@ class Main {
     this.renderer = this.#createRenderer()
     this.camera = this.#createPerspectiveCamera()
     this.scene = this.#createScene()
-    this.loadingManager = new LoadingManager()
+    this.loadingManager = this.#createLoader()
     this.mixers = []
     this.previousRAF = null
     this.isMouseMoving = false
@@ -82,15 +82,11 @@ class Main {
         this.previousRAF = time
       }
 
-    if (this.loadingManager.isDoneLoading) {
-      this.renderer.render(this.scene, this.camera)
-      this.#update(time - this.previousRAF)
-      this.previousRAF = time
-      console.log('done loading')
-    } else {
-      console.log('not done loading')
-      //Fortsätt att ladda resurser och visa en loader eller meddelande
-    }
+      if (this.loadingManager.isDoneLoading) {
+        this.renderer.render(this.scene, this.camera)
+        this.#update(time - this.previousRAF)
+        this.previousRAF = time
+      } 
 
       this.#RAF()
 
@@ -194,6 +190,14 @@ class Main {
   
     return scene
   }  
+
+  #createLoader() {
+    return new LoadingManager({
+      scene: this.scene,
+      width: window.innerWidth / 2,
+      height: window.innerHeight / 2
+    })
+  }
 }
 
 new Main()

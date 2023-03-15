@@ -1,6 +1,6 @@
-import { Description } from './description'
+import { HTMLElement } from './html'
 
-export class GameDescrition extends Description {
+export class GameDescrition extends HTMLElement {
     constructor(params) {
         super(params)
         this.#updateDiv()

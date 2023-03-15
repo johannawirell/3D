@@ -1,4 +1,5 @@
 @import './gameDescription.css';
+@import './loader.css';
 body {
     overflow: hidden;
 }
