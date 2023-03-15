@@ -32,11 +32,18 @@ export class LoadingManager {
     #addContent() {
         this.container = document.createElement('div')
         this.container.classList.add('loader')
-        const p = document.createElement('p')
-        p.textContent = 'Loading...'
-        this.container.appendChild(p)
+
+        const label = document.createElement('label')
+        label.textContent = 'Loading...'
+        label.setAttribute('for', 'loading-bar')
+        this.container.appendChild(label)
+
+        const progressBar = document.createElement('progress')
+        progressBar.setAttribute('id', 'loading-bar')
+        progressBar.setAttribute('value', '0')
+        progressBar.setAttribute('max', '100')
+        this.container.appendChild(progressBar)
 
         document.body.appendChild(this.container)
-
     }
 }
