@@ -27,7 +27,6 @@ export class LoadingManager {
     }
 
     #handleProgress() {
-        console.log(this.progressBar)
         this.loadingManager.onProgress = (url, loaded, total) => {
             this.progressBar.value = (loaded / total) * 100
         }

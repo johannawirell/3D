@@ -3,12 +3,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { Movement } from './movement'
 
 const PATH_TO_HORSE = '../../models/Daffy.glb'
-const WIDTH = 0.4
-const HEIGHT = 0.4
-const DEPTH = 0.4
+const SCALE = 0.4
 
-const X_POSITION = -5
-const Y_POSITION = 0
+const X_POSITION = 50
+const Y_POSITION = -5
 const Z_POSITION = -100
 
 const WALK_STATE = 'Walk'
@@ -101,7 +99,7 @@ export class HorseController {
 
    #updateInitialPosition(model) {
         if (model) {
-            model.scale.set(WIDTH, HEIGHT, DEPTH)
+            model.scale.set(SCALE, SCALE, SCALE)
             model.position.set(X_POSITION, Y_POSITION, Z_POSITION)
             model.rotateY(Math.PI)
         }
