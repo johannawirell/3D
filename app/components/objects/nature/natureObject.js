@@ -1,20 +1,20 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+import { GameEnity } from '../../controllers/gameEnity/gameEnity'
 
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
 
-export class NatureObject {
+export class NatureObject extends GameEnity {
     constructor(params) {
+        super(params)
         this.glbPath = params.glbPath
-        this.scene = params.scene
         this.loadingManager = params.loadingManager
         this.entityManager = params.entityManager
         this.position = params.position
         
 
         this.#loadTree()
-        this.#createObstacle()
     }
 
     #loadTree() {
@@ -31,7 +31,7 @@ export class NatureObject {
             })
             model.name = 'Tree'
             this.target = model
-            this.#createObstacle()
+            this.createObstacle(this.target)
             this.scene.add(model)
             
         })
@@ -42,12 +42,5 @@ export class NatureObject {
         model.scale.set(scale, scale, scale)
         model.position.set(x, y, z)
         return model
-    }
-
-    #createObstacle() {
-        if (this.target) {
-            console.log(this.target)
-            console.log('target')
-        }
-    }
+    }   
 }
