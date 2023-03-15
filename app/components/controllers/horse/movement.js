@@ -1,23 +1,12 @@
 import * as THREE from 'three'
-const FORWARDS = new THREE.Vector3(-5, 0, -50)
-const RIGHTWARDS =  new THREE.Vector3(50, 0, -50)
-const BACKWARDS = new THREE.Vector3(50, 0, -100)
-const LEFTWARDS = new THREE.Vector3(-5, 0, -100)
 
 export class Movement {
     velocity = new THREE.Vector3(0, 0, 2)
     currentPosition = new THREE.Vector3()
     startPosition = {x: -5, z: -100}
 
-    constructor() {
-        this.waypoints = [
-            FORWARDS,
-            new THREE.Vector3(25, 0, 0),
-            RIGHTWARDS,
-            BACKWARDS,
-            new THREE.Vector3(25, 0, -125),
-            LEFTWARDS
-        ]
+    constructor(waypoints) {
+        this.waypoints = waypoints
         this.speed = 0.5
         this.waypointIndex = 0
     }
@@ -50,6 +39,45 @@ export class Movement {
         }
 
         return newPosition
-
     }
+
+    updateWayPoints(waypoints) {
+        this.waypoints = waypoints
+    }
+
+    calculateAvoidanceWaypoints(obstaclePosition, currentPosition, waypoints) {
+        const MAX_AVOIDANCE_ANGLE = Math.PI / 4 // Maximum angle to turn away from obstacle
+        const AVOIDANCE_DISTANCE = 40 // Distance to keep from obstacle
+    
+        const avoidanceVector = new THREE.Vector3()
+        avoidanceVector.subVectors(currentPosition, obstaclePosition)
+        avoidanceVector.normalize()
+    
+        const newWaypoints = []
+    
+        for (let i = 0; i < waypoints.length; i++) {
+          const waypoint = waypoints[i]
+          const toWaypoint = new THREE.Vector3()
+          toWaypoint.subVectors(waypoint, currentPosition)
+    
+          const angle = avoidanceVector.angleTo(toWaypoint)
+    
+          if (angle < MAX_AVOIDANCE_ANGLE && toWaypoint.length() < AVOIDANCE_DISTANCE) {
+            const avoidanceDirection = new THREE.Vector3()
+            avoidanceDirection.crossVectors(avoidanceVector, toWaypoint)
+            avoidanceDirection.normalize()
+    
+            const avoidanceOffset = avoidanceDirection.clone()
+            avoidanceOffset.multiplyScalar(AVOIDANCE_DISTANCE)
+            const newWaypoint = waypoint.clone()
+            newWaypoint.add(avoidanceOffset)
+    
+            newWaypoints.push(newWaypoint)
+          } else {
+            newWaypoints.push(waypoint.clone())
+          }
+        }
+    
+        return newWaypoints
+      }
 }

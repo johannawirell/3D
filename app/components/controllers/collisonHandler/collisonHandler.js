@@ -22,14 +22,15 @@ export class CollisonHandler {
         }
     }
 
-    isColliding(objectNames) {
+    getCollidingObject(objectNames) {
         for (const obj of this.scene.children) {            
             if (objectNames.includes(obj.name)) {
                 const objBB = new THREE.Box3().setFromObject(obj)
                 if (this.bbox.intersectsBox(objBB)) {
-                    return true
+                    return obj
                 }
             }
         }
+        return false
     }
 }
