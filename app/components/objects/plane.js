@@ -1,7 +1,10 @@
 import * as THREE from 'three'
 import { NatureObject } from './nature/natureObject'
 
-const TREES = [ '../../../models/Oak.glb']
+const TREES = [ 
+    '../../../models/Oak.glb',
+    '../../../models/Pine.glb'
+]
 
 const SKYBOX = [
     '../../img/skybox/posx.jpg',
@@ -13,7 +16,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 100
+    numberOfTrees = 150
     constructor(scene) {
         this.textureLoader = new THREE.CubeTextureLoader()
         this.scene = scene
@@ -66,11 +69,19 @@ export class Plane {
        
         for (let i = 0; i < this.numberOfTrees; i++) {
             const treeToCreate = this.#randomTree()
+            let scale
+            if (treeToCreate === TREES[0]) {
+                scale = this.#generateRandomNumber(5,8)
+            } else if (treeToCreate === TREES[1]) {
+                scale = this.#generateRandomNumber(4,6)
+            } else if (treeToCreate === TREES[2]) {
+                
+            }
             new NatureObject(
                 treeToCreate,
                 this.scene, 
                 { 
-                    scale: this.#generateRandomNumber(4, 6),
+                    scale: scale,
                     x: this.#generateRandomNumber(-windowWidth, windowWidth),
                     y: this.#generateRandomNumber(1, 0),
                     z: this.#generateRandomNumber(-windowHeight, windowHeight)
