@@ -201,7 +201,7 @@ export class PlayerController extends CollisonHandler {
             this.#move(false, velocity, time, acceleration)
         }
 
-        if (!this.isColliding(COLLIDING_OBJECT_NAMES)) {
+        if (!this.getCollidingObject(COLLIDING_OBJECT_NAMES)) {
             this.#updatePosition(rotation, velocity, time, controlObject)
         } else {
             this.handleOverEdge(controlObject, rotation)
