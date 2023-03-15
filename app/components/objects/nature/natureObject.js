@@ -24,6 +24,8 @@ export class NatureObject extends GameEnity {
         gltfLoader.load(this.glbPath, gltf => {
             let model = gltf.scene
             model = this.#position(model)
+            this.getBoundingSphereForGLTF(model)
+
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
@@ -31,7 +33,7 @@ export class NatureObject extends GameEnity {
             })
             model.name = 'Tree'
             this.target = model
-            this.createObstacle(this.target)
+            this.createObstacle()
             this.scene.add(model)
             
         })
@@ -42,5 +44,5 @@ export class NatureObject extends GameEnity {
         model.scale.set(scale, scale, scale)
         model.position.set(x, y, z)
         return model
-    }   
+    }
 }
