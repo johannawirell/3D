@@ -1,18 +1,20 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { CollisonHandler } from '../collisonHandler/collisonHandler.js'
 import { InputController } from './inputController.js'
 import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 
-export class PlayerController {
+export class PlayerController extends CollisonHandler {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
     acceleration = new THREE.Vector3(1, 0.25, 50.0)
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
     constructor(params) {
+        super(params)
         this.animationsMap = new Map()
         this.inputController = new InputController()
         this.state = new State()
@@ -45,6 +47,7 @@ export class PlayerController {
         new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
             let model = gltf.scene
             model = this.#updateInitialPosition(model)
+            model = this.createBoundingBox(model, PLAYER_SCALE_VECTOR)
             model.traverse(obj => {
                 if (obj.isMesh) {
                     obj.castShadow = true
@@ -60,8 +63,6 @@ export class PlayerController {
                 this.animationsMap.set(a.name, this.mixer.clipAction(a))
             })
           })
-
-          this.#updateInitialPosition()
     }
 
     #updateInitialPosition(model) {
@@ -69,7 +70,7 @@ export class PlayerController {
             model.scale.copy(PLAYER_SCALE_VECTOR)       
         }
         return model
-    }     
+    }
 
     #animatePlayer() {
         let action
@@ -209,6 +210,7 @@ export class PlayerController {
 
             if (this.#isKeyAction(keys)) {
                 this.#handleMovement(time, keys)
+                this.updateBoundingBox(this.target, PLAYER_SCALE_VECTOR)
             } else {
                 this.currentState = this.state.update()
             }
