@@ -1,7 +1,5 @@
 import * as THREE from 'three'
 
-const objects = ['Tree', 'Daffy']
-
 export class CollisonHandler {
     constructor(params) {
         this.params = params
@@ -24,9 +22,9 @@ export class CollisonHandler {
         }
     }
 
-    isColliding() {
-        for (const obj of this.scene.children) {
-            if (obj.name === objects[0] || obj.name === objects[1]) {
+    isColliding(objectNames) {
+        for (const obj of this.scene.children) {            
+            if (objectNames.includes(obj.name)) {
                 const objBB = new THREE.Box3().setFromObject(obj)
                 if (this.bbox.intersectsBox(objBB)) {
                     return true

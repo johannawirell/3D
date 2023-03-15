@@ -140,7 +140,10 @@ class Main {
       planePosition: this.plane.position,
       move: false
     })
-    this.horse = new HorseController(this.camera, this.scene)
+    this.horse = new HorseController({
+      camera: this.camera, 
+      scene: this.scene
+    })
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player

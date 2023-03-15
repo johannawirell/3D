@@ -5,6 +5,7 @@ import { InputController } from './inputController.js'
 import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
+const COLLIDING_OBJECT_NAMES = ['Tree', 'Daffy']
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 
 export class PlayerController extends CollisonHandler {
@@ -200,7 +201,7 @@ export class PlayerController extends CollisonHandler {
             this.#move(false, velocity, time, acceleration)
         }
 
-        if (!this.isColliding()) {
+        if (!this.isColliding(COLLIDING_OBJECT_NAMES)) {
             this.#updatePosition(rotation, velocity, time, controlObject)
         } else {
             this.handleOverEdge(controlObject, rotation)
