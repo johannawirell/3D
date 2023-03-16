@@ -40,14 +40,11 @@ export class HorseController extends GameEnity {
     
     update(time) {
         if (this.isDoneLoading) {
-            this.walk(time)
-            // if (this.move){
-            //     console.log('move')
-            //     this.moveModel(time)
-            // } else {
-            //     console.log('idle')
-            //     this.idle()
-            // }
+            if (this.move){
+                this.walk()
+            } else {
+                this.idle()
+            }
     
             if (this.mixer) {
                 this.mixer.update(time)
