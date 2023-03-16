@@ -1,8 +1,6 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { GameEnity } from '../gameEnity/gameEnity.js'
 import { InputController } from './inputController.js'
-import { State } from './state.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
@@ -15,13 +13,8 @@ export class PlayerController extends GameEnity {
 
     constructor(params) {
         super(params)
-        // this.animationsMap = new Map()
         this.planePosition = params.planePosition
-        this.inputController = new InputController()
-        // this.state = new State()
-        // this.currentState = this.state.current
-
-        
+        this.inputController = new InputController()      
     
         this.#loadPlayer()
     }
