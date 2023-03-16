@@ -61,9 +61,7 @@ export class ThirdPersonCamera {
         return targetRotation.y < Math.PI/4 && targetRotation.y > -Math.PI/4
       }
 
-    update(timeElapsed) {
-      const playerPosition = this.target.currentPosition.clone()
-    
+    update(timeElapsed) {   
       // Calculate the ideal offset and lookat position
       let idealOffset = this.#calculateIdeal(-1, 2, -2);
       let idealLookat = this.#calculateIdeal(0, 1, 0);
