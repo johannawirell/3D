@@ -16,7 +16,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 0
+    numberOfTrees = 1
     constructor(scene, loadingManager, entityManager) {
         this.scene = scene
         this.loadingManager = loadingManager
@@ -62,7 +62,7 @@ export class Plane {
         this.plane.receiveShadow = true
         this.#position()
 
-        this.#addTrees()
+        // this.#addTrees()
         this.scene.add(this.plane)    
     }
 
@@ -91,26 +91,8 @@ export class Plane {
                     y: this.#generateRandomNumber(1, 0),
                     z: this.#generateRandomNumber(-windowHeight, windowHeight)
                 }
-            }
-               
-            )
+            })
         }
-
-        new NatureObject({
-            glbPath: TREES[0],
-            scene: this.scene,
-            loadingManager: this.loadingManager,
-            entityManager: this.entityManager,
-            position: { 
-                scale: 5,
-                x: -60,
-                y: 0,
-                z: -100
-            }
-        }
-            
-        )
-
     }
 
     #randomTree() {

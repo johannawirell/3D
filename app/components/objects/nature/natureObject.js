@@ -12,7 +12,6 @@ export class NatureObject extends GameEnity {
         this.loadingManager = params.loadingManager
         this.entityManager = params.entityManager
         this.position = params.position
-        
 
         this.#loadTree()
     }
@@ -25,6 +24,7 @@ export class NatureObject extends GameEnity {
             let model = gltf.scene
             model = this.#position(model)
             this.getBoundingSphereForGLTF(model)
+            this.obstacle = this.createObstacle()
 
             model.traverse(obj => {
                 if (obj.isMesh) {
@@ -32,10 +32,7 @@ export class NatureObject extends GameEnity {
                 }
             })
             model.name = 'Tree'
-            this.target = model
-            this.createObstacle()
             this.scene.add(model)
-            
         })
     }
 
