@@ -55,16 +55,16 @@ export class Plane {
         const planeGeometry = new THREE.PlaneGeometry(
             window.innerWidth * 2,
             window.innerHeight * 2,
-            50, 20, 50, 50// Add more segments to the geometry for smoother bending
+            // 50, 20, 50, 50// Add more segments to the geometry for smoother bending
         )
 
-        // Bend the plane downwards
-        const vertices = planeGeometry.attributes.position.array
-        for (let i = 0; i < vertices.length; i += 3) {
-            const x = vertices[i]
-            const z = vertices[i + 2]
-            vertices[i + 2] = z - Math.sin(x / 10) * 20 // Adjust the amplitude and frequency of the wave as desired
-        }
+        // // Bend the plane downwards
+        // const vertices = planeGeometry.attributes.position.array
+        // for (let i = 0; i < vertices.length; i += 3) {
+        //     const x = vertices[i]
+        //     const z = vertices[i + 2]
+        //     vertices[i + 2] = z - Math.sin(x / 10) * 20 // Adjust the amplitude and frequency of the wave as desired
+        // }
 
         const material = new THREE.MeshBasicMaterial({
             map: this.#createTexturePlane(),
