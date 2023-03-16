@@ -106,7 +106,7 @@ export class PlayerController extends GameEnity {
 
     #updatePosition(time, rotation, velocity, controlObject) {
         if (this.#isOverEdge()) {
-            this.#handleOverEdge(controlObject, rotation)
+            this.#handleOverEdge(controlObject, velocity)
         } else {
             controlObject.quaternion.copy(rotation)
             
@@ -129,25 +129,53 @@ export class PlayerController extends GameEnity {
     }
 
      #isOverEdge() {
-        if (this.currentPosition.z < (this.planePosition.z) * -1) {
-            return true
-        } else if (this.currentPosition.z > this.planePosition.z) {
-            return true
-        } else if (this.currentPosition.x < (this.planePosition.x) * -1) {
-            return true
-        } else if (this.currentPosition.x > this.planePosition.z) {
-            return true
-        }
+        return (
+            this.#isOverNegativeZ() || this.#isOverPositiveZ() ||
+            this.#isOverNegativeX() || this.#isOverPositiveX()
+            )
     }
 
-    #handleOverEdge(controlObject, rotation) {
-        
+    #handleOverEdge(controlObject, velocity) {
+        if (this.#isOverNegativeZ()) {
+            console.log('neg z')
+            velocity.z *= -1
+            controlObject.position.z = (this.planePosition.z) * -1
+        } else if (this.#isOverPositiveZ()) {
+            console.log('pos z')
+            velocity.z *= -1
+            controlObject.position.z = this.planePosition.z
+        } else if (this.#isOverNegativeX()) {
+            console.log('neg x')
+            velocity.x *= -1
+            controlObject.position.x = (this.planePosition.x) * -1
+        } else if (this.#isOverPositiveX()) {
+            console.log('pos x')
+            velocity.x *= -1
+            controlObject.position.x = this.planePosition.x
+        }
+        this.currentPosition.copy(controlObject.position)
+    }
+
+    #isOverNegativeZ() {
+        return this.currentPosition.z < (this.planePosition.z) * -1
+    }
+
+    #isOverPositiveZ() {
+        return this.currentPosition.z > this.planePosition.z
+    }
+
+    #isOverNegativeX() {
+        return this.currentPosition.x < (this.planePosition.x) * -1
+    }
+
+    #isOverPositiveX() {
+        return this.currentPosition.x > this.planePosition.x
     }
 
     #move(time, velocity, acceleration, forwards) {
         if (forwards) {
             if (this.inputController.isRunning()) {
-                acceleration.multiplyScalar(4.0)
+                acceleration.multiplyScalar(10.0)
             }
             velocity.z -= acceleration.z * time
         } else {

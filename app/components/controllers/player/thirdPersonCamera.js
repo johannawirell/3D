@@ -4,15 +4,6 @@ const MIDDLE_WIDTH = window.innerWidth / 2
 const MIDDLE_HEIGHT = window.innerHeight / 2 
 const ROTATION_SPEED = 0.005
 
-  // Define the bounds of the camera volume
-  const VOLUME_BOUNDS = {
-    minX: -300,
-    maxX: 3000,
-    minZ: -320,
-    maxZ: 320
-  }
-
-
 export class ThirdPersonCamera {
     constructor(params) {
         this.params = params
@@ -69,30 +60,13 @@ export class ThirdPersonCamera {
       #isFacingCamera(targetRotation) {
         return targetRotation.y < Math.PI/4 && targetRotation.y > -Math.PI/4
       }
-   
+
     update(timeElapsed) {
       const playerPosition = this.target.currentPosition.clone()
-  
+    
       // Calculate the ideal offset and lookat position
       let idealOffset = this.#calculateIdeal(-1, 2, -2);
       let idealLookat = this.#calculateIdeal(0, 1, 0);
-    
-      // If the player is outside the volume bounds, adjust the camera position and lookat position
-      if (playerPosition.x < VOLUME_BOUNDS.minX) {
-        idealOffset.x += playerPosition.x - VOLUME_BOUNDS.minX
-        idealLookat.x += playerPosition.x - VOLUME_BOUNDS.minX
-      } else if (playerPosition.x > VOLUME_BOUNDS.maxX) {
-        idealOffset.x += playerPosition.x - VOLUME_BOUNDS.maxX
-        idealLookat.x += playerPosition.x - VOLUME_BOUNDS.maxX
-      }
-    
-      if (playerPosition.z < VOLUME_BOUNDS.minZ) {
-        idealOffset.z += playerPosition.z - VOLUME_BOUNDS.minZ
-        idealLookat.z += playerPosition.z - VOLUME_BOUNDS.minZ
-      } else if (playerPosition.z > VOLUME_BOUNDS.maxZ) {
-        idealOffset.z += playerPosition.z - VOLUME_BOUNDS.maxZ
-        idealLookat.z += playerPosition.z - VOLUME_BOUNDS.maxZ
-      }
     
       // Interpolate the camera position and lookat towards the ideal positions
       const t = 1.0 - Math.pow(0.001, timeElapsed);
@@ -102,5 +76,6 @@ export class ThirdPersonCamera {
       // Set the camera position and lookat
       this.camera.position.copy(this.currentPosition);
       this.camera.lookAt(this.currentLookat);
-  }
+    }
+      
 }
