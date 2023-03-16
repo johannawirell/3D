@@ -10,6 +10,7 @@ export class GameEnity {
         this.scene = params.scene
         this.states = {}
         this.animationsMap = new Map()
+        this.isDoneLoading = false
     }
 
     setState(state) {
@@ -32,9 +33,7 @@ export class GameEnity {
             })
             
             this.target = model
-            if (movement) {
-                this.createMovement()
-            }
+            
             
             this.scene.add(model)
 
@@ -50,6 +49,11 @@ export class GameEnity {
             resolve()
           })
         })
+        this.isDoneLoading = true
+
+        if (movement) {
+            this.createMovement()
+        }
     }
 
     createMovement() {
@@ -58,25 +62,30 @@ export class GameEnity {
         }
     }
 
-    moveModel(time) {
-        if (this.target) {
-            // const toPlay = this.animationsMap.get(this.currentState)
-            // toPlay.play() 
-        } 
+    walk() {
+        const newAction = this.states.Walk
+
+        if (this.currentState !== newAction) {
+            const toPlay = this.animationsMap.get(newAction)
+            toPlay.play()
+            this.setState(newAction)
+        }
     }
 
     idle() {
-        // const newAction = this.states.idle    
+        const newAction = this.states.Idle
 
-        // if (this.currentState !== newAction) {
-        //     console.log(this.animationsMap.get('Idle'))
-        //     const toPlay = this.animationsMap.get(newAction)
-        //     const current = this.animationsMap.get(this.currentState)
+        if (this.currentState !== newAction) {
+            this.updateAnimation(newAction)
+        }
+    }
 
-        //     current.fadeOut(this.fadeDuration)
-        //     toPlay.reset().fadeIn(this.fadeDuration).play()
-        //     this.setState(newAction)
-        // }    
+    updateAnimation(newAction) {
+        const toPlay = this.animationsMap.get(newAction)
+        const current = this.animationsMap.get(this.currentState)
+        current.fadeOut(this.fadeDuration)
+        toPlay.reset().fadeIn(this.fadeDuration).play()
+        this.setState(newAction)
     }
 
     createObstacle() {

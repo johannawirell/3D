@@ -16,17 +16,14 @@ export class HorseController extends GameEnity {
 
     constructor(params) {
         super(params)
-        this.move = false
+        this.move = true
         
         this.#loadHorse()
-        // this.setState(states.walk)
-        // this.loadGLTF(PATH_TO_HORSE, true)
-        // console.log(this.states)
     }
 
     async #loadHorse() {
         await this.loadGLTF(PATH_TO_HORSE, true)
-        this.setState(this.states.Walk)
+        // this.setState(this.states.Walk)
     }
 
     get position() {
@@ -42,15 +39,21 @@ export class HorseController extends GameEnity {
     }   
     
     update(time) {
-        if (this.move){
-            this.moveModel(time)
-        } else {
-            this.idle()
+        if (this.isDoneLoading) {
+            this.walk(time)
+            // if (this.move){
+            //     console.log('move')
+            //     this.moveModel(time)
+            // } else {
+            //     console.log('idle')
+            //     this.idle()
+            // }
+    
+            if (this.mixer) {
+                this.mixer.update(time)
+            }
         }
-
-        if (this.mixer) {
-            this.mixer.update(time)
-        }
+      
     }
 
    position(model) {
