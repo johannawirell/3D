@@ -1,8 +1,6 @@
 import * as THREE from 'three'
 import { GameEnity } from '../gameEnity/gameEnity'
 
-import { Movement } from '../gameEnity/movement'
-
 const PATH_TO_HORSE = '../../models/Daffy.glb'
 const SCALE = 0.4
 
@@ -23,7 +21,6 @@ export class HorseController extends GameEnity {
 
     async #loadHorse() {
         await this.loadGLTF(PATH_TO_HORSE, true)
-        // this.setState(this.states.Walk)
     }
 
     get position() {

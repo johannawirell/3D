@@ -106,11 +106,11 @@ class Main {
 
     if (this.horse) {
       this.horse.update(seconds)
-      if (this.#isNearHorse()) {
-        this.horse.stopMovement()
-      } else {
-        this.horse.startMovement()
-      }
+      // if (this.#isNearHorse()) {
+      //   this.horse.stopMovement()
+      // } else {
+      //   this.horse.startMovement()
+      // }
     }
 
     if (this.thirdPersonCamera) {
@@ -124,15 +124,6 @@ class Main {
     if (this.gameDescrition) {
       this.gameDescrition.update(this.camera)
     }   
-  }
-
-  #isNearHorse() {
-    const playerPosition = this.player.position
-    const horsePosition = this.horse.position
-    const distance = playerPosition.distanceTo(horsePosition)
-    if (distance < 20) {
-      return true
-    } 
   }
 
   #loadAnimateModel() {
