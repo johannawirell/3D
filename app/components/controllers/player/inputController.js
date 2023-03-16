@@ -84,4 +84,28 @@ export class InputController {
             .filter(key => this.keys[key])
         return activeKeys
     }
+
+    isTurning() {
+        return (this.isTurningLeft()) || (this.isTurningRight())
+    }
+
+    isTurningLeft() {
+        return this.keys.left
+    }
+
+    isTurningRight() {
+        return this.keys.right
+    }
+
+    isMovingForwards() {
+        return this.keys.forward
+    }
+
+    isMovingBackwards() {
+        return this.keys.backward
+    }
+
+    isRunning() {
+        return this.keys.shift
+    }
 }

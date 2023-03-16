@@ -34,7 +34,6 @@ export class GameEnity {
             
             this.target = model
             
-            
             this.scene.add(model)
 
             this.gltfAnimation = gltf.animations
@@ -58,6 +57,8 @@ export class GameEnity {
 
     createMovement() {
         if (this.target) {
+            // TODO: kolla movement, ska både häst och player ha movement?
+            // Lägg till movement logik i häst istället
             this.movement = new Movement(this.target, this.entityManager)
         }
     }
@@ -66,9 +67,7 @@ export class GameEnity {
         const newAction = this.states.Walk
 
         if (this.currentState !== newAction) {
-            const toPlay = this.animationsMap.get(newAction)
-            toPlay.play()
-            this.setState(newAction)
+            this.updateAnimation(newAction)
         }
     }
 
@@ -80,11 +79,24 @@ export class GameEnity {
         }
     }
 
+    run() {
+        const newAction = this.states.Run
+
+        if (this.currentState !== newAction) {
+            this.updateAnimation(newAction)
+        }
+    }
+
     updateAnimation(newAction) {
         const toPlay = this.animationsMap.get(newAction)
         const current = this.animationsMap.get(this.currentState)
-        current.fadeOut(this.fadeDuration)
-        toPlay.reset().fadeIn(this.fadeDuration).play()
+        if (current) {
+            current.fadeOut(this.fadeDuration)
+            toPlay.reset().fadeIn(this.fadeDuration).play()
+        } else {
+            toPlay.play()
+        }
+        
         this.setState(newAction)
     }
 

@@ -37,8 +37,6 @@ export class PlayerController extends GameEnity {
         return model
     }
 
-    update() {}
-
     getPosition() {
         return this.currentPosition
     }
@@ -51,217 +49,155 @@ export class PlayerController extends GameEnity {
         }
     }
 
-    // enableMovement() {
-    //     this.move = true
-    // }
+    enableMovement() {
+        this.move = true
+    }  
 
-    // #loadPlayerModel() {
-    //     // new GLTFLoader().load(PATH_TO_PLAYER, gltf => {
-    //     //     let model = gltf.scene
-    //     //     model = this.#updateInitialPosition(model)
-
-    //     //     model.traverse(obj => {
-    //     //         if (obj.isMesh) {
-    //     //             obj.castShadow = true
-    //     //         }
-    //     //     })
-    //     //     this.scene.add(model)
-
-    //     //     this.target = gltf.scene           
-        
-    //     //     const gltfAnimations = gltf.animations
-    //     //     this.mixer = new THREE.AnimationMixer(model)
-    //     //     gltfAnimations.filter(a => a.name != 'TPose').forEach(a => {
-    //     //         this.animationsMap.set(a.name, this.mixer.clipAction(a))
-    //     //     })
-    //     //   })
-    // }
-
-   
-
-    // #animatePlayer() {
-    //     let action
-    //     const { states } = this.state
-
-    //     const directionPressed = this.inputController.isDirectionsPressed()
-    //     const shiftPressed = this.inputController.isShiftPressed()
-
-    //     if (directionPressed && shiftPressed) {
-    //         action = states.run
-    //     } else if (directionPressed) {
-    //         action = states.walk
-    //     } else {
-    //         action = states.idle
-    //     }
-
-    //     if (this.currentState !== action) {
-    //         const toPlay = this.animationsMap.get(action)
-    //         const current = this.animationsMap.get(this.currentState)
-
-    //         current.fadeOut(this.fadeDuration)
-    //         toPlay.reset().fadeIn(this.fadeDuration).play()
-    //     }
-    // }
-
-    // #updateVelocity(time) {
-    //     const deceleration = this.deceleration
-    //     const velocity = this.velocity
-        
-    //     const frameDeceleration = new THREE.Vector3(
-    //         velocity.x * deceleration.x,
-    //         velocity.y * deceleration.y,
-    //         velocity.z * deceleration.z
-    //     )
-
-    //     frameDeceleration.multiplyScalar(time)
-        
-    //     frameDeceleration.z = Math.sign(frameDeceleration.z) * Math.min(
-    //         Math.abs(frameDeceleration.z),
-    //         Math.abs(velocity.z)
-    //     )
-        
-    //     velocity.add(frameDeceleration)
-    //     return velocity
-    // }
-
-    // #turn(left, right, rotation, time, acceleration) {
-    //     const quaternion = new THREE.Quaternion()
-    //     const axis = new THREE.Vector3()
-
-    //     if (left) {
-    //         axis.set(0, 1, 0)
-    //         quaternion.setFromAxisAngle(
-    //             axis, 
-    //             4.0 * Math.PI * time * acceleration.y
-    //         )
-    //         rotation.multiply(quaternion)
-    //     }
-
-    //     if (right) {
-    //         axis.set(0, 1, 0)
-    //         quaternion.setFromAxisAngle(
-    //             axis,
-    //             4.0 * - Math.PI * time * acceleration.y
-    //         )
-    //         rotation.multiply(quaternion)
-    //       }
-
-    //     return rotation
-    // }
-
-    // #move(forwards, velocity, time, acceleration) {
-    //     if (forwards) {
-    //         if (this.#isRunning()) {
-    //             acceleration.multiplyScalar(2.0)
-    //         }
-    //         velocity.z -= acceleration.z * time
-    //     } else {
-    //         velocity.z += acceleration.z * time
-    //     }
-    // }
-
-    // #updatePosition(rotation, velocity, time, controlObject) {
-    //     if (this.#isOverEdge()) {
-    //         this.handleOverEdge(controlObject, rotation)
-    //     } else {
-    //         controlObject.quaternion.copy(rotation)
+    update(time) {
+        if (this.isDoneLoading && this.move) {
+            if (this.#shouldMove()) {
+                this.#animatePlayer()
+                this.#handleMovement(time)
+            } else {
+                this.idle()
+            }
             
-    //         const forward = new THREE.Vector3(0, 0, 1)
-    //         forward.applyQuaternion(controlObject.quaternion)
-    //         forward.normalize()
+        }
+
+        if (this.mixer) {
+            this.mixer.update(time)
+        }
+    }
+
+    #shouldMove() {
+        return this.inputController.isDirectionsPressed()
+    }
+
+    #animatePlayer() {
+        const shiftPressed = this.inputController.isShiftPressed()
+
+        if (shiftPressed) {
+            this.run()
+        } else {
+            this.walk()
+        }
+    }
+
+    #handleMovement(time) {
+        const velocity = this.#updateVelocity(time)
+
+        const controlObject = this.target
+        let rotation = controlObject.quaternion.clone()
+        const acceleration = this.acceleration.clone()
+
+
+        if (this.inputController.isTurning()) {
+            rotation = this.#turn(time, rotation, acceleration)
+        }
+
+        if (this.inputController.isMovingForwards()) {
+            this.#move(time, velocity, acceleration, true)
+        } else if (this.inputController.isMovingBackwards()) {
+            this.#move(time, velocity, acceleration, false)
+        }
+
+        this.#updatePosition(time, rotation, velocity, controlObject)       
+    }
+
+    #updatePosition(time, rotation, velocity, controlObject) {
+        if (this.#isOverEdge()) {
+            this.#handleOverEdge(controlObject, rotation)
+        } else {
+            controlObject.quaternion.copy(rotation)
             
-    //         const sideways = new THREE.Vector3(1, 0, 0)
-    //         sideways.applyQuaternion(controlObject.quaternion)
-    //         sideways.normalize()
+            const forward = new THREE.Vector3(0, 0, 1)
+            forward.applyQuaternion(controlObject.quaternion)
+            forward.normalize()
             
-    //         sideways.multiplyScalar(velocity.x * time)
-    //         forward.multiplyScalar(velocity.z * time)
+            const sideways = new THREE.Vector3(1, 0, 0)
+            sideways.applyQuaternion(controlObject.quaternion)
+            sideways.normalize()
             
-    //         controlObject.position.add(forward)
-    //         controlObject.position.add(sideways)
+            sideways.multiplyScalar(velocity.x * time)
+            forward.multiplyScalar(velocity.z * time)
+            
+            controlObject.position.add(forward)
+            controlObject.position.add(sideways)
 
-    //         this.currentPosition.copy(controlObject.position)
-    //     }
-    // }
+            this.currentPosition.copy(controlObject.position)
+        }
+    }
 
-    // #handleMovement(time, keys) {
-    //     this.currentState = this.state.update(keys, this.inputController.isDirectionsPressed())
+     #isOverEdge() {
+        if (this.currentPosition.z < (this.planePosition.z) * -1) {
+            return true
+        } else if (this.currentPosition.z > this.planePosition.z) {
+            return true
+        } else if (this.currentPosition.x < (this.planePosition.x) * -1) {
+            return true
+        } else if (this.currentPosition.x > this.planePosition.z) {
+            return true
+        }
+    }
 
-    //     const velocity = this.#updateVelocity(time)
-
-    //     const controlObject = this.target
-    //     let rotation = controlObject.quaternion.clone()
-    //     const acceleration = this.acceleration.clone()
-
-    //     if (keys.left || keys.right) {
-    //         rotation = this.#turn(keys.left, keys.right, rotation, time, acceleration)
-    //     }
-
-    //     if (this.#isRunning()){
-    //         acceleration.multiplyScalar(2.0)
-    //     }
-
-    //     if (keys.forward) {
-    //         this.#move(true, velocity, time, acceleration)
-    //     } else if (keys.backward) {
-    //         this.#move(false, velocity, time, acceleration)
-    //     }
-
-    //     this.#updatePosition(rotation, velocity, time, controlObject)       
-    // }
-
-    // update(time) {
-    //     const keys = this.inputController.keys
-    //     if (this.move) {
-    //         this.#animatePlayer()          
-
-    //         if (this.#isKeyAction(keys)) {
-    //             this.#handleMovement(time, keys)
-    //         } else {
-    //             this.currentState = this.state.update()
-    //         }
-    
-    //     }
+    #handleOverEdge(controlObject, rotation) {
         
-    //     if (this.mixer) {
-    //         this.mixer.update(time)
-    //     }
-    // }
+    }
 
-    // #isKeyAction(keys) {
-    //     return Object.values(keys).some(val => val)
-    // }
+    #move(time, velocity, acceleration, forwards) {
+        if (forwards) {
+            if (this.inputController.isRunning()) {
+                acceleration.multiplyScalar(4.0)
+            }
+            velocity.z -= acceleration.z * time
+        } else {
+            velocity.z += acceleration.z * time
+        }
+    }
 
-    // #isRunning() {
-    //     const { states } = this.state
+     #turn(time, rotation, acceleration) {
+        const quaternion = new THREE.Quaternion()
+        const axis = new THREE.Vector3()
 
-    //     return this.state.current === states.run
-    // }
+        if (this.inputController.isTurningLeft()) {
+            axis.set(0, 1, 0)
+            quaternion.setFromAxisAngle(
+                axis, 
+                4.0 * Math.PI * time * acceleration.y
+            )
+            rotation.multiply(quaternion)
+        }
 
-    // #isOverEdge() {
-    //     if (this.currentPosition.z < (this.planePosition.z) * -1) {
-    //         return true
-    //     } else if (this.currentPosition.z > this.planePosition.z) {
-    //         return true
-    //     } else if (this.currentPosition.x < (this.planePosition.x) * -1) {
-    //         return true
-    //     } else if (this.currentPosition.x > this.planePosition.z) {
-    //         return true
-    //     }
-    // }
+        if (this.inputController.isTurningRight()) {
+            axis.set(0, 1, 0)
+            quaternion.setFromAxisAngle(
+                axis,
+                4.0 * - Math.PI * time * acceleration.y
+            )
+            rotation.multiply(quaternion)
+          }
 
-    // handleOverEdge(controlObject, rotation) {
-    //     controlObject.quaternion.copy(rotation)
-            
-    //     const backwards = new THREE.Vector3(-10, 0, -10)
-    //     backwards.applyQuaternion(controlObject.quaternion)
-    //     backwards
-    //         .negate()
-    //         .normalize()
-    //         .multiplyScalar(0.5)
+        return rotation
+    }
+
+    #updateVelocity(time) {
+        const deceleration = this.deceleration
+        const velocity = this.velocity
         
-    //     controlObject.position.add(backwards)
+        const frameDeceleration = new THREE.Vector3(
+            velocity.x * deceleration.x,
+            velocity.y * deceleration.y,
+            velocity.z * deceleration.z
+        )
 
-    //     this.currentPosition.copy(controlObject.position)
-    // }
+        frameDeceleration.multiplyScalar(time)
+        
+        frameDeceleration.z = Math.sign(frameDeceleration.z) * Math.min(
+            Math.abs(frameDeceleration.z),
+            Math.abs(velocity.z)
+        )
+        
+        velocity.add(frameDeceleration)
+        return velocity
+    }  
 }
