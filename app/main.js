@@ -106,11 +106,6 @@ class Main {
 
     if (this.horse) {
       this.horse.update(seconds)
-      // if (this.#isNearHorse()) {
-      //   this.horse.stopMovement()
-      // } else {
-      //   this.horse.startMovement()
-      // }
     }
 
     if (this.thirdPersonCamera) {
@@ -131,6 +126,7 @@ class Main {
       camera: this.camera,
       scene: this.scene,
       planePosition: this.plane.position,
+      entityManager: this.entityManager,
       move: false
     })
     this.horse = new HorseController({
