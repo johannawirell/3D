@@ -44,6 +44,7 @@ export class GameEnity {
             this.mixer = new THREE.AnimationMixer(model)
 
             for (const action of this.gltfAnimation) {
+                console.log(action)
                 const name = action.name
                 this.animationsMap.set(name, this.mixer.clipAction(action))
                 this.states[name] = name
@@ -96,10 +97,16 @@ export class GameEnity {
         this.entityManager.update(delta)
     }
 
-    createVehicle() {
+    createVehicle(position) {
+        const { scale } = position
         this.vehicle = new YUKA.Vehicle()
         this.vehicle.boundingRadius = 1.9
         this.vehicle.smoother = new YUKA.Smoother(30)
+
+        this.vehicle.scale.set(scale, scale, scale)
+        this.vehicle.rotation.y += Math.PI / 2
+
+
     }
 
     createPath(path, isLoop) {
@@ -113,6 +120,8 @@ export class GameEnity {
         }
                
         this.vehicle.position.copy(this.path.current())
+        this.vehicle.rotation.y = Math.PI
+        this.vehicle.maxSpeed = 15
 
         const followPathBehavior = new YUKA.FollowPathBehavior(this.path, 3) // TODO: vad står 3 för?
         this.vehicle.steering.add(followPathBehavior)
