@@ -44,7 +44,6 @@ export class GameEnity {
             this.mixer = new THREE.AnimationMixer(model)
 
             for (const action of this.gltfAnimation) {
-                console.log(action)
                 const name = action.name
                 this.animationsMap.set(name, this.mixer.clipAction(action))
                 this.states[name] = name
