@@ -34,7 +34,7 @@ export class HorseController extends GameEnity {
     #createCirclePath() {
         const waypoints = []
         const radius = 200
-        const center = new YUKA.Vector3(-50, 0, -250)
+        const center = new YUKA.Vector3(10, 0, 100)
         for (let i = 0; i <= 360; i += 10) {
             const angle = degToRad(i)
             const x = Math.sin(angle) * radius + center.x
