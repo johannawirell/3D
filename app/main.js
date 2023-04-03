@@ -94,7 +94,6 @@ class Main {
     })
   }
 
-
   #update(time) {
     const seconds = time * 0.001
     if (this.mixers) {

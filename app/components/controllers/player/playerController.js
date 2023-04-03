@@ -121,7 +121,7 @@ export class PlayerController extends GameEnity {
         }
     }
 
-     #isOverEdge() {
+    #isOverEdge() {
         return (
             this.#isOverNegativeZ() || this.#isOverPositiveZ() ||
             this.#isOverNegativeX() || this.#isOverPositiveX()
@@ -176,7 +176,7 @@ export class PlayerController extends GameEnity {
         }
     }
 
-     #turn(time, rotation, acceleration) {
+    #turn(time, rotation, acceleration) {
         const quaternion = new THREE.Quaternion()
         const axis = new THREE.Vector3()
 
