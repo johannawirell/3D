@@ -28,7 +28,6 @@ export class HorseController extends GameEnity {
         })
         this.createPath(this.#createCirclePath(), true)
         await this.loadGLTF(PATH_TO_HORSE)
-        this.createLine()
     }
 
     #createCirclePath() {

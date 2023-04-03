@@ -34,6 +34,6 @@ export class Movement {
 
         const followPathBehavior = new YUKA.FollowPathBehavior(this.path, 3)
         this.vehicle.steering.add(followPathBehavior)
-        
+
     }
 }
