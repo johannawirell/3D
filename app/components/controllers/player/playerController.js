@@ -125,24 +125,20 @@ export class PlayerController extends GameEnity {
         return (
             this.#isOverNegativeZ() || this.#isOverPositiveZ() ||
             this.#isOverNegativeX() || this.#isOverPositiveX()
-            )
+        )
     }
 
     #handleOverEdge(controlObject, velocity) {
         if (this.#isOverNegativeZ()) {
-            console.log('neg z')
             velocity.z *= -1
             controlObject.position.z = (this.planePosition.z) * -1
         } else if (this.#isOverPositiveZ()) {
-            console.log('pos z')
             velocity.z *= -1
             controlObject.position.z = this.planePosition.z
         } else if (this.#isOverNegativeX()) {
-            console.log('neg x')
             velocity.x *= -1
             controlObject.position.x = (this.planePosition.x) * -1
         } else if (this.#isOverPositiveX()) {
-            console.log('pos x')
             velocity.x *= -1
             controlObject.position.x = this.planePosition.x
         }
