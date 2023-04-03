@@ -122,7 +122,7 @@ export class GameEnity {
         this.vehicle.rotation.y = Math.PI
         this.vehicle.maxSpeed = 15
 
-        const followPathBehavior = new YUKA.FollowPathBehavior(this.path, 3) // TODO: vad står 3 för?
+        const followPathBehavior = new YUKA.FollowPathBehavior(this.path, 3)
         this.vehicle.steering.add(followPathBehavior)
 
         this.entityManager.add(this.vehicle)
@@ -130,7 +130,7 @@ export class GameEnity {
 
     getWayPoints() {
         const position = []
-        for(let i = 0; i < this.path._waypoints.length; i++) {
+        for (let i = 0; i < this.path._waypoints.length; i++) {
             const waypoint = this.path._waypoints[i]
             position.push(waypoint.x, waypoint.y, waypoint.z)
         }
@@ -142,7 +142,7 @@ export class GameEnity {
         const position = this.getWayPoints()
 
         const lineGeometry = new THREE.BufferGeometry()
-        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3)) // TODO: vad står 3 för?
+        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3))
 
         const lineMaterial = new THREE.LineBasicMaterial({color: 0xFFFFFF})
         const lines = new THREE.LineLoop(lineGeometry, lineMaterial)
