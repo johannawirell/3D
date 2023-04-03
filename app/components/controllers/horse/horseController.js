@@ -3,7 +3,7 @@ import * as YUKA from 'yuka'
 import { degToRad } from 'three/src/math/MathUtils.js'
 import { GameEnity } from '../gameEnity/gameEnity'
 
-const PATH_TO_HORSE = '../../models/horse.glb'
+const PATH_TO_HORSE = '../../models/horse(7).glb'
 const SCALE = 1
 
 const X_POSITION = 0
@@ -16,7 +16,7 @@ export class HorseController extends GameEnity {
 
     constructor(params) {
         super(params)
-        this.move = true
+        this.move = false
         
         this.#loadHorse()
     }
