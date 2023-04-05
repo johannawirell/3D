@@ -13,33 +13,40 @@ export class NatureObject extends GameEnity {
         this.entityManager = params.entityManager
         this.position = params.position
 
-        this.#loadTree()
+        this.modelPromise = this.#loadTree()
     }
 
     #loadTree() {
-        const gltfLoader = new GLTFLoader(this.loadingManager)
-        gltfLoader.setDRACOLoader(dracoLoader)
+        return new Promise((resolve, reject) => {
+            const gltfLoader = new GLTFLoader(this.loadingManager)
+            gltfLoader.setDRACOLoader(dracoLoader)
 
-        gltfLoader.load(this.glbPath, gltf => {
-            let model = gltf.scene
-            model = this.#position(model)
-            this.getBoundingSphereForGLTF(model)
-            this.obstacle = this.createObstacle()
+            gltfLoader.load(this.glbPath, gltf => {
+                this.model = gltf.scene
+                this.model = this.#position()
+                this.getBoundingSphereForGLTF(this.model)
+                this.obstacle = this.createObstacle()
+                this.model.name = 'Tree'
 
-            model.traverse(obj => {
-                if (obj.isMesh) {
-                    obj.castShadow = true
-                }
-            })
-            model.name = 'Tree'
-            this.scene.add(model)
+                this.model.traverse(obj => {    
+                    if (obj.isMesh) {
+                        obj.castShadow = true
+                    }
+                })
+                resolve(this.model)
+                // this.scene.add(this.model)
+            }, undefined, reject)
         })
     }
 
-    #position(model) {
+    async getModel() {
+        return await this.modelPromise
+    }
+
+    #position() {
         const { scale, x, y, z } = this.position
-        model.scale.set(scale, scale, scale)
-        model.position.set(x, y, z)
-        return model
+        this.model.scale.set(scale, scale, scale)
+        this.model.position.set(x, y, z)
+        return this.model
     }
 }
