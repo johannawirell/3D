@@ -1,10 +1,5 @@
 import * as THREE from 'three'
-import { NatureObject } from './nature/natureObject'
-
-const TREES = [ 
-    '../../../models/Oak.glb',
-    '../../../models/Pine.glb'
-]
+import { Forrest } from './nature/forrest'
 
 const SKYBOX = [
     '../../img/skybox/posx.jpg',
@@ -80,15 +75,11 @@ export class Plane {
     }
 
     #addTrees() {
-        for (let i = 0; i < TREES.length; i++) {
-            new NatureObject({
-                glbPath: TREES[i],
-                scene: this.scene,
-                loadingManager: this.loadingManager,
-                entityManager: this.entityManager,
-                instances: 50
-            })
-        }       
+        new Forrest({
+            scene: this.scene,
+            loadingManager: this.loadingManager,
+            entityManager: this.entityManager
+        })     
     }
 
     #position() {
