@@ -16,7 +16,6 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 50
     radius = 100
     constructor(scene, loadingManager, entityManager) {
         this.scene = scene
@@ -81,76 +80,15 @@ export class Plane {
     }
 
     #addTrees() {
-        // const windowWidth = window.innerWidth
-        // const windowHeight = window.innerHeight
-        const tree = new NatureObject({
-                    glbPath: '../../../models/Oak.glb',
-                    scene: this.scene,
-                    loadingManager: this.loadingManager,
-                    entityManager: this.entityManager,
-                    position: { 
-                        scale: 1,
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    }
-                })
-        // const object = tree.getModel()
-    
-        tree.getModel().then(object => {
-            console.log(object)
-            // Här kan du göra vad du vill med "object" när det har laddats klart
-        })
-
-        // const geometry = new THREE.IcosahedronGeometry()
-        // const material = new THREE.MeshPhongMaterial({ color: 0x00FF00})
-        // const mesh = new THREE.InstancedMesh(geometry, material, 100)
-        // this.scene.add(object)
-        // const object = new THREE.Object3D()
-        // for (let i = 0; i < this.numberOfTrees; i++) {
-        //     object.position.x = Math.random() * 40 - 20
-        //     object.position.y = Math.random() * 40 - 20
-        //     object.position.z = Math.random() * 40 - 20
-
-        //     object.updateMatrix()
-        //     mesh.setMatrixAt(i, object.matrix)
-        // }
-       
-       
-        // for (let i = 0; i < this.numberOfTrees; i++) {
-        //     const treeToCreate = this.#randomTree()
-        //     let scale
-        //     if (treeToCreate === TREES[0]) {
-        //         scale = this.#generateRandomNumber(5,8)
-        //     } else if (treeToCreate === TREES[1]) {
-        //         scale = this.#generateRandomNumber(4,6)
-        //     } else if (treeToCreate === TREES[2]) {
-                
-        //     }
-        //     new NatureObject({
-        //         glbPath: treeToCreate,
-        //         scene: this.scene,
-        //         loadingManager: this.loadingManager,
-        //         entityManager: this.entityManager,
-        //         position: { 
-        //             scale: scale,
-        //             x: this.#generateRandomNumber(-windowWidth, windowWidth),
-        //             y: this.#generateRandomNumber(1, 0),
-        //             z: this.#generateRandomNumber(-windowHeight, windowHeight)
-        //         }
-        //     })
-        // }
-    }
-
-    #randomTree() {
-        const randomIndex = Math.floor(Math.random() * TREES.length)
-        const tree = TREES[randomIndex]
-
-        return tree
-    }
-
-    #generateRandomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min)
+        for (let i = 0; i < TREES.length; i++) {
+            new NatureObject({
+                glbPath: TREES[i],
+                scene: this.scene,
+                loadingManager: this.loadingManager,
+                entityManager: this.entityManager,
+                instances: 50
+            })
+        }       
     }
 
     #position() {

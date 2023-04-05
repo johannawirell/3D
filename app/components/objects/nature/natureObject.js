@@ -11,42 +11,38 @@ export class NatureObject extends GameEnity {
         this.glbPath = params.glbPath
         this.loadingManager = params.loadingManager
         this.entityManager = params.entityManager
-        this.position = params.position
+        this.instances = params.instances
 
-        this.modelPromise = this.#loadTree()
+        this.#loadTree()
     }
 
     #loadTree() {
-        return new Promise((resolve, reject) => {
-            const gltfLoader = new GLTFLoader(this.loadingManager)
-            gltfLoader.setDRACOLoader(dracoLoader)
+        const gltfLoader = new GLTFLoader(this.loadingManager)
+        gltfLoader.setDRACOLoader(dracoLoader)
 
-            gltfLoader.load(this.glbPath, gltf => {
-                this.model = gltf.scene
-                this.model = this.#position()
-                this.getBoundingSphereForGLTF(this.model)
+        gltfLoader.load(this.glbPath, gltf => {
+            const model = gltf.scene
+
+            for (let i = 0; i < this.instances; i++) {
+                const clone = model.clone()
+                this.getBoundingSphereForGLTF(clone)
                 this.obstacle = this.createObstacle()
-                this.model.name = 'Tree'
 
-                this.model.traverse(obj => {    
+                clone.traverse(obj => {
                     if (obj.isMesh) {
                         obj.castShadow = true
                     }
                 })
-                resolve(this.model)
-                // this.scene.add(this.model)
-            }, undefined, reject)
+                clone.name = 'Tree'
+                clone.position.set(
+                    Math.random() * 100 - 50,
+                    Math.random() * 20,
+                    Math.random() * 100 - 50
+                )
+
+                this.scene.add(clone)
+            }
         })
     }
 
-    async getModel() {
-        return await this.modelPromise
-    }
-
-    #position() {
-        const { scale, x, y, z } = this.position
-        this.model.scale.set(scale, scale, scale)
-        this.model.position.set(x, y, z)
-        return this.model
-    }
 }
