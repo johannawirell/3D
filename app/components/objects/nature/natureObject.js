@@ -17,6 +17,8 @@ export class NatureObject extends GameEnity {
     }
 
     #loadTree() {
+        const windowWidth = window.innerWidth
+        const windowHeight = window.innerHeight
         const gltfLoader = new GLTFLoader(this.loadingManager)
         gltfLoader.setDRACOLoader(dracoLoader)
 
@@ -25,8 +27,8 @@ export class NatureObject extends GameEnity {
 
             const positions = []
             for (let i = 0; i < this.instances; i++) {
-                const x = Math.random() * 100 - 50
-                const z = Math.random() * 100 - 50
+                const x = Math.random() * windowWidth - windowWidth / 2
+                const z = Math.random() * windowHeight - windowHeight / 2
                 let y = 0
                 let positionIsValid = false
                 while (!positionIsValid) {
