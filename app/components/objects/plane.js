@@ -16,7 +16,7 @@ const SKYBOX = [
 ]
 
 export class Plane {
-    numberOfTrees = 1
+    numberOfTrees = 50
     radius = 100
     constructor(scene, loadingManager, entityManager) {
         this.scene = scene
@@ -76,7 +76,7 @@ export class Plane {
         this.plane.receiveShadow = true
         this.#position()
 
-        // this.#addTrees()
+        this.#addTrees()
         this.scene.add(this.plane)   
     }
 
