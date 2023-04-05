@@ -23,7 +23,28 @@ export class NatureObject extends GameEnity {
         gltfLoader.load(this.glbPath, gltf => {
             const model = gltf.scene
 
+            const positions = []
             for (let i = 0; i < this.instances; i++) {
+                const x = Math.random() * 100 - 50
+                const z = Math.random() * 100 - 50
+                let y = 0
+                let positionIsValid = false
+                while (!positionIsValid) {
+                    y += 0.1
+                    positionIsValid = true
+                    for (let j = 0; j < positions.length; j++) {
+                        const dx = x - positions[j].x
+                        const dy = y - positions[j].y
+                        const dz = z - positions[j].z
+                        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
+                        if (distance < 5) {
+                            positionIsValid = false
+                            break
+                        }
+                    }
+                }
+                positions.push({x, y, z})
+
                 const clone = model.clone()
                 this.getBoundingSphereForGLTF(clone)
                 this.obstacle = this.createObstacle()
@@ -34,15 +55,10 @@ export class NatureObject extends GameEnity {
                     }
                 })
                 clone.name = 'Tree'
-                clone.position.set(
-                    Math.random() * 100 - 50,
-                    Math.random() * 20,
-                    Math.random() * 100 - 50
-                )
+                clone.position.set(x, y, z)
 
                 this.scene.add(clone)
             }
         })
     }
-
 }
