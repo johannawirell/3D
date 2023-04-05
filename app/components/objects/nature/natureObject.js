@@ -31,6 +31,7 @@ export class NatureObject extends GameEnity {
                 const z = Math.random() * windowHeight - windowHeight / 2
                 let y = 0
                 let positionIsValid = false
+                
                 while (!positionIsValid) {
                     y += 0.1
                     positionIsValid = true
