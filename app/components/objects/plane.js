@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { Graph } from 'yuka'
 import { Forrest } from './nature/forrest'
 
 const SKYBOX = [
@@ -9,6 +10,15 @@ const SKYBOX = [
     '../../img/skybox/posz.jpg',
     '../../img/skybox/negz.jpg',  
 ]
+
+const GRASS = {
+    ao: '../../img/grass/grass-ao.png',
+    heightmap: '../../img/grass/grass-heightmap.png',
+    normalmap: '../../img/grass/grass-normalmap.png',
+    roughness: '../../img/grass/grass-roughness.png',
+    texture: '../../img/grass/grass-texture.png',
+
+}
 
 export class Plane {
     radius = 100
@@ -33,14 +43,6 @@ export class Plane {
         return texture
     }
 
-    #createTexturePlane() {
-        const texture = new THREE.TextureLoader(this.loadingManager).load(SKYBOX[3])
-        texture.wrapS = THREE.MirroredRepeatWrapping;
-        texture.wrapT = THREE.MirroredRepeatWrapping;
-        
-        texture.repeat.set(20, 20)
-        return texture
-    }
 
     #createPlane() {
         const texture = this.#createTextureSkybox()
@@ -49,20 +51,29 @@ export class Plane {
         const planeGeometry = new THREE.PlaneGeometry(
             window.innerWidth * 2,
             window.innerHeight * 2,
-            // 50, 20, 50, 50// Add more segments to the geometry for smoother bending
+            50, 50
         )
 
-        // // Bend the plane downwards
-        // const vertices = planeGeometry.attributes.position.array
-        // for (let i = 0; i < vertices.length; i += 3) {
-        //     const x = vertices[i]
-        //     const z = vertices[i + 2]
-        //     vertices[i + 2] = z - Math.sin(x / 10) * 20 // Adjust the amplitude and frequency of the wave as desired
-        // }
+       
+        const textureLoader = new THREE.TextureLoader()
+        const grassTexture = textureLoader.load(GRASS.texture)
+        grassTexture.wrapS = THREE.RepeatWrapping
+        grassTexture.wrapT = THREE.RepeatWrapping
+        grassTexture.repeat.set(10, 10)
+        grassTexture.offset.set(0.5, 0.5)
 
-        const material = new THREE.MeshBasicMaterial({
-            map: this.#createTexturePlane(),
+       
+
+        const material = new THREE.MeshPhongMaterial({
+            map: grassTexture,
+            shininess: 0,
+            specular: 0x222222,
+            side: THREE.DoubleSide
         })
+
+        const grassNormalMap = textureLoader.load(GRASS.normalmap)
+
+        material.normalMap = grassNormalMap
 
         this.plane = new THREE.Mesh(planeGeometry, material)
 
