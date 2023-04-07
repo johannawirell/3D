@@ -54,6 +54,15 @@ export class Plane {
             50, 50
         )
 
+        const positions = planeGeometry.attributes.position.array
+  for (let i = 0; i < positions.length; i += 3) {
+    const x = positions[i]
+    const y = positions[i + 1]
+    const z = positions[i + 2]
+    positions[i + 2] = Math.sin(x * 0.2) * Math.cos(z * 0.2) * 5
+  }
+  planeGeometry.computeVertexNormals()
+
        
         const textureLoader = new THREE.TextureLoader()
         const grassTexture = textureLoader.load(GRASS.texture)
