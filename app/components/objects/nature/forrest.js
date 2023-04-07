@@ -44,7 +44,7 @@ export class Forrest extends GameEnity {
         for (let i = 0; i < this.instances; i++) {
           let x = Math.random() * windowWidth - windowWidth / 2
           const z = Math.random() * windowHeight - windowHeight / 2
-          let y = 0
+          let y = -1
           let positionIsValid = false
 
           while (!positionIsValid) {
@@ -80,7 +80,7 @@ export class Forrest extends GameEnity {
           })
           clone.name = tree.name
           clone.position.set(x, y, z)
-          const scale = this.#generateRandomNumbers(5, 10)
+          const scale = this.#generateRandomNumbers(3, 8)
           clone.scale.set(scale, scale, scale)
 
           trees.push(clone)
