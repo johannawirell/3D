@@ -7,7 +7,7 @@ const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 
 export class PlayerController extends GameEnity {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
-    acceleration = new THREE.Vector3(1, 0.25, 50.0)
+    acceleration = new THREE.Vector3(1, 0.25, 15.0)
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
