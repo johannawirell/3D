@@ -37,13 +37,17 @@ export class Forrest extends GameEnity {
     this.#loadForrest()
   }
 
+   getObjects () {
+      return this.forestObjects
+    }
+
   #loadForrest() {
     const windowWidth = window.innerWidth
     const windowHeight = window.innerHeight
     const gltfLoader = new GLTFLoader(this.loadingManager)
     gltfLoader.setDRACOLoader(dracoLoader)
 
-    const forestObjects = []
+    this.forestObjects = []
 
     objects.forEach(obj => {
       gltfLoader.load(obj.path, gltf => {
@@ -64,8 +68,8 @@ export class Forrest extends GameEnity {
                 continue
             }
 
-            for (let j = 0; j < forestObjects.length; j++) {
-              const otherTree = forestObjects[j]
+            for (let j = 0; j < this.forestObjects.length; j++) {
+              const otherTree = this.forestObjects[j]
               const dx = x - otherTree.position.x
               const dy = y - otherTree.position.y
               const dz = z - otherTree.position.z
@@ -94,7 +98,7 @@ export class Forrest extends GameEnity {
           clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))
 
 
-          forestObjects.push(clone)
+          this.forestObjects.push(clone)
           this.scene.add(clone)
         }
       })

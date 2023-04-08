@@ -37,6 +37,10 @@ export class Plane {
         }
     }
 
+    getObstacles() {
+        return this.forrest.getObjects()
+    }
+
     #createTextureSkybox() {
         const texture = this.textureLoader.load(SKYBOX)
         return texture
@@ -81,7 +85,7 @@ export class Plane {
     }
 
     #addTrees() {
-        new Forrest({
+        this.forrest = new Forrest({
             scene: this.scene,
             loadingManager: this.loadingManager,
             entityManager: this.entityManager
