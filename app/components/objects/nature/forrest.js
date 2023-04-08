@@ -10,10 +10,10 @@ const TREES = [
     name: 'Oak',
     path: '../../../models/Oak.glb',
   },
-  // {
-  //   name: 'Pine',
-  //   path: '../../../models/Pine.glb',
-  // },
+  {
+    name: 'Pine',
+    path: '../../../models/Pine.glb',
+  },
 ]
 
 export class Forrest extends GameEnity {

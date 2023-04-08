@@ -55,21 +55,21 @@ export class Plane {
         )
 
         const positions = planeGeometry.attributes.position.array
-  for (let i = 0; i < positions.length; i += 3) {
-    const x = positions[i]
-    const y = positions[i + 1]
-    const z = positions[i + 2]
-    positions[i + 2] = Math.sin(x * 0.2) * Math.cos(z * 0.2) * 5
-  }
-  planeGeometry.computeVertexNormals()
+        for (let i = 0; i < positions.length; i += 3) {
+            const x = positions[i]
+            const y = positions[i + 1]
+            const z = positions[i + 2]
+            positions[i + 2] = Math.sin(x * 0.2) * Math.cos(z * 0.2) * 5
+        }
+        planeGeometry.computeVertexNormals()
 
        
         const textureLoader = new THREE.TextureLoader()
         const grassTexture = textureLoader.load(GRASS.texture)
         grassTexture.wrapS = THREE.RepeatWrapping
         grassTexture.wrapT = THREE.RepeatWrapping
-        grassTexture.repeat.set(10, 10)
-        grassTexture.offset.set(0.5, 0.5)
+        grassTexture.repeat.set(20, 10)
+        grassTexture.offset.set(0.8, 0.8)
 
        
 
@@ -77,8 +77,11 @@ export class Plane {
             map: grassTexture,
             shininess: 0,
             specular: 0x222222,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
         })
+        // const greenColor = new THREE.Color(0x00ff00)
+        // material.map.setHex(greenColor.getHex())
+
 
         const grassNormalMap = textureLoader.load(GRASS.normalmap)
 
