@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GameEnity } from '../../controllers/gameEnity/gameEnity.js'
@@ -9,12 +10,12 @@ const objects = [
   {
     name: 'Oak',
     path: '../../../models/Oak.glb',
-    instances: 35
+    instances: 30
   },
   {
     name: 'Pine',
     path: '../../../models/Pine.glb',
-    instances: 35
+    instances: 30
   },
   {
     name: 'Rock',
@@ -89,6 +90,8 @@ export class Forrest extends GameEnity {
           clone.position.set(x, y, z)
           const scale = this.#generateRandomNumbers(3, 8)
           clone.scale.set(scale, scale, scale)
+          const rotation = new THREE.Vector3(0, Math.random(), 0)
+          clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))
 
 
           forestObjects.push(clone)

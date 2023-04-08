@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { Graph } from 'yuka'
 import { Forrest } from './nature/forrest'
 
 const SKYBOX = [
