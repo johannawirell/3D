@@ -54,7 +54,10 @@ export class PlayerController extends GameEnity {
             } else {
                 this.idle()
             }
-            
+
+            if (this.sphereMesh) {
+                this.sphereMesh.position.copy(this.currentPosition)
+            }
         }
 
         if (this.mixer) {
@@ -100,6 +103,8 @@ export class PlayerController extends GameEnity {
     #updatePosition(time, rotation, velocity, controlObject) {
         if (this.#isOverEdge()) {
             this.#handleOverEdge(controlObject, velocity)
+        } else if (this.#isColliding()) {
+            // console.log('collision')
         } else {
             controlObject.quaternion.copy(rotation)
             
@@ -159,6 +164,10 @@ export class PlayerController extends GameEnity {
 
     #isOverPositiveX() {
         return this.currentPosition.x > this.planePosition.x
+    }
+
+    #isColliding() {
+        return false
     }
 
     #move(time, velocity, acceleration, forwards) {

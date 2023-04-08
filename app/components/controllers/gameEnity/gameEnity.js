@@ -16,8 +16,10 @@ export class GameEnity {
 
     addObstacles(obstacles) {
         this.obstacles = obstacles
-        const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
-        this.vehicle.steering.add(obstacleAvoidanceBehavior)
+        if (this.vehicle) {
+            const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
+            this.vehicle.steering.add(obstacleAvoidanceBehavior)
+        }
     }
 
     setState(state) {
@@ -44,6 +46,8 @@ export class GameEnity {
                     renderComponent.matrix.copy(entity.worldMatrix)
                 })
             }
+
+            this.#createBoundingSphere(model)
             
             this.target = model
             this.scene.add(model)
@@ -59,6 +63,31 @@ export class GameEnity {
           })
         })
         this.isDoneLoading = true
+    }
+
+    #createBoundingSphere(model) {
+        // Beräkna bounding sphere för objektet
+        const boundingSphere = new THREE.Sphere()
+        const box = new THREE.Box3().setFromObject(model)
+        box.getBoundingSphere(boundingSphere)
+        
+        // Skapa en sfär geometri med radie baserat på bounding sphere
+        const sphereGeometry = new THREE.SphereGeometry(boundingSphere.radius, 32, 32)
+
+        // Skapa ett material för sfären
+        const sphereMaterial = new THREE.MeshBasicMaterial({
+            color: 0xff0000,
+            wireframe: true
+        })
+
+        // Skapa en mesh av sfärgeometrin och materialet
+        this.sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial)
+
+        // Positionera meshen vid objektets position
+        this.sphereMesh.position.copy(model.position)
+
+        // Lägg till meshen till scenen
+        this.scene.add(this.sphereMesh)
     }
 
     walk() {
@@ -172,7 +201,7 @@ export class GameEnity {
         this.entityManager.add(obstacle)
         obstacle.boundingRadius = boundingRadius
 
-        this.#paintSphere(obstacle, boundingRadius)    
+        // this.#paintSphere(obstacle, boundingRadius)    
         return obstacle
     }
     

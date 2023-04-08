@@ -90,6 +90,7 @@ class Main {
         if (!this.obstacles) {
           this.obstacles = this.plane.getObstacles()
           this.horse.addObstacles(this.obstacles)
+          this.player.addObstacles(this.obstacles)
         }
       } 
 
