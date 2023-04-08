@@ -43,26 +43,8 @@ export class Plane {
         return texture
     }
 
-
-    #createPlane() {
-        const texture = this.#createTextureSkybox()
-        this.scene.background = texture
-
-        const planeGeometry = new THREE.PlaneGeometry(
-            window.innerWidth * 2,
-            window.innerHeight * 2,
-            50, 50
-        )
-
-        const positions = planeGeometry.attributes.position.array
-        for (let i = 0; i < positions.length; i += 3) {
-            const x = positions[i]
-            const y = positions[i + 1]
-            const z = positions[i + 2]
-            positions[i + 2] = Math.sin(x * 0.2) * Math.cos(z * 0.2) * 5
-        }
-        planeGeometry.computeVertexNormals()
-
+    #createPlaneGeometry() {
+        const planeGeometry = new THREE.PlaneGeometry(window.innerWidth * 2, window.innerHeight * 2)
        
         const textureLoader = new THREE.TextureLoader()
         const grassTexture = textureLoader.load(GRASS.texture)
@@ -71,17 +53,12 @@ export class Plane {
         grassTexture.repeat.set(20, 10)
         grassTexture.offset.set(0.8, 0.8)
 
-       
-
         const material = new THREE.MeshPhongMaterial({
             map: grassTexture,
             shininess: 0,
             specular: 0x222222,
             side: THREE.DoubleSide,
         })
-        // const greenColor = new THREE.Color(0x00ff00)
-        // material.map.setHex(greenColor.getHex())
-
 
         const grassNormalMap = textureLoader.load(GRASS.normalmap)
 
@@ -91,6 +68,13 @@ export class Plane {
 
         this.plane.castShadow = false
         this.plane.receiveShadow = true
+    }
+
+    #createPlane() {
+        const texture = this.#createTextureSkybox()
+        this.scene.background = texture
+        this.#createPlaneGeometry()
+        
         this.#position()
 
         this.#addTrees()
