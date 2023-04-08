@@ -11,6 +11,13 @@ export class GameEnity {
         this.animationsMap = new Map()
         this.isDoneLoading = false
         this.time = new YUKA.Time()
+        this.obstacles = []
+    }
+
+    addObstacles(obstacles) {
+        this.obstacles = obstacles
+        const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
+        this.vehicle.steering.add(obstacleAvoidanceBehavior)
     }
 
     setState(state) {
@@ -19,11 +26,6 @@ export class GameEnity {
 
     getState() {
         return this.currentState
-    }
-
-    addObstacles(obstacles) {
-        const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
-        this.vehicle.steering.add(obstacleAvoidanceBehavior)
     }
 
     async loadGLTF(path) {
@@ -61,7 +63,7 @@ export class GameEnity {
 
     walk() {
         const newAction = this.states.Walk
-
+       
         if (this.currentState !== newAction) {
             this.updateAnimation(newAction)
         }
@@ -104,13 +106,11 @@ export class GameEnity {
     createVehicle(position) {
         const { scale } = position
         this.vehicle = new YUKA.Vehicle()
-        this.vehicle.boundingRadius = 1.9
+        this.vehicle.boundingRadius = 50
         this.vehicle.smoother = new YUKA.Smoother(30)
 
         this.vehicle.scale.set(scale, scale, scale)
         this.vehicle.rotation.y += Math.PI / 2
-
-
     }
 
     createPath(path, isLoop) {
@@ -143,32 +143,50 @@ export class GameEnity {
         return position
     }
 
-    createLine() {
-        const position = this.getWayPoints()
+    #paintSphere(model, boundingRadius) {
+        const sphereGeometry = new THREE.SphereGeometry(boundingRadius, 32, 32);
 
-        const lineGeometry = new THREE.BufferGeometry()
-        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3))
+        // Skapa ett material för sfären.
+        const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-        const lineMaterial = new THREE.LineBasicMaterial({color: 0xFFFFFF})
-        const lines = new THREE.LineLoop(lineGeometry, lineMaterial)
-        this.scene.add(lines)
+        // Skapa en mesh av sfärgeometrin och materialet.
+        const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        // Positionera meshen vid hinderentitetens position.
+        sphereMesh.position.copy(model.position);
+
+        // Lägg till meshen till scenen.
+        this.scene.add(sphereMesh)
+
     }
 
-    createObstacle() {
-        if (this.target) {
-            this.obstacle = new YUKA.GameEntity()
-            this.obstacle.position.copy(this.target.position)
-            this.obstacle.boundingBox = this.sphere.radius
-            this.entityManager.add(this.obstacle)
-            return this.obstacle
-        }
-    }
+    // createSphere(model) {
+    //     if (model) {
+    //         const boundingBox = new THREE.Box3().setFromObject(model)
+    //         const size = new THREE.Vector3();
+    //         boundingBox.getSize(size)
 
-    getBoundingSphereForGLTF(gltfObject) {
-        const box = new THREE.Box3().setFromObject(gltfObject)
-        this.sphere = new THREE.Sphere()
-        box.getBoundingSphere(this.sphere)
+    //         const radius = size.length() / 10
 
-        return box
+    //         // Skapa sphären och lägg till den i scenen.
+    //         const sphereGeometry = new THREE.SphereGeometry(radius, 1, 1);
+    //         const sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.5});
+    //         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    //         sphere.position.copy(model.position);
+    //         this.scene.add(sphere);
+
+    //         return sphere
+    //     }
+    // }
+
+    createObstacle(model, boundingRadius) {
+        const obstacle = new YUKA.GameEntity()
+        obstacle.position.copy(model.position)
+        this.entityManager.add(obstacle)
+        obstacle.boundingRadius = boundingRadius
+
+        this.#paintSphere(obstacle, boundingRadius)        
+        return obstacle
     }
+    
 }

@@ -121,7 +121,7 @@ class Main {
 
     if (this.gameDescrition) {
       this.gameDescrition.update(this.camera)
-    }   
+    }
   }
 
   #loadAnimateModel() {

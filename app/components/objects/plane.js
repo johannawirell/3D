@@ -38,7 +38,7 @@ export class Plane {
     }
 
     getObstacles() {
-        return this.forrest.getObjects()
+        return this.forrest.getObstacles()
     }
 
     #createTextureSkybox() {

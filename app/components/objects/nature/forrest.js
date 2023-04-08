@@ -33,12 +33,13 @@ export class Forrest extends GameEnity {
     this.loadingManager = params.loadingManager
     this.entityManager = params.entityManager
     this.instances = 70
+    this.obstacles = []
 
     this.#loadForrest()
   }
 
-   getObjects () {
-      return this.forestObjects
+   getObstacles () {
+      return this.obstacles
     }
 
   #loadForrest() {
@@ -83,19 +84,28 @@ export class Forrest extends GameEnity {
           }
 
           const clone = model.clone()
-          this.getBoundingSphereForGLTF(clone)
-          this.obstacle = this.createObstacle()
+          let boundingRadius = 0
+
           clone.traverse(obj => {
             if (obj.isMesh) {
               obj.castShadow = true
+              obj.geometry.computeBoundingSphere()
+              if (obj.geometry.boundingSphere.radius > boundingRadius) {
+                boundingRadius = obj.geometry.boundingSphere.radius
+              }
             }
           })
+          
           clone.name = obj.name
           clone.position.set(x, y, z)
           const scale = this.#generateRandomNumbers(3, 8)
           clone.scale.set(scale, scale, scale)
           const rotation = new THREE.Vector3(0, Math.random(), 0)
           clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))
+          this.createObstacle(clone, boundingRadius + 5)
+          // this.createSphere(clone)
+
+          // this.obstacles.push()
 
 
           this.forestObjects.push(clone)
