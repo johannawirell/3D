@@ -103,12 +103,7 @@ export class Forrest extends GameEnity {
           const rotation = new THREE.Vector3(0, Math.random(), 0)
           clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))
           this.createObstacle(clone, boundingRadius + 5)
-          // this.createSphere(clone)
-
-          // this.obstacles.push()
-
-
-          this.forestObjects.push(clone)
+      
           this.scene.add(clone)
         }
       })

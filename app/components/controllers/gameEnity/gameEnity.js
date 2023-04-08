@@ -104,13 +104,15 @@ export class GameEnity {
     }
 
     createVehicle(position) {
-        const { scale } = position
+        const { scale, rotation, boundingRadius } = position
         this.vehicle = new YUKA.Vehicle()
-        this.vehicle.boundingRadius = 50
+        this.vehicle.boundingRadius = boundingRadius
         this.vehicle.smoother = new YUKA.Smoother(30)
 
         this.vehicle.scale.set(scale, scale, scale)
-        this.vehicle.rotation.y += Math.PI / 2
+        this.vehicle.rotation.y += rotation
+
+        return this.vehicle
     }
 
     createPath(path, isLoop) {
@@ -130,7 +132,11 @@ export class GameEnity {
         const followPathBehavior = new YUKA.FollowPathBehavior(this.path, 3)
         this.vehicle.steering.add(followPathBehavior)
 
+        const onPathBehavior = new YUKA.OnPathBehavior(this.path)
+        this.vehicle.steering.add(onPathBehavior)
+
         this.entityManager.add(this.vehicle)
+        return this.path
     }
 
     getWayPoints() {
@@ -150,34 +156,15 @@ export class GameEnity {
         const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
         // Skapa en mesh av sfärgeometrin och materialet.
-        const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        this.sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
         // Positionera meshen vid hinderentitetens position.
-        sphereMesh.position.copy(model.position);
+        this.sphereMesh.position.copy(model.position);
 
         // Lägg till meshen till scenen.
-        this.scene.add(sphereMesh)
+        this.scene.add(this.sphereMesh)
 
     }
-
-    // createSphere(model) {
-    //     if (model) {
-    //         const boundingBox = new THREE.Box3().setFromObject(model)
-    //         const size = new THREE.Vector3();
-    //         boundingBox.getSize(size)
-
-    //         const radius = size.length() / 10
-
-    //         // Skapa sphären och lägg till den i scenen.
-    //         const sphereGeometry = new THREE.SphereGeometry(radius, 1, 1);
-    //         const sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.5});
-    //         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    //         sphere.position.copy(model.position);
-    //         this.scene.add(sphere);
-
-    //         return sphere
-    //     }
-    // }
 
     createObstacle(model, boundingRadius) {
         const obstacle = new YUKA.GameEntity()
@@ -185,7 +172,7 @@ export class GameEnity {
         this.entityManager.add(obstacle)
         obstacle.boundingRadius = boundingRadius
 
-        this.#paintSphere(obstacle, boundingRadius)        
+        this.#paintSphere(obstacle, boundingRadius)    
         return obstacle
     }
     

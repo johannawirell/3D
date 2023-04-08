@@ -22,16 +22,17 @@ export class HorseController extends GameEnity {
     }
 
     async #loadHorse() {
-        this.createVehicle({
+        this.vehicle = this.createVehicle({
             scale: SCALE,
-            rotation: Math.PI
+            rotation: Math.PI / 2,
+            boundingRadius: 20
         })
-        this.createPath(this.#createCirclePath(), true)
+        this.path = this.createPath(this.#createCirclePath(), true)
         await this.loadGLTF(PATH_TO_HORSE)
     }
 
     #createCirclePath() {
-        const waypoints = []
+        this.waypoints = []
         const radius = 200
         const center = new YUKA.Vector3(10, 0, 100)
         for (let i = 0; i <= 360; i += 10) {
@@ -39,10 +40,10 @@ export class HorseController extends GameEnity {
             const x = Math.sin(angle) * radius + center.x
             const y = center.y
             const z = Math.cos(angle) * radius + center.z
-            waypoints.push(new YUKA.Vector3(x, y, z))
+            this.waypoints.push(new YUKA.Vector3(x, y, z))
         }
 
-        return waypoints
+        return this.waypoints
     }
 
     get position() {
