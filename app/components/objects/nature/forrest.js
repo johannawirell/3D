@@ -5,15 +5,22 @@ import { GameEnity } from '../../controllers/gameEnity/gameEnity.js'
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
 
-const TREES = [
+const objects = [
   {
     name: 'Oak',
     path: '../../../models/Oak.glb',
+    instances: 35
   },
   {
     name: 'Pine',
     path: '../../../models/Pine.glb',
+    instances: 35
   },
+  {
+    name: 'Rock',
+    path: '../../../models/Rock.glb',
+    instances: 15
+  }
 ]
 
 export class Forrest extends GameEnity {
@@ -21,7 +28,7 @@ export class Forrest extends GameEnity {
 
   constructor(params) {
     super(params)
-    this.glbPaths = TREES.map(tree => tree.path)
+    this.glbPaths = objects.map(obj => obj.path)
     this.loadingManager = params.loadingManager
     this.entityManager = params.entityManager
     this.instances = 70
@@ -35,13 +42,13 @@ export class Forrest extends GameEnity {
     const gltfLoader = new GLTFLoader(this.loadingManager)
     gltfLoader.setDRACOLoader(dracoLoader)
 
-    const trees = []
+    const forestObjects = []
 
-    TREES.forEach(tree => {
-      gltfLoader.load(tree.path, gltf => {
+    objects.forEach(obj => {
+      gltfLoader.load(obj.path, gltf => {
         const model = gltf.scene
 
-        for (let i = 0; i < this.instances; i++) {
+        for (let i = 0; i < obj.instances; i++) {
           let x = Math.random() * windowWidth - windowWidth / 2
           const z = Math.random() * windowHeight - windowHeight / 2
           let y = -1
@@ -56,8 +63,8 @@ export class Forrest extends GameEnity {
                 continue
             }
 
-            for (let j = 0; j < trees.length; j++) {
-              const otherTree = trees[j]
+            for (let j = 0; j < forestObjects.length; j++) {
+              const otherTree = forestObjects[j]
               const dx = x - otherTree.position.x
               const dy = y - otherTree.position.y
               const dz = z - otherTree.position.z
@@ -78,12 +85,13 @@ export class Forrest extends GameEnity {
               obj.castShadow = true
             }
           })
-          clone.name = tree.name
+          clone.name = obj.name
           clone.position.set(x, y, z)
           const scale = this.#generateRandomNumbers(3, 8)
           clone.scale.set(scale, scale, scale)
 
-          trees.push(clone)
+
+          forestObjects.push(clone)
           this.scene.add(clone)
         }
       })
