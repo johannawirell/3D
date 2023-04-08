@@ -21,6 +21,11 @@ export class GameEnity {
         return this.currentState
     }
 
+    addObstacles(obstacles) {
+        const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
+        this.vehicle.steering.add(obstacleAvoidanceBehavior)
+    }
+
     async loadGLTF(path) {
        await new Promise(resolve => {
         new GLTFLoader().load(path, gltf => {
