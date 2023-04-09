@@ -167,6 +167,8 @@ export class PlayerController extends GameEnity {
     }
 
     #isColliding() {
+        // console.log(this.sphereMesh)
+        console.log(this.obstacles)
         return false
     }
 

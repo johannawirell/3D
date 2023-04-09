@@ -201,7 +201,7 @@ export class GameEnity {
         this.entityManager.add(obstacle)
         obstacle.boundingRadius = boundingRadius
 
-        // this.#paintSphere(obstacle, boundingRadius)    
+        this.#paintSphere(obstacle, boundingRadius)    
         return obstacle
     }
     
