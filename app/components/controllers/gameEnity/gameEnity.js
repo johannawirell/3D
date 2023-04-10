@@ -12,6 +12,7 @@ export class GameEnity {
         this.isDoneLoading = false
         this.time = new YUKA.Time()
         this.obstacles = []
+        this.obstacleSpheres = []
     }
 
     addObstacles(obstacles) {
@@ -20,6 +21,10 @@ export class GameEnity {
             const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
             this.vehicle.steering.add(obstacleAvoidanceBehavior)
         }
+    }
+
+    addObstacleSpheres(obstacleSpheres) {
+        this.obstacleSpheres = obstacleSpheres
     }
 
     setState(state) {
@@ -47,7 +52,7 @@ export class GameEnity {
                 })
             }
 
-            this.#createBoundingSphere(model)
+            this.sphere = this.#createBoundingSphere(model)
             
             this.target = model
             this.scene.add(model)
@@ -81,13 +86,14 @@ export class GameEnity {
         })
 
         // Skapa en mesh av sfärgeometrin och materialet
-        this.sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial)
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
 
         // Positionera meshen vid objektets position
-        this.sphereMesh.position.copy(model.position)
+        sphere.position.copy(model.position)
 
         // Lägg till meshen till scenen
-        this.scene.add(this.sphereMesh)
+        this.scene.add(sphere)
+        return sphere
     }
 
     walk() {
@@ -178,30 +184,12 @@ export class GameEnity {
         return position
     }
 
-    #paintSphere(model, boundingRadius) {
-        const sphereGeometry = new THREE.SphereGeometry(boundingRadius, 32, 32);
-
-        // Skapa ett material för sfären.
-        const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-
-        // Skapa en mesh av sfärgeometrin och materialet.
-        this.sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
-
-        // Positionera meshen vid hinderentitetens position.
-        this.sphereMesh.position.copy(model.position);
-
-        // Lägg till meshen till scenen.
-        this.scene.add(this.sphereMesh)
-
-    }
-
-    createObstacle(model, boundingRadius) {
+    createObstacle(model) {
         const obstacle = new YUKA.GameEntity()
         obstacle.position.copy(model.position)
         this.entityManager.add(obstacle)
-        obstacle.boundingRadius = boundingRadius
-
-        this.#paintSphere(obstacle, boundingRadius)    
+        this.sphere = this.#createBoundingSphere(model)
+ 
         return obstacle
     }
     

@@ -64,6 +64,7 @@ export class HorseController extends GameEnity {
             if (this.move){
                 this.walk(time)
                 this.currentPosition = this.vehicle.position
+                this.sphere.position.copy(this.vehicle.position) 
                 this.updateEnity()
             } else {
                 this.idle()

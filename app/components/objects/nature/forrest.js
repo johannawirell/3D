@@ -34,13 +34,17 @@ export class Forrest extends GameEnity {
     this.entityManager = params.entityManager
     this.instances = 70
     this.obstacles = []
+    this.spheres = []
 
     this.#loadForrest()
   }
 
    getObstacles () {
-      // console.log(this.obstacles)
       return this.obstacles
+    }
+
+    getSpheres() {
+      return this.spheres
     }
 
   #loadForrest() {
@@ -99,6 +103,8 @@ export class Forrest extends GameEnity {
           const rotation = new THREE.Vector3(0, Math.random(), 0)
           clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))
           const obstacle = this.createObstacle(clone)
+          this.spheres.push(this.sphere)
+          
           this.obstacles.push(obstacle)
       
           this.scene.add(clone)

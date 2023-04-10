@@ -104,7 +104,7 @@ export class PlayerController extends GameEnity {
         if (this.#isOverEdge()) {
             this.#handleOverEdge(controlObject, velocity)
         } else if (this.#isColliding()) {
-            // console.log('collision')
+            console.log('collision')
         } else {
             controlObject.quaternion.copy(rotation)
             
@@ -123,6 +123,7 @@ export class PlayerController extends GameEnity {
             controlObject.position.add(sideways)
 
             this.currentPosition.copy(controlObject.position)
+            this.sphere.position.copy(controlObject.position)
         }
     }
 
@@ -167,9 +168,21 @@ export class PlayerController extends GameEnity {
     }
 
     #isColliding() {
-        // console.log(this.sphereMesh)
-        console.log(this.obstacles)
+        const playerSphere = this.sphere.position
+        const obstacleSpheres = this.obstacleSpheres.map(sphere => sphere.position)
+        const minDistance = 10
+
+        for (const obstacle of obstacleSpheres) {
+            const distanceToPlayer = obstacle.distanceTo(playerSphere)
+            if (distanceToPlayer <= minDistance) {
+                return true
+            }
+        }
         return false
+    }
+
+    #spatialPartitioning() {
+
     }
 
     #move(time, velocity, acceleration, forwards) {

@@ -29,6 +29,7 @@ class Main {
     this.previousRAF = null
     this.isMouseMoving = false
     this.event
+    this.obstacles
 
     this.#createPlane()
     this.#loadAnimateModel()
@@ -89,9 +90,8 @@ class Main {
         this.previousRAF = time
         if (!this.obstacles) {
           this.obstacles = this.plane.getObstacles()
-          console.log(this.obstacles)
           this.horse.addObstacles(this.obstacles)
-          this.player.addObstacles(this.obstacles)
+          this.player.addObstacleSpheres(this.plane.getSpheres())
         }
       } 
 

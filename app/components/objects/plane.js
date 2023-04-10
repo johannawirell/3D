@@ -41,6 +41,10 @@ export class Plane {
         return this.forrest.getObstacles()
     }
 
+    getSpheres() {
+        return this.forrest.getSpheres()
+    }
+
     #createTextureSkybox() {
         const texture = this.textureLoader.load(SKYBOX)
         return texture
