@@ -39,6 +39,7 @@ export class Forrest extends GameEnity {
   }
 
    getObstacles () {
+      // console.log(this.obstacles)
       return this.obstacles
     }
 
@@ -84,15 +85,10 @@ export class Forrest extends GameEnity {
           }
 
           const clone = model.clone()
-          let boundingRadius = 0
 
           clone.traverse(obj => {
             if (obj.isMesh) {
               obj.castShadow = true
-              obj.geometry.computeBoundingSphere()
-              if (obj.geometry.boundingSphere.radius > boundingRadius) {
-                boundingRadius = obj.geometry.boundingSphere.radius
-              }
             }
           })
           
@@ -102,10 +98,11 @@ export class Forrest extends GameEnity {
           clone.scale.set(scale, scale, scale)
           const rotation = new THREE.Vector3(0, Math.random(), 0)
           clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))
-          const obstacle = this.createObstacle(clone, boundingRadius + 5)
+          const obstacle = this.createObstacle(clone)
           this.obstacles.push(obstacle)
       
           this.scene.add(clone)
+          this.forestObjects.push(clone)
         }
       })
     })
