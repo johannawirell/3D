@@ -41,35 +41,22 @@ export class ThirdPersonCamera {
       #calculateIdeal(x, y, z) {
         const ideal = new THREE.Vector3(x, y, z)
         const targetRotation = this.target.getRotation().clone()
-
-        if (this.#isFacingCamera(targetRotation)) {
-          targetRotation.y += Math.PI
-        } else {
-          // Rotate camera in the other direction
-          const cameraRotation = targetRotation.clone()
-          cameraRotation.y += Math.PI
-          ideal.applyQuaternion(cameraRotation)
-          
-        }
            
         ideal.applyQuaternion(targetRotation)
         ideal.add(this.target.getPosition())
-        return ideal
-      }
 
-      #isFacingCamera(targetRotation) {
-        return targetRotation.y < Math.PI/4 && targetRotation.y > -Math.PI/4
+        return ideal
       }
 
     update(timeElapsed) {   
       // Calculate the ideal offset and lookat position
-      let idealOffset = this.#calculateIdeal(-1, 2, -2);
-      let idealLookat = this.#calculateIdeal(0, 1, 0);
-    
-      // Interpolate the camera position and lookat towards the ideal positions
-      const t = 1.0 - Math.pow(0.001, timeElapsed);
-      this.currentPosition.lerp(idealOffset, t);
-      this.currentLookat.lerp(idealLookat, t);
+      let idealOffset = this.#calculateIdeal(0, 10, 20)
+      let idealLookat = this.#calculateIdeal(0, 1, 0)
+
+  
+      const t = 1.0 - Math.pow(0.001, timeElapsed)
+      this.currentPosition.lerp(idealOffset, t)
+      this.currentLookat.lerp(idealLookat, t)
     
       // Set the camera position and lookat
       this.camera.position.copy(this.currentPosition);
