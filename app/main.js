@@ -113,6 +113,10 @@ class Main {
       this.horse.update(seconds)
     }
 
+    if (this.plane) {
+      this.plane.update(seconds)
+    }
+
     if (this.thirdPersonCamera) {
       if (this.isMouseMoving) {
         this.thirdPersonCamera.mouseMove(this.event)
