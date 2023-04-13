@@ -23,6 +23,7 @@ export class HTMLElement {
         this.addContent()
 
         const object = new CSS2DObject(this.div)
+        this.div.autofocus = true
         this.scene.add(object)
     }
 

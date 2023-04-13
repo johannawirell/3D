@@ -3,15 +3,20 @@ import { HTMLElement } from './html'
 export class GameDescrition extends HTMLElement {
     constructor(params) {
         super(params)
+        this.handler
         this.#updateDiv()
     }
 
     handleStart(handler) {
         this.button.addEventListener('click', handler)
+        window.addEventListener('keydown', handler)
+        this.handler = handler
     }
 
     hide() {
         this.div.style.display = 'none'
+        window.removeEventListener('keydown', this.handler)
+        this.handler = null
     }
 
     #updateDiv() {
