@@ -7,7 +7,7 @@ const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 
 export class PlayerController extends GameEnity {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
-    acceleration = new THREE.Vector3(1, 0.25, 15.0)
+    acceleration = new THREE.Vector3(1, 0.25, 50.0)
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
@@ -104,7 +104,7 @@ export class PlayerController extends GameEnity {
         if (this.#isOverEdge()) {
             this.#handleOverEdge(controlObject, velocity)
         } else if (this.#isColliding()) {
-            console.log('collision')
+            this.#handleCollision(controlObject, velocity)
         } else {
             controlObject.quaternion.copy(rotation)
             
@@ -135,20 +135,25 @@ export class PlayerController extends GameEnity {
     }
 
     #handleOverEdge(controlObject, velocity) {
+        if (this.#isOverNegativeX()) {
+            velocity.x *= -1
+            controlObject.position.x = (this.planePosition.x) * -1
+        } 
+        if (this.#isOverPositiveX()) {
+            velocity.x *= -1
+            controlObject.position.x = this.planePosition.x
+        } 
         if (this.#isOverNegativeZ()) {
             velocity.z *= -1
             controlObject.position.z = (this.planePosition.z) * -1
-        } else if (this.#isOverPositiveZ()) {
+        } 
+        if (this.#isOverPositiveZ()) {
             velocity.z *= -1
             controlObject.position.z = this.planePosition.z
-        } else if (this.#isOverNegativeX()) {
-            velocity.x *= -1
-            controlObject.position.x = (this.planePosition.x) * -1
-        } else if (this.#isOverPositiveX()) {
-            velocity.x *= -1
-            controlObject.position.x = this.planePosition.x
-        }
+        }    
+        
         this.currentPosition.copy(controlObject.position)
+        this.sphere.position.copy(controlObject.position)
     }
 
     #isOverNegativeZ() {
@@ -161,6 +166,7 @@ export class PlayerController extends GameEnity {
 
     #isOverNegativeX() {
         return this.currentPosition.x < (this.planePosition.x) * -1
+
     }
 
     #isOverPositiveX() {
@@ -169,20 +175,32 @@ export class PlayerController extends GameEnity {
 
     #isColliding() {
         const playerSphere = this.sphere.position
-        const obstacleSpheres = this.obstacleSpheres.map(sphere => sphere.position)
-        const minDistance = 10
+        const obstacleSpheres = this.obstacleSpheres
+        const minDistance = 15
 
         for (const obstacle of obstacleSpheres) {
-            const distanceToPlayer = obstacle.distanceTo(playerSphere)
+            const distanceToPlayer = obstacle.position.distanceTo(playerSphere)
             if (distanceToPlayer <= minDistance) {
+                this.collidingObject = obstacle
                 return true
             }
         }
         return false
     }
 
-    #spatialPartitioning() {
+    #handleCollision(controlObject, velocity) {
+        const xDiff = controlObject.position.x - this.collidingObject.position.x
 
+        if (xDiff > -15 && xDiff < 0) {
+            velocity.x *= -1
+            controlObject.position.x -= 1
+        } else if(xDiff < 15 && xDiff > 0) {
+            velocity.x *= -1
+            controlObject.position.x += 1
+        }
+
+        this.currentPosition.copy(controlObject.position)
+        this.sphere.position.copy(controlObject.position)
     }
 
     #move(time, velocity, acceleration, forwards) {
