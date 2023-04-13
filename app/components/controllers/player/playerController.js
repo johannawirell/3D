@@ -122,8 +122,7 @@ export class PlayerController extends GameEnity {
             controlObject.position.add(forward)
             controlObject.position.add(sideways)
 
-            this.currentPosition.copy(controlObject.position)
-            this.sphere.position.copy(controlObject.position)
+            this.updatePosition(controlObject.position)
         }
     }
 
@@ -199,8 +198,7 @@ export class PlayerController extends GameEnity {
             controlObject.position.x += 1
         }
 
-        this.currentPosition.copy(controlObject.position)
-        this.sphere.position.copy(controlObject.position)
+        this.updatePosition(controlObject.position)
     }
 
     #move(time, velocity, acceleration, forwards) {
@@ -258,5 +256,5 @@ export class PlayerController extends GameEnity {
         
         velocity.add(frameDeceleration)
         return velocity
-    }  
+    }
 }

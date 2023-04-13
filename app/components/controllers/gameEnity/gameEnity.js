@@ -193,4 +193,8 @@ export class GameEnity {
         return obstacle
     }
     
+    updatePosition(newPosition) {
+        this.currentPosition.copy(newPosition)
+        this.sphere.position.copy(newPosition)
+    }
 }
