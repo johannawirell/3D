@@ -52,8 +52,14 @@ export class GameEnity {
                 })
             }
 
-            this.sphere = this.#createBoundingSphere(model)
-            
+            if (path.includes('horse')) {
+                const box = new THREE.Box3().setFromObject(model)
+                const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius * 0.2
+                this.sphere = this.#createBoundingSphere(model, sphereRadius)
+            } else {
+                this.sphere = this.#createBoundingSphere(model)
+            }
+
             this.target = model
             this.scene.add(model)
             this.gltfAnimation = gltf.animations
@@ -70,28 +76,22 @@ export class GameEnity {
         this.isDoneLoading = true
     }
 
-    #createBoundingSphere(model) {
-        // Beräkna bounding sphere för objektet
-        const boundingSphere = new THREE.Sphere()
-        const box = new THREE.Box3().setFromObject(model)
-        box.getBoundingSphere(boundingSphere)
+    #createBoundingSphere(model, radius) {
+        if (!radius) {
+            const boundingSphere = new THREE.Sphere()
+            const box = new THREE.Box3().setFromObject(model)
+            box.getBoundingSphere(boundingSphere)
         
-        // Skapa en sfär geometri med radie baserat på bounding sphere
-        const sphereGeometry = new THREE.SphereGeometry(boundingSphere.radius, 32, 32)
+        radius = boundingSphere.radius
+        }
+        const sphereGeometry = new THREE.SphereGeometry(radius, 32, 32)
 
-        // Skapa ett material för sfären
-        const sphereMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff0000,
-            wireframe: true
-        })
+        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: false } )
 
-        // Skapa en mesh av sfärgeometrin och materialet
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
 
-        // Positionera meshen vid objektets position
         sphere.position.copy(model.position)
 
-        // Lägg till meshen till scenen
         this.scene.add(sphere)
         return sphere
     }
