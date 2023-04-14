@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { Forrest } from './nature/forrest'
-import { vertexShader, fragmentShader } from './shader'
+// import { vertexShader, fragmentShader } from './shader'
 
 const SKYBOX = [
     '../../img/skybox/posx.jpg',
@@ -47,8 +47,8 @@ export class Plane {
     }
 
     update(time) {
-        this.plane.material.uniforms.time.value = time;
-        this.plane.material.uniforms.windStrength.value = Math.sin(time * 0.5) * 0.5 + 0.5;
+        // this.plane.material.uniforms.time.value = time;
+        // this.plane.material.uniforms.windStrength.value = Math.sin(time * 0.5) * 0.5 + 0.5;
     }
 
     #createTextureSkybox() {
@@ -56,32 +56,28 @@ export class Plane {
         return texture
     }
 
+    #createGrass() {
+       // Skapa en kon geometri
+        const geometry = new THREE.ConeGeometry(0.5, 3, 4);
+
+        // Skapa en grön material
+        const material = new THREE.MeshBasicMaterial( { color: 153615 } );
+
+        // Skapa en mesh av kon geometrin och materialet
+        var grass = new THREE.Mesh( geometry, material );
+        return grass
+    }
+
     #createPlaneGeometry() {
-        const alphaMap = new THREE.TextureLoader().load(GRASS.texture)
         // Define geometry for instanced planes
         const geometry = new THREE.PlaneGeometry(window.innerWidth * 2, window.innerHeight * 2);
         const material = new THREE.ShaderMaterial({
-            uniforms: {
-                time: { value: 0 },
-                windStrength: { value: 0.1 },
-                alphaMap: { value: alphaMap },
-            },
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader,
             alphaTest: 0.5,
             side: THREE.DoubleSide,
             transparent: true,
         })
         const plane = new THREE.InstancedMesh(geometry, material)
-        const offset = new THREE.Vector3()
-        const color = new THREE.Color()
-        for (let i = 0; i < 10000; i++) {
-            offset.x = Math.random() * 200 - 100
-            offset.z = Math.random() * 200 - 100
-            plane.setMatrixAt(i, new THREE.Matrix4().setPosition(offset))
-            color.setHSL(Math.random() * 0.3 + 0.3, Math.random() * 0.1 + 0.8, Math.random() * 0.1 + 0.5)
-            plane.setColorAt(i, color)
-        }
+      
 
         return plane
     }
@@ -90,11 +86,12 @@ export class Plane {
         const texture = this.#createTextureSkybox()
         this.scene.background = texture
         this.plane = this.#createPlaneGeometry()
+        const grass = this.#createGrass()
         
         this.#position()
 
         this.#addTrees()
-        this.scene.add(this.plane)   
+        this.scene.add(this.plane, grass)   
     }
 
     #addTrees() {
