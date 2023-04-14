@@ -56,18 +56,6 @@ export class Plane {
         return texture
     }
 
-    #createGrass() {
-       // Skapa en kon geometri
-        const geometry = new THREE.ConeGeometry(0.5, 3, 4);
-
-        // Skapa en grön material
-        const material = new THREE.MeshBasicMaterial( { color: 153615 } );
-
-        // Skapa en mesh av kon geometrin och materialet
-        var grass = new THREE.Mesh( geometry, material );
-        return grass
-    }
-
     #createPlaneGeometry() {
         // Define geometry for instanced planes
         const geometry = new THREE.PlaneGeometry(window.innerWidth * 2, window.innerHeight * 2);
@@ -86,12 +74,11 @@ export class Plane {
         const texture = this.#createTextureSkybox()
         this.scene.background = texture
         this.plane = this.#createPlaneGeometry()
-        const grass = this.#createGrass()
         
         this.#position()
 
         this.#addTrees()
-        this.scene.add(this.plane, grass)   
+        this.scene.add(this.plane)   
     }
 
     #addTrees() {

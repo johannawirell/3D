@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GameEnity } from '../../controllers/gameEnity/gameEnity.js'
+import { GrassField } from './grassField.js'
 
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
@@ -35,6 +36,11 @@ export class Forrest extends GameEnity {
     this.instances = 70
     this.obstacles = []
     this.spheres = []
+    this.grassField = new GrassField({
+      scene: this.scene,
+      loadingManager: this.loadingManager,
+      entityManager: this.entityManager
+    })
 
     this.#loadForrest()
   }
