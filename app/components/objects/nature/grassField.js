@@ -17,8 +17,8 @@ export class GrassField {
         const grassPositions = [];
         
         // Loop för att skapa och placera ut linjer på plan yta
-        for (let x = -grassWidth / 2; x <= grassWidth / 2; x += 10) {
-          for (let z = -grassHeight / 2; z <= grassHeight / 2; z += 10) {
+        for (let x = -grassWidth / 2; x <= grassWidth / 2; x += 0.5) {
+          for (let z = -grassHeight / 2; z <= grassHeight / 2; z += 0.5) {
             const startPosition = new THREE.Vector3(x, 0, z);
             const endPosition = new THREE.Vector3(x, 5, z);
         
