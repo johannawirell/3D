@@ -69,6 +69,30 @@ export class Forrest extends GameEnity {
           let x = Math.random() * windowWidth - windowWidth / 2
           const z = Math.random() * windowHeight - windowHeight / 2
           let y = -1
+          let positionIsValid = false
+
+          while (!positionIsValid) {
+            x += 0.1
+            positionIsValid = true
+
+            if (Math.abs(x) < this.emptyspace / 2) {
+                positionIsValid = false
+                continue
+            }
+
+            for (let j = 0; j < this.forestObjects.length; j++) {
+              const otherTree = this.forestObjects[j]
+              const dx = x - otherTree.position.x
+              const dy = y - otherTree.position.y
+              const dz = z - otherTree.position.z
+              const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
+
+              if (distance < 50) {
+                positionIsValid = false
+                break
+              }
+            }
+          }
           
           const clone = model.clone()
 
