@@ -1,31 +1,24 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { GameEnity } from '../../controllers/gameEnity/gameEnity'
-const dracoLoader = new DRACOLoader()
-dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/')
 
-const grass = {
-    name: 'Grass',
-    path: '../../../models/Grass.glb',
-}
-
-export class GrassField extends GameEnity{
+export class GrassField {
     constructor(params) {
-        super(params)
         this.loadingManager = params.loadingManager
+        this.scene = params.scene
         this.field = this.#createField()
     }
 
     #createField() {
-        const windowWidth = window.innerWidth
-        const windowHeight = window.innerHeight
-        const gltfLoader = new GLTFLoader(this.loadingManager)
-        gltfLoader.setDRACOLoader(dracoLoader)
+        // Skapa en kon geometri
+        var geometry = new THREE.ConeGeometry( 1, 2, 32 );
 
-        gltfLoader.load(grass.path, gltf => {
-            console.log(gltf)
-            console.log(this.scene)
-        })
+        // Skapa en grön material
+        var material = new THREE.MeshBasicMaterial( { color: 112711 } );
+
+        // Skapa en mesh av kon geometrin och materialet
+        var cone = new THREE.Mesh( geometry, material );
+        this.scene.add( cone );
+        // this.loadGLTF(grass.path)
     }
+
+  
 }

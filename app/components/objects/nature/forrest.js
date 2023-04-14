@@ -69,8 +69,7 @@ export class Forrest extends GameEnity {
           let x = Math.random() * windowWidth - windowWidth / 2
           const z = Math.random() * windowHeight - windowHeight / 2
           let y = -1
-         
-
+          
           const clone = model.clone()
 
           clone.traverse(obj => {
