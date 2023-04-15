@@ -87,7 +87,7 @@ export class HorseController extends GameEnity {
 
    position(model) {
         if (model) {
-            this.currentPosition = model.position
+            this.currentPosition = this.waypoints[0]
             model.rotation.set(0, 0, Math.PI, 1)
         }
         return model

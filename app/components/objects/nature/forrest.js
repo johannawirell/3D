@@ -8,14 +8,9 @@ dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5
 
 const objects = [
   {
-    name: 'Oak',
-    path: '../../../models/Oak.glb',
-    instances: 30
-  },
-  {
     name: 'Pine',
     path: '../../../models/Pine.glb',
-    instances: 30
+    instances: 60
   },
   {
     name: 'Rock',
