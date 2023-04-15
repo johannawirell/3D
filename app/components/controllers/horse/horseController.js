@@ -46,7 +46,7 @@ export class HorseController extends GameEnity {
         return this.waypoints
     }
 
-    get position() {
+    getPosition() {
         return this.currentPosition
     }
 
@@ -61,7 +61,7 @@ export class HorseController extends GameEnity {
     
     update(time) {
         if (this.isDoneLoading) {
-            if (this.move){
+            if (this.move) {
                 this.walk(time)
                 this.currentPosition = this.vehicle.position
                 this.sphere.position.copy(this.vehicle.position) 

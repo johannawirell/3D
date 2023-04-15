@@ -113,6 +113,12 @@ class Main {
       this.horse.update(seconds)
     }
 
+    const playerPosition = this.player.getPosition()
+    const horsePosition = this.horse.getPosition()
+    if (playerPosition.distanceTo(horsePosition) < 25) {
+      this.horse.stopMovement()
+    }
+
     if (this.thirdPersonCamera) {
       if (this.isMouseMoving) {
         this.thirdPersonCamera.mouseMove(this.event)
