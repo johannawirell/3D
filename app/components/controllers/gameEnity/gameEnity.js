@@ -89,6 +89,7 @@ export class GameEnity {
         const sphereMaterial = new THREE.MeshBasicMaterial( { visible: false } )
 
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+        sphere.name = model.name
 
         sphere.position.copy(model.position)
 

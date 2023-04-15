@@ -4,10 +4,12 @@ import { InputController } from './inputController.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
+const COLLISION_TREE= 15
+const COLLISION_ROCK= 20
 
 export class PlayerController extends GameEnity {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
-    acceleration = new THREE.Vector3(1, 0.25, 50.0)
+    acceleration = new THREE.Vector3(1, 0.25, 20.0)
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
 
@@ -175,27 +177,40 @@ export class PlayerController extends GameEnity {
     #isColliding() {
         const playerSphere = this.sphere.position
         const obstacleSpheres = this.obstacleSpheres
-        const minDistance = 15
 
         for (const obstacle of obstacleSpheres) {
             const distanceToPlayer = obstacle.position.distanceTo(playerSphere)
-            if (distanceToPlayer <= minDistance) {
-                this.collidingObject = obstacle
-                return true
+            if (obstacle.name ==! 'Rock') {
+                if (distanceToPlayer <= COLLISION_ROCK) {
+                    this.collidingObject = obstacle
+                    return true
+                }
+            } else {
+                if (distanceToPlayer <= COLLISION_TREE) {
+                    this.collidingObject = obstacle
+                    return true
+                }
             }
+           
         }
         return false
     }
 
     #handleCollision(controlObject, velocity) {
         const xDiff = controlObject.position.x - this.collidingObject.position.x
+        let collisionDistance
+        if (this.collidingObject.name === 'Rock') {
+            collisionDistance = COLLISION_ROCK
+        } else {
+            collisionDistance = COLLISION_TREE
+        }
 
-        if (xDiff > -15 && xDiff < 0) {
+        if (xDiff > (collisionDistance) * -1 && xDiff < 0) {
             velocity.x *= -1
-            controlObject.position.x -= 1
-        } else if(xDiff < 15 && xDiff > 0) {
+            controlObject.position.x -= 0.1
+        } else if(xDiff < collisionDistance && xDiff > 0) {
             velocity.x *= -1
-            controlObject.position.x += 1
+            controlObject.position.x += 0.1
         }
 
         this.updatePosition(controlObject.position)
