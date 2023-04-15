@@ -197,4 +197,14 @@ export class GameEnity {
         this.currentPosition.copy(newPosition)
         this.sphere.position.copy(newPosition)
     }
+
+    stopVechicle() {
+        this.vehicle.maxSpeed = 0
+        this.stopedAt = this.vehicle.position
+        
+    }
+
+    startVechicle() {
+        this.vehicle.maxSpeed = 15
+    }
 }
