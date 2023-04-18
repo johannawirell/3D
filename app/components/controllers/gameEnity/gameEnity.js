@@ -211,7 +211,7 @@ export class GameEnity {
         this.sphere.position.copy(newPosition)
     }
 
-    stopVechicle() {
+    stopVehicle() {
         if (!this.stoped) {
             this.stoped = true
             this.stopedAt = this.vehicle.position
@@ -223,7 +223,7 @@ export class GameEnity {
         
     }
 
-    startVechicle() {
+    startVehicle() {
         this.stoped = false  
     }
 }
