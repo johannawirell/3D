@@ -13,12 +13,14 @@ export class GameEnity {
         this.time = new YUKA.Time()
         this.obstacles = []
         this.obstacleSpheres = []
+        this.steeringBehaviors = []
     }
 
     addObstacles(obstacles) {
         this.obstacles = obstacles
         if (this.vehicle) {
             const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
+            this.steeringBehaviors.push(obstacleAvoidanceBehavior)
 
             this.vehicle.steering.add(obstacleAvoidanceBehavior)
         }
@@ -57,6 +59,7 @@ export class GameEnity {
                 const box = new THREE.Box3().setFromObject(model)
                 const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
                 this.sphere = this.#createBoundingSphere(model, sphereRadius)
+                this.horse = true
             } else {
                 this.sphere = this.#createBoundingSphere(model)
             }
@@ -103,6 +106,9 @@ export class GameEnity {
 
     walk() {
         const newAction = this.states.Walk
+        // if (this.horse) {
+        //     console.log(this.vehicle.position)
+        // }
        
         if (this.currentState !== newAction) {
             this.updateAnimation(newAction)
@@ -175,6 +181,7 @@ export class GameEnity {
 
         const onPathBehavior = new YUKA.OnPathBehavior(this.path)
         this.vehicle.steering.add(onPathBehavior)
+        this.steeringBehaviors.push(followPathBehavior, onPathBehavior)
 
         this.entityManager.add(this.vehicle)
         return this.path
@@ -205,12 +212,18 @@ export class GameEnity {
     }
 
     stopVechicle() {
-        this.vehicle.maxSpeed = 0
-        this.stopedAt = this.vehicle.position
+        if (!this.stoped) {
+            this.stoped = true
+            this.stopedAt = this.vehicle.position
+        }
+        this.vehicle.position.copy(this.stopedAt)
+        this.updatePosition(this.stopedAt)
+      
+
         
     }
 
     startVechicle() {
-        this.vehicle.maxSpeed = 15
+        this.stoped = false  
     }
 }

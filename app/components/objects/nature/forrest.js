@@ -10,7 +10,7 @@ const objects = [
   {
     name: 'Pine',
     path: '../../../models/Pine.glb',
-    instances: 60
+    instances: 100
   },
   {
     name: 'Rock',
