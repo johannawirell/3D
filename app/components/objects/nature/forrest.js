@@ -92,8 +92,14 @@ export class Forrest extends GameEnity {
           })
           
           clone.name = obj.name
+          let scale 
           clone.position.set(x, y, z)
-          const scale = this.#generateRandomNumbers(3, 8)
+          if (clone.name === 'Rock') {
+            scale = this.#generateRandomNumbers(3, 5)
+          } else {
+            scale = this.#generateRandomNumbers(3, 8)
+          }
+
           clone.scale.set(scale, scale, scale)
           const rotation = new THREE.Vector3(0, Math.random(), 0)
           clone.rotation.setFromVector3(rotation.multiplyScalar(Math.PI * 2))

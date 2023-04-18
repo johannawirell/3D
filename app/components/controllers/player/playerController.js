@@ -4,8 +4,8 @@ import { InputController } from './inputController.js'
 
 const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
-const COLLISION_TREE= 15
-const COLLISION_ROCK= 20
+const COLLISION_TREE= 10
+const COLLISION_ROCK= 15
 
 export class PlayerController extends GameEnity {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)

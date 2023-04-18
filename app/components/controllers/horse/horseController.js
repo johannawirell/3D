@@ -25,7 +25,7 @@ export class HorseController extends GameEnity {
         this.vehicle = this.createVehicle({
             scale: SCALE,
             rotation: Math.PI / 2,
-            boundingRadius: 20
+            boundingRadius: 30
         })
         this.path = this.createPath(this.#createCirclePath(), true)
         await this.loadGLTF(PATH_TO_HORSE)
