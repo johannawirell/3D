@@ -174,7 +174,7 @@ export class GameEnity {
                
         this.vehicle.position.copy(this.path.current())
         this.vehicle.rotation.y = Math.PI
-        this.vehicle.maxSpeed = 15
+        this.vehicle.maxSpeed = 10
 
         const followPathBehavior = new YUKA.FollowPathBehavior(this.path, 3)
         this.vehicle.steering.add(followPathBehavior)
