@@ -4,7 +4,6 @@ import { degToRad } from 'three/src/math/MathUtils.js'
 import { GameEnity } from '../gameEnity/gameEnity'
 
 const PATH_TO_HORSE = '../../models/horse.glb'
-const SCALE = 5
 
 const X_POSITION = 0
 const Y_POSITION = 0
@@ -23,7 +22,7 @@ export class HorseController extends GameEnity {
 
     async #loadHorse() {
         this.vehicle = this.createVehicle({
-            scale: SCALE,
+            scale: 1,
             rotation: Math.PI / 2,
             boundingRadius: 30
         })

@@ -19,9 +19,6 @@ export class GameEnity {
         this.obstacles = obstacles
         if (this.vehicle) {
             const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(obstacles)
-            obstacleAvoidanceBehavior.brakingWeight = 0.5
-            obstacleAvoidanceBehavior.weight = 0.2
-            console.log(obstacleAvoidanceBehavior)
 
             this.vehicle.steering.add(obstacleAvoidanceBehavior)
         }
@@ -58,7 +55,7 @@ export class GameEnity {
 
             if (path.includes('horse')) {
                 const box = new THREE.Box3().setFromObject(model)
-                const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius * 2
+                const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
                 this.sphere = this.#createBoundingSphere(model, sphereRadius)
             } else {
                 this.sphere = this.#createBoundingSphere(model)
@@ -85,12 +82,15 @@ export class GameEnity {
             const boundingSphere = new THREE.Sphere()
             const box = new THREE.Box3().setFromObject(model)
             box.getBoundingSphere(boundingSphere)
+            if (model.name === 'Pine') {
+                boundingSphere.radius = boundingSphere.radius * 0.1
+            }
         
-        radius = boundingSphere.radius
+            radius = boundingSphere.radius
         }
         const sphereGeometry = new THREE.SphereGeometry(radius, 32, 32)
 
-        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: true, wireframe: true } )
+        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: false, wireframe: true } )
 
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
         sphere.name = model.name
