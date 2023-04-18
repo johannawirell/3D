@@ -4,7 +4,7 @@ import { degToRad } from 'three/src/math/MathUtils.js'
 import { GameEnity } from '../gameEnity/gameEnity'
 
 const PATH_TO_HORSE = '../../models/horse.glb'
-const SCALE = 1
+const SCALE = 5
 
 const X_POSITION = 0
 const Y_POSITION = 0
