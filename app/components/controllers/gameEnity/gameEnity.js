@@ -59,7 +59,6 @@ export class GameEnity {
                 const box = new THREE.Box3().setFromObject(model)
                 const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
                 this.sphere = this.#createBoundingSphere(model, sphereRadius)
-                this.horse = true
             } else {
                 this.sphere = this.#createBoundingSphere(model)
             }
@@ -106,9 +105,6 @@ export class GameEnity {
 
     walk() {
         const newAction = this.states.Walk
-        // if (this.horse) {
-        //     console.log(this.vehicle.position)
-        // }
        
         if (this.currentState !== newAction) {
             this.updateAnimation(newAction)

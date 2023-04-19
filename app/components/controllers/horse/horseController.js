@@ -50,13 +50,17 @@ export class HorseController extends GameEnity {
     }
 
     stopMovement() {
-        this.move = false
-        this.stopVehicle()
+        if (this.isDoneLoading) {
+            this.move = false
+            this.stopVehicle()
+        }
     }
 
     startMovement() {
-        this.move = true
-        this.startVehicle()
+        if (this.isDoneLoading) {
+            this.move = true
+            this.startVehicle()
+        }
     }   
       
     
@@ -66,6 +70,7 @@ export class HorseController extends GameEnity {
                 this.updatePosition(this.vehicle.position)
                 this.walk(time)
                 this.updateEnity()
+              
             } else {
                 this.idle()
                 this.updateEnity()
