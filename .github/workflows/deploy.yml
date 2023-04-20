@@ -10,17 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Navigate to app
-        uses: cd app
-
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd app
+          npm install
 
       - name: Build project
-        run: npm run build
+        run: |
+          cd app
+          npm run build
 
       # - name: Deploy to Hostinger
       #   uses: appleboy/ssh-action@master
