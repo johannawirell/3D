@@ -90,15 +90,32 @@ class Main {
         this.#update(time - this.previousRAF)
         this.previousRAF = time
         if (!this.obstacles) {
-          this.obstacles = this.plane.getObstacles()
-          this.horse.addObstacles(this.obstacles)
-          this.player.addObstacleSpheres(this.plane.getSpheres())
+         this.#addObstaclesToHorse()
+        }
+        if (!this.horseSphere) {
+          this.#addObstaclesToPlayer()
+         
         }
       } 
 
       this.#RAF()
 
     })
+  }
+
+  #addObstaclesToHorse() {
+    this.obstacles = this.plane.getObstacles()
+    this.horse.addObstacles(this.obstacles)
+  }
+
+  #addObstaclesToPlayer() {
+      const obstacleSpheres = this.plane.getSpheres()
+      this.horseSphere = this.horse.getSphere()
+      if (this.horseSphere) {
+        obstacleSpheres.push(this.horseSphere)
+      }
+      
+      this.player.addObstacleSpheres(obstacleSpheres)
   }
 
   #update(time) {

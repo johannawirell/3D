@@ -19,6 +19,10 @@ export class HorseController extends GameEnity {
         
         this.#loadHorse()
     }
+
+    getSphere() {
+        return this.sphere
+    }
  
     async #loadHorse() {
         this.vehicle = this.createVehicle({
@@ -28,6 +32,7 @@ export class HorseController extends GameEnity {
         })
         this.path = this.createPath(this.#createCirclePath(), true)
         await this.loadGLTF(PATH_TO_HORSE)
+        this.target.name = 'Horse'
     }
 
     #createCirclePath() {
