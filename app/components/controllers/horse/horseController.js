@@ -19,7 +19,7 @@ export class HorseController extends GameEnity {
         
         this.#loadHorse()
     }
-
+ 
     async #loadHorse() {
         this.vehicle = this.createVehicle({
             scale: 1,
@@ -32,8 +32,8 @@ export class HorseController extends GameEnity {
 
     #createCirclePath() {
         this.waypoints = []
-        const radius = 200
-        const center = new YUKA.Vector3(10, 0, 100)
+        const radius = 100
+        const center = new YUKA.Vector3(0, 0, 0)
         for (let i = 0; i <= 360; i += 10) {
             const angle = degToRad(i)
             const x = Math.sin(angle) * radius + center.x

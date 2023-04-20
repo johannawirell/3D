@@ -118,10 +118,8 @@ class Main {
     const horsePosition = this.horse.getPosition()
     if (playerPosition.distanceTo(horsePosition) < 50) {
       this.horse.stopMovement()
-      this.hasStopped = true
     } else if (this.hasStopped) {
       this.horse.startMovement()
-      this.hasStopped = false
     }
 
     if (this.thirdPersonCamera) {
