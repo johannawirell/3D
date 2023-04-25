@@ -55,7 +55,7 @@ export class GameEnity {
                 })
             }
 
-            if (path.includes('horse')) {
+            if (path.includes('horse') || path.includes('dog')) {
                 const box = new THREE.Box3().setFromObject(model)
                 const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
                 this.sphere = this.#createBoundingSphere(model, sphereRadius)

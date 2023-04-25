@@ -93,9 +93,9 @@ class Main {
         if (!this.obstacles) {
          this.#addObstaclesToHorse()
         }
-        if (!this.horseSphere) {
+        if (!this.addedSpheres) {
           this.#addObstaclesToPlayer()
-         
+          console.log()
         }
       } 
 
@@ -112,11 +112,13 @@ class Main {
   #addObstaclesToPlayer() {
       const obstacleSpheres = this.plane.getSpheres()
       this.horseSphere = this.horse.getSphere()
-      if (this.horseSphere) {
-        obstacleSpheres.push(this.horseSphere)
+      this.dogSphere = this.dog.getSphere()
+      if (this.horseSphere && this.dogSphere) {
+        obstacleSpheres.push(this.horseSphere, this.dogSphere)
+        this.player.addObstacleSpheres(obstacleSpheres)
+        this.addedSpheres = true
+        
       }
-      
-      this.player.addObstacleSpheres(obstacleSpheres)
   }
 
   #update(time) {

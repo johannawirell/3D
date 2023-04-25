@@ -23,9 +23,14 @@ export class DogController extends GameEnity {
         this.target.name = 'dog'
     }
 
+    getSphere() {
+        return this.sphere
+    }
+
    position(model) {
         if (model) {
             model.rotation.set(0, 0, Math.PI, 1)
+            model.position.set(0, 0, 50)
         }
         return model
     }
