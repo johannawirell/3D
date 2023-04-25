@@ -10,6 +10,7 @@ import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { GameDescrition } from './components/html/gameDescription'
 import { ambientLight, directionaLight } from './components/light'
+import { DogController } from './components/controllers/dog/dogController'
 
 const FIELD_OF_VIEW = 60
 const ASPECT = window.innerWidth / window.innerHeight
@@ -162,6 +163,11 @@ class Main {
     })
     this.horse = new HorseController({
       camera: this.camera, 
+      scene: this.scene,
+      entityManager: this.entityManager
+    })
+    this.dog = new DogController({
+      camera: this.camera,
       scene: this.scene,
       entityManager: this.entityManager
     })
