@@ -211,15 +211,15 @@ export class GameEnity {
         if (!this.stoped) {
             this.stoped = true
             this.stopedAt = this.vehicle.position
+            this.vehicle.maxSpeed = 0.000000001
+            
         }
         this.vehicle.position.copy(this.stopedAt)
         this.updatePosition(this.stopedAt)
-      
-
-        
     }
 
     startVehicle() {
+        this.vehicle.maxSpeed = 10
         this.stoped = false  
     }
 }
