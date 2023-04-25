@@ -132,6 +132,10 @@ class Main {
       this.horse.update(seconds)
     }
 
+    if (this.dog) {
+      this.dog.update(seconds)
+    }
+
     const playerPosition = this.player.getPosition()
     const horsePosition = this.horse.getPosition()
     if (playerPosition.distanceTo(horsePosition) < 50) {
