@@ -30,7 +30,7 @@ class Main {
     this.isMouseMoving = false
     this.event
     this.obstacles
-    this.hasStopped = false
+    this.isNearHorse = false
 
     this.#createPlane()
     this.#loadAnimateModel()
@@ -134,10 +134,14 @@ class Main {
     const playerPosition = this.player.getPosition()
     const horsePosition = this.horse.getPosition()
     if (playerPosition.distanceTo(horsePosition) < 50) {
-      this.horse.stopMovement()
-      this.hasStopped = true
-    } else if (this.hasStopped) {
-      this.horse.startMovement()
+      if (!this.isNearHorse) {
+        console.log('is near horse')
+      }
+
+      this.isNearHorse = true
+
+    } else if (this.isNearHorse) {
+      this.isNearHorse = false
     }
 
     if (this.thirdPersonCamera) {
