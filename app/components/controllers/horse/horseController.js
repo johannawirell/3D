@@ -77,7 +77,6 @@ export class HorseController extends GameEnity {
                 this.updateEnity()
               
             } else {
-                this.idle()
                 this.updateEnity()
                 this.stopedAt = this.currentPosition
             }
