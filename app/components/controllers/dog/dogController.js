@@ -30,7 +30,7 @@ export class DogController extends GameEnity {
    position(model) {
         if (model) {
             model.rotation.set(0, 0, Math.PI, 1)
-            model.position.set(0, 0, 50)
+            model.position.set(-100, 0, -100)
         }
         return model
     }
