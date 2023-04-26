@@ -9,7 +9,7 @@ import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCa
 import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { GameDescrition } from './components/html/gameDescription'
-import { ambientLight, directionaLight } from './components/light'
+import { ambientLight, directionaLight } from './components/objects/light'
 import { DogController } from './components/controllers/dog/dogController'
 import { House } from './components/objects/house/house'
 

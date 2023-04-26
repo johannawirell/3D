@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { GameEnity } from '../../controllers/gameEnity/gameEnity'
+import { glassShader } from '../shaders/shader'
 
 const PATH_TO_HOUSE= '../../../models/house.glb'
 
@@ -16,6 +17,13 @@ export class House extends GameEnity {
         await this.loadGLTF(PATH_TO_HOUSE)
         const doorAction = this.animationsMap.get('DoorAction')
         doorAction.play()
+
+
+        this.target.traverse((child) => {
+            if (child.name.includes('Window')) {
+                child.material = new THREE.ShaderMaterial(glassShader);
+            }
+        })
     }
 
     getSphere() {
@@ -24,9 +32,13 @@ export class House extends GameEnity {
 
    position(model) {
         if (model) {
+            for (const obj of model.children) {
+                obj.frustumCulled = false
+            }
+            model.frustumCulled = false
+
             model.rotation.set(0, 0, Math.PI, 1)
-            // model.scale.set(0.5, 0.5, 0.5)
-            model.position.set(-20, 0, -0)
+            model.position.set(-20, 2, -0)
         }
         return model
     }
