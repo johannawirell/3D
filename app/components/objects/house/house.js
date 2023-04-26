@@ -14,6 +14,8 @@ export class House extends GameEnity {
 
     async #loadHouse() {
         await this.loadGLTF(PATH_TO_HOUSE)
+        const doorAction = this.animationsMap.get('DoorAction')
+        doorAction.play()
     }
 
     getSphere() {
@@ -23,15 +25,14 @@ export class House extends GameEnity {
    position(model) {
         if (model) {
             model.rotation.set(0, 0, Math.PI, 1)
-            model.scale.set(0.5, 0.5, 0.5)
-            model.position.set(-200, 0, -200)
+            // model.scale.set(0.5, 0.5, 0.5)
+            model.position.set(-20, 0, -0)
         }
         return model
     }
 
     update(time) {
         if (this.mixer) {
-
             this.mixer.update(time)
         }
     }

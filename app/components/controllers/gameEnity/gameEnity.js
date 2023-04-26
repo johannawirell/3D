@@ -63,6 +63,10 @@ export class GameEnity {
                 this.sphere = this.#createBoundingSphere(model)
             }
 
+            if (path.includes('house')) {
+                this.#addTransparency(model)
+            }
+
             this.target = model
             this.scene.add(model)
             this.gltfAnimation = gltf.animations
@@ -77,6 +81,19 @@ export class GameEnity {
           })
         })
         this.isDoneLoading = true
+    }
+
+    #addTransparency(model) {
+        const doorMaterial = this.#getMaterial(model, 'Door_Group', 'CTRL_Hole')
+
+        doorMaterial.transparent = true
+        doorMaterial.opacity = 0
+    }
+
+    #getMaterial(model, groupName, childName) {
+        const group = model.children.find(obj => obj.name === groupName)
+        const child = group.children.find(obj => obj.name === childName)
+        return child.material
     }
 
     #createBoundingSphere(model, radius) {

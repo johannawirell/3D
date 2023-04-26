@@ -138,6 +138,10 @@ class Main {
       this.dog.update(seconds)
     }
 
+    if (this.house) {
+      this.house.update(seconds)
+    }
+
     const playerPosition = this.player.getPosition()
     const horsePosition = this.horse.getPosition()
     if (playerPosition.distanceTo(horsePosition) < 50) {
@@ -188,8 +192,7 @@ class Main {
     })
     this.house = new House({
       camera: this.camera,
-      scene: this.scene,
-      entityManager: this.entityManager
+      scene: this.scene
     })
   }
 
