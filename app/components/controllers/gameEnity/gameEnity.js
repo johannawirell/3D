@@ -84,16 +84,36 @@ export class GameEnity {
     }
 
     #addTransparency(model) {
-        const doorMaterial = this.#getMaterial(model, 'Door_Group', 'CTRL_Hole')
+        const materialToHide = []
+        materialToHide.push(this.#getMaterial(model, 'Door_Group', 'CTRL_Hole'))
 
-        doorMaterial.transparent = true
-        doorMaterial.opacity = 0
+        for (const child of model.children) {
+            if (child.name.includes('Window')) {
+                for (const material of child.children) {
+                    if (material.name.includes('CTRL_Hole')) {
+                        materialToHide.push(this.#getMaterial(model, child.name, material.name))
+                    }
+                }
+            }
+        }
+
+        for (const material of materialToHide) {
+            this.#hide(material)
+        }
+
+          
+        console.log(materialToHide)
     }
 
     #getMaterial(model, groupName, childName) {
         const group = model.children.find(obj => obj.name === groupName)
         const child = group.children.find(obj => obj.name === childName)
         return child.material
+    }
+
+    #hide(material) {
+        material.transparent = true
+        material.opacity = 0
     }
 
     #createBoundingSphere(model, radius) {

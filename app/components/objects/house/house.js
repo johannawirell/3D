@@ -21,7 +21,7 @@ export class House extends GameEnity {
 
         this.target.traverse((child) => {
             if (child.name.includes('Window')) {
-                child.material = new THREE.ShaderMaterial(glassShader);
+                // child.material = new THRsEE.ShaderMaterial(glassShader);
             }
         })
     }
