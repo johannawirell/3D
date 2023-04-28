@@ -46,8 +46,25 @@ export class House extends GameEnity {
         material.opacity = 0
     }
 
-    createBoundingSphere(model) {
+    createBoundingSphereHouse(model) {
+        model.traverse(obj => {
+            if (this.#shouldCreateSphere(obj)) {
+                const obstacle = this.createObstacle(obj)
 
+                console.log(obj)
+
+            }
+        })
+    }
+
+    #shouldCreateSphere(obj) {
+        return (
+            obj.type === 'Group' && 
+            (!obj.name.includes('Door')) &&
+            (!obj.name.includes('Hole')) &&
+            (!obj.name.includes('floor')) &&
+            (!obj.name.includes('Scene'))
+        )
     }
 
     getSphere() {
@@ -57,8 +74,8 @@ export class House extends GameEnity {
    position(model) {
         if (model) {
             model.rotation.set(0, 0, Math.PI, 1)
-            // model.scale.set(2, 2, 2)
-            model.position.set(-20,1.1, -0)
+            model.position.y = 1.1
+            // model.position.set(-20, 1.1, -0)
         }
         return model
     }

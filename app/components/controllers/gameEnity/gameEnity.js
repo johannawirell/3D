@@ -60,7 +60,7 @@ export class GameEnity {
                 const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
                 this.sphere = this.#createBoundingSphere(model, sphereRadius)
             } else if (path.includes('house')) {
-                console.log('house')
+                this.createBoundingSphereHouse(model)
                 this.addTransparency(model)
             } else {
                 this.sphere = this.#createBoundingSphere(model)
