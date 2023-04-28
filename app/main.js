@@ -11,7 +11,6 @@ import { Plane } from './components/objects/plane'
 import { GameDescrition } from './components/html/gameDescription'
 import { ambientLight, directionaLight } from './components/objects/light'
 import { DogController } from './components/controllers/dog/dogController'
-import { House } from './components/objects/house/house'
 
 const FIELD_OF_VIEW = 60
 const ASPECT = window.innerWidth / window.innerHeight
@@ -189,10 +188,6 @@ class Main {
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player
-    })
-    this.house = new House({
-      camera: this.camera,
-      scene: this.scene
     })
   }
 

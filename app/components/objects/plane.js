@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Forrest } from './nature/forrest'
+import { House } from './house/house'
 
 const SKYBOX = [
     '../../img/skybox/posx.jpg',
@@ -35,6 +36,10 @@ export class Plane {
             x: this.plane.geometry.parameters.width / 4,
             z: this.plane.geometry.parameters.height / 4
         }
+    }
+
+    getHouse() {
+        return this.house
     }
 
     getObstacles() {
@@ -85,6 +90,7 @@ export class Plane {
         this.#position()
 
         this.#addTrees()
+        this.#createHouse()
         this.scene.add(this.plane)   
     }
 
@@ -94,6 +100,14 @@ export class Plane {
             loadingManager: this.loadingManager,
             entityManager: this.entityManager
         })     
+    }
+
+    #createHouse () {
+        this.house = new House ({
+            scene: this.scene,
+            loadingManager: this.loadingManager,
+            entityManager: this.entityManager
+        })
     }
 
     #position() {

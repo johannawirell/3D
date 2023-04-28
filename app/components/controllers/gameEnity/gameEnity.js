@@ -45,7 +45,7 @@ export class GameEnity {
             model = this.position(model)
             model.traverse(obj => {
                 if (obj.isMesh) {
-                    obj.castShadow = true
+                    obj.castShagitdow = true
                 }
             })
             if (this.vehicle) {

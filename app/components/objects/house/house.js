@@ -8,9 +8,11 @@ export class House extends GameEnity {
 
     constructor(params) {
         super(params)
-        this.move = true
+        this.loadingManager = params.loadingManager
+        this.entityManager = params.entityManager
         
         this.#loadHouse()
+        console.log('load house')
     }
 
     async #loadHouse() {
