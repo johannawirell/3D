@@ -115,5 +115,9 @@ export class Plane {
         this.plane.position.set(0, 0, 0)
 
     }
+
+    update(time) {
+        this.house.update(time)
+    }
 }
 

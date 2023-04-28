@@ -59,12 +59,11 @@ export class GameEnity {
                 const box = new THREE.Box3().setFromObject(model)
                 const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
                 this.sphere = this.#createBoundingSphere(model, sphereRadius)
+            } else if (path.includes('house')) {
+                console.log('house')
+                this.addTransparency(model)
             } else {
                 this.sphere = this.#createBoundingSphere(model)
-            }
-
-            if (path.includes('house')) {
-                this.#addTransparency(model)
             }
 
             this.target = model
@@ -83,35 +82,7 @@ export class GameEnity {
         this.isDoneLoading = true
     }
 
-    #addTransparency(model) {
-        const materialToHide = []
-        materialToHide.push(this.#getMaterial(model, 'Door_Group', 'CTRL_Hole'))
-
-        for (const child of model.children) {
-            if (child.name.includes('Window')) {
-                for (const material of child.children) {
-                    if (material.name.includes('CTRL_Hole')) {
-                        materialToHide.push(this.#getMaterial(model, child.name, material.name))
-                    }
-                }
-            }
-        }
-
-        for (const material of materialToHide) {
-            this.#hide(material)
-        }
-    }
-
-    #getMaterial(model, groupName, childName) {
-        const group = model.children.find(obj => obj.name === groupName)
-        const child = group.children.find(obj => obj.name === childName)
-        return child.material
-    }
-
-    #hide(material) {
-        material.transparent = true
-        material.opacity = 0
-    }
+    
 
     #createBoundingSphere(model, radius) {
         if (!radius) {
@@ -126,7 +97,7 @@ export class GameEnity {
         }
         const sphereGeometry = new THREE.SphereGeometry(radius, 32, 32)
 
-        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: false, wireframe: true } )
+        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: true, wireframe: true } )
 
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
         sphere.name = model.name

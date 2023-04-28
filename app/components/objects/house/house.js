@@ -12,7 +12,6 @@ export class House extends GameEnity {
         this.entityManager = params.entityManager
         
         this.#loadHouse()
-        console.log('load house')
     }
 
     async #loadHouse() {
@@ -20,12 +19,35 @@ export class House extends GameEnity {
         const doorAction = this.animationsMap.get('DoorAction')
         doorAction.play()
 
-
         this.target.traverse((child) => {
             if (child.name.includes('Window')) {
                 child.material = new THREE.ShaderMaterial(glassShader)
             }
         })
+    }
+
+    addTransparency(model) {
+        const materialToHide = []
+        materialToHide.push(this.#getMaterial(model, 'Door_Group', 'CTRL_Hole'))
+
+        for (const material of materialToHide) {
+            this.#hide(material)
+        }
+    }
+
+    #getMaterial(model, groupName, childName) {
+        const group = model.children.find(obj => obj.name === groupName)
+        const child = group.children.find(obj => obj.name === childName)
+        return child.material
+    }
+
+    #hide(material) {
+        material.transparent = true
+        material.opacity = 0
+    }
+
+    createBoundingSphere(model) {
+
     }
 
     getSphere() {

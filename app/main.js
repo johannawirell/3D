@@ -137,8 +137,8 @@ class Main {
       this.dog.update(seconds)
     }
 
-    if (this.house) {
-      this.house.update(seconds)
+    if (this.plane) {
+      this.plane.update(seconds)
     }
 
     const playerPosition = this.player.getPosition()
