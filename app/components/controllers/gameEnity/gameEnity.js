@@ -100,9 +100,6 @@ export class GameEnity {
         for (const material of materialToHide) {
             this.#hide(material)
         }
-
-          
-        console.log(materialToHide)
     }
 
     #getMaterial(model, groupName, childName) {

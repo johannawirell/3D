@@ -21,7 +21,7 @@ export class House extends GameEnity {
 
         this.target.traverse((child) => {
             if (child.name.includes('Window')) {
-                // child.material = new THRsEE.ShaderMaterial(glassShader);
+                child.material = new THREE.ShaderMaterial(glassShader)
             }
         })
     }
@@ -32,14 +32,9 @@ export class House extends GameEnity {
 
    position(model) {
         if (model) {
-            for (const obj of model.children) {
-                obj.frustumCulled = false
-            }
-            model.frustumCulled = false
-
             model.rotation.set(0, 0, Math.PI, 1)
-            model.scale.set(2, 2, 2)
-            model.position.set(-20,2.2, -0)
+            // model.scale.set(2, 2, 2)
+            model.position.set(-20,1.1, -0)
         }
         return model
     }
