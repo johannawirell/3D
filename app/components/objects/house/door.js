@@ -48,7 +48,7 @@ export class Door extends GameEnity {
 
     position(model) {
         model.scale.set(2, 2, 2)
-        model.position.set(50, 0, 20)
+        model.position.set(50, 0, 19)
 
         return this.addTranparency(model)
     } 
