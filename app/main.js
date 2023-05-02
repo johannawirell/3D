@@ -6,11 +6,12 @@ import './css/index.css'
 import { LoadingManager } from './components/loader/loaderManager'
 import { PlayerController } from './components/controllers/player/playerController'
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
-import { Plane } from './components/objects/plane'
+import { Plane } from './components/objects/plane/plane'
 import { GameDescrition } from './components/html/gameDescription'
 import { ambientLight, directionaLight } from './components/objects/light'
 
 import { Outdoors } from './outdoors'
+import { Indoors } from './indoors'
 
 const FIELD_OF_VIEW = 60
 const ASPECT = window.innerWidth / window.innerHeight
@@ -31,7 +32,8 @@ export class Main {
     this.isMouseMoving = false
     this.event
     this.obstacles
-    this.isNearHorse = false
+    
+    this.entityManager = new YUKA.EntityManager()
 
     this.#createPlane()
     this.#loadAnimateModel()
@@ -93,7 +95,6 @@ export class Main {
       } 
 
       this.#RAF()
-
     })
   }
 
@@ -138,6 +139,14 @@ export class Main {
       target: this.player
     })
 
+    // this.indoors = new Indoors({
+    //   camera: this.camera,
+    //   scene: this.scene,
+    //   plane: this.plane,
+    //   player: this.player,
+    //   loading: this.loadingManager
+    // })
+
     this.outdoors = new Outdoors({
       camera: this.camera,
       scene: this.scene,
@@ -148,8 +157,13 @@ export class Main {
   }
 
   #createPlane() {
-    this.entityManager = new YUKA.EntityManager()
-    this.plane = new Plane(this.scene, this.loadingManager.loader, this.entityManager)
+    this.plane = new Plane({
+      scene: this.scene,
+      loadingManager: this.loadingManager.loader,
+      entityManager: this.entityManager,
+    })
+
+    this.plane.createOutdoorPlane()
   }
 
   #createRenderer() {

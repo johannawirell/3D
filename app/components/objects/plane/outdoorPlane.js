@@ -1,7 +1,5 @@
 import * as THREE from 'three'
-import { Forrest } from './nature/forrest'
-import { House } from './house/house'
-
+import { Forrest } from '../nature/forrest'
 const SKYBOX = [
     '../../img/skybox/posx.jpg',
     '../../img/skybox/negx.jpg',
@@ -17,29 +15,22 @@ const GRASS = {
     normalmap: '../../img/grass/grass-normalmap.png',
     roughness: '../../img/grass/grass-roughness.png',
     texture: '../../img/grass/grass-texture.png',
-
 }
 
-export class Plane {
-    radius = 100
-    constructor(scene, loadingManager, entityManager) {
-        this.scene = scene
-        this.loadingManager = loadingManager
+export class OutdoorPlane {
+    constructor(params) {
+        this.scene = params.scene
+        this.loadingManager = params.loadingManager
+        this.entityManager = params.entityManager
         this.textureLoader = new THREE.CubeTextureLoader(this.loadingManager)
-        this.entityManager = entityManager
-        
         this.#createPlane()
     }
 
-    get position () {
+    position() {
         return {
             x: this.plane.geometry.parameters.width / 4,
             z: this.plane.geometry.parameters.height / 4
         }
-    }
-
-    getHouse() {
-        return this.house
     }
 
     getObstacles() {
@@ -90,7 +81,7 @@ export class Plane {
         this.#position()
 
         this.#addTrees()
-        this.scene.add(this.plane)   
+        this.scene.add(this.plane)
     }
 
     #addTrees() {
@@ -106,4 +97,3 @@ export class Plane {
         this.plane.position.set(0, 0, 0)
     }
 }
-

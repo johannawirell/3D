@@ -8,6 +8,7 @@ export class Outdoors {
         this.plane = params.plane
         this.player = params.player
         this.entityManager = params.entityManager
+        this.isNearHorse = false
 
         this.loadAnimateModel()
     }
