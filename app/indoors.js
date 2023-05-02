@@ -1,4 +1,6 @@
-import * as THREE from 'three'
+
+import { ComputerDescription } from './components/html/computerDescription'
+
 export class Indoors {
      playComputer = false
      constructor(params) {
@@ -21,11 +23,23 @@ export class Indoors {
                this.computerPosition = await this.plane.getComputerPosition()
           } else if (!this.playComputer){
                if (this.#shouldShowComputer()) {
+                    this.computerDescription = new ComputerDescription({
+                         scene: this.scene,
+                         width: window.innerWidth,
+                         height: window.innerHeight,
+                         player: this.player
+                       })
                     console.log('play computer')
                     this.playComputer = true
                } 
           } else if (this.playComputer && !this.#shouldShowComputer()) {
                this.playComputer = false
+               this.computerDescription = null
+               console.log('stop')
+          }
+
+          if (this.computerDescription) {
+               this.computerDescription.update(this.camera)
           }
      }
      

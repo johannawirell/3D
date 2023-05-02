@@ -5,6 +5,7 @@ export class HTMLElement {
     constructor(params) {
         this.params = params
         this.scene = params.scene
+        this.CSS2DRenderer = new CSS2DRenderer()
         
         this.#createRenderer()
         this.#createDiv()
@@ -12,7 +13,7 @@ export class HTMLElement {
 
     #createRenderer() {
         const { width, height } = this.params
-        this.CSS2DRenderer = new CSS2DRenderer()
+       
         this.CSS2DRenderer.setSize(width, height)
         document.body.appendChild(this.CSS2DRenderer.domElement)
     }
