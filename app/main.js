@@ -102,9 +102,6 @@ export class Main {
     if (this.gameDescrition) {
       this.gameDescrition.update(this.camera)
     }
-    if (this.plane) {
-      this.plane.update(seconds)
-    }
     if (this.player) {
       this.player.update(seconds) 
     }
@@ -121,6 +118,9 @@ export class Main {
 
     if (this.outdoors) {
       this.outdoors.update(time)
+    }
+    if (this.indoors) {
+      this.indoors.update(time)
     }
   }
 

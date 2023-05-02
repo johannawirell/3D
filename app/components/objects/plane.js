@@ -90,7 +90,6 @@ export class Plane {
         this.#position()
 
         this.#addTrees()
-        this.#createHouse()
         this.scene.add(this.plane)   
     }
 
@@ -102,22 +101,9 @@ export class Plane {
         })     
     }
 
-    #createHouse () {
-        this.house = new House ({
-            scene: this.scene,
-            loadingManager: this.loadingManager,
-            entityManager: this.entityManager
-        })
-    }
-
     #position() {
         this.plane.rotation.x = - Math.PI / 2
         this.plane.position.set(0, 0, 0)
-
-    }
-
-    update(time) {
-        this.house.update(time)
     }
 }
 
