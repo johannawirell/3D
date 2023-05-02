@@ -29,7 +29,7 @@ export class GameDescrition extends HTMLElement {
 
     addContent() {
         const h1 = document.createElement('h1')
-        h1.textContent = 'Välkommen till Johanna Wirells CV spel'
+        h1.textContent = 'Välkommen till Johanna Wirells CV-spel'
 
         const descriptionDiv = document.createElement('div')
         descriptionDiv.classList.add('description')
@@ -57,15 +57,8 @@ export class GameDescrition extends HTMLElement {
         const p7 = document.createElement('p')
         p7.textContent = 'shift - Spring'
         keyDescription.appendChild(p7)
-        const p8 = document.createElement('p')
-        p8.textContent = 'space - hoppa'
-        keyDescription.appendChild(p8)
 
         descriptionDiv.appendChild(keyDescription)
-
-        const p9 = document.createElement('p')
-        p9.textContent = '... och akta dig för monstret!'
-        descriptionDiv.appendChild(p9)
 
         this.button = document.createElement('button')
         this.button.textContent = 'Starta'
