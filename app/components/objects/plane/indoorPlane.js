@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 import { Door } from '../house/door'
+import { Interior } from '../house/interior'
+
 const FLOOR = {
     img: '../../img/texture/floor.png',
 }
@@ -50,7 +52,7 @@ export class IndoorPlane {
     }
 
     #createFloor() {
-        const floorGeometry = new THREE.PlaneGeometry(window.innerWidth / 8, window.innerHeight / 4)
+        const floorGeometry = new THREE.PlaneGeometry(80, 100)
         const floorTexture = this.textureLoader.load(FLOOR.img)
         const floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture })
         this.plane = new THREE.Mesh(floorGeometry, floorMaterial)
@@ -82,7 +84,9 @@ export class IndoorPlane {
     }
 
     #loadContent() {
-        this.door = new Door({
+
+
+        this.interior = new Interior({
             entityManager: this.entityManager,
             camera: this.camera,
             scene: this.scene
