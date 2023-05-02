@@ -49,28 +49,31 @@ export class IndoorPlane {
 
     #createWalls() {
         const { width, height } = this.plane.geometry.parameters
-        
+
         const wallMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
         const wallHeight = height / 2
         const wallThickness = 0.1
+        
         const leftWallGeometry = new THREE.BoxGeometry(wallThickness, wallHeight, height)
         const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial)
         leftWall.position.set(-width / 2, wallHeight / 2, 0)
+        
         const rightWallGeometry = new THREE.BoxGeometry(wallThickness, wallHeight, height)
         const rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial)
         rightWall.position.set(width / 2, wallHeight / 2, 0)
+        
         const frontWallGeometry = new THREE.BoxGeometry(width, wallHeight, wallThickness)
         const frontWall = new THREE.Mesh(frontWallGeometry, wallMaterial)
         frontWall.position.set(0, wallHeight / 2, -height / 2)
+        
         const backWallGeometry = new THREE.BoxGeometry(width, wallHeight, wallThickness)
         const backWall = new THREE.Mesh(backWallGeometry, wallMaterial)
         backWall.position.set(0, wallHeight / 2, height / 2)
-
+        
         // add walls to scene
-        this.scene.add(leftWall)
-        this.scene.add(rightWall)
-        this.scene.add(frontWall)
-        this.scene.add(backWall)
+        const walls = [leftWall, rightWall, frontWall, backWall]
+        walls.forEach(wall => this.scene.add(wall))
+        
     }
 
     #loadContent() {
