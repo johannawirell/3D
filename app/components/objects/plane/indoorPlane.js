@@ -6,12 +6,14 @@ const FLOOR = {
 }
 
 export class IndoorPlane {
+    wallThickness = 0.1
     constructor(params) {
         this.scene = params.scene
         this.loadingManager = params.loadingManager
         this.entityManager = params.entityManager
-        this.textureLoader = new THREE.CubeTextureLoader(this.loadingManager)
+        this.textureLoader = new THREE.TextureLoader(this.loadingManager)
         this.gltfLoader = new GLTFLoader(this.loadingManager)
+        this.walls = []
         this.#createRoom()
     }
 
@@ -32,25 +34,43 @@ export class IndoorPlane {
 
     #createRoom() {
         this.#createFloor()
-        // this.#createWalls()
+        this.#createWalls()
         this.#position()
-        this.#loadContent()
+        // this.#loadContent()
     }
 
     #createFloor() {
         const floorGeometry = new THREE.PlaneGeometry(window.innerWidth / 8, window.innerHeight / 4)
-        const textureLoader = new THREE.TextureLoader()
-        const floorTexture = textureLoader.load(FLOOR.img)
+        const floorTexture = this.textureLoader.load(FLOOR.img)
         const floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture })
         this.plane = new THREE.Mesh(floorGeometry, floorMaterial)
         this.scene.add(this.plane)
     }
 
     #createWalls() {
-        const wallGeometry = new THREE.BoxGeometry(10, 10, 10)
-        const wallMaterial = new THREE.MeshBasicMaterial({color: 0xffffff})
-        this.walls = new THREE.Mesh(wallGeometry, wallMaterial)
-        this.scene.add(this.walls)
+        const { width, height } = this.plane.geometry.parameters
+        
+        const wallMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+        const wallHeight = height / 2
+        const wallThickness = 0.1
+        const leftWallGeometry = new THREE.BoxGeometry(wallThickness, wallHeight, height)
+        const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial)
+        leftWall.position.set(-width / 2, wallHeight / 2, 0)
+        const rightWallGeometry = new THREE.BoxGeometry(wallThickness, wallHeight, height)
+        const rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial)
+        rightWall.position.set(width / 2, wallHeight / 2, 0)
+        const frontWallGeometry = new THREE.BoxGeometry(width, wallHeight, wallThickness)
+        const frontWall = new THREE.Mesh(frontWallGeometry, wallMaterial)
+        frontWall.position.set(0, wallHeight / 2, -height / 2)
+        const backWallGeometry = new THREE.BoxGeometry(width, wallHeight, wallThickness)
+        const backWall = new THREE.Mesh(backWallGeometry, wallMaterial)
+        backWall.position.set(0, wallHeight / 2, height / 2)
+
+        // add walls to scene
+        this.scene.add(leftWall)
+        this.scene.add(rightWall)
+        this.scene.add(frontWall)
+        this.scene.add(backWall)
     }
 
     #loadContent() {
@@ -60,19 +80,5 @@ export class IndoorPlane {
     #position() {
         this.plane.rotation.x = - Math.PI / 2
         this.plane.position.set(0, 0, 0)
-
-
-        // this.walls.rotation.y =  Math.PI / 2
-        // this.walls.position.x = 5
-        // const wall2 = this.walls.clone()
-        // wall2.rotation.y = -Math.PI / 2
-        // wall2.position.x = -5
-        // const wall3 = this.walls.clone()
-        // wall3.rotation.y = Math.PI
-        // wall3.position.z = 5
-        // const wall4 = this.walls.clone()
-        // wall4.rotation.y = 0
-        // wall4.position.z = -5
-        // this.plane.position.y 
     }
 }
