@@ -11,10 +11,24 @@ export class Indoors {
 
 
      update(time) {
-          this.plane.update(time)
+          if (!this.doorPosition) {
+               this.doorPosition = this.plane.getDoorPosition()
+          } else {
+               const playerPosition = this.player.getPosition()
+               const distance = playerPosition.distanceTo(this.doorPosition)
+               // if (distance !== 0)
+                    // console.log(distance)
+               if (distance <= 61 && distance > 58) {
+                    console.log('open')
+                    this.plane.update(time)
+             }
+          }
+          
      }
 
-     shouldMoveOutdoors() {}
+     shouldMoveOutdoors() {
+
+     }
 
      moveOutdoors() {}
 }

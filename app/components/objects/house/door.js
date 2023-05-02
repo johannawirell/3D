@@ -15,6 +15,12 @@ export class Door extends GameEnity {
         this.target.name = 'door'
     }
 
+    getPosition() {
+        if (this.target) {
+            return this.target.position
+        }
+    }
+
     open() {
         const newAction = this.states.DoorAction
 
@@ -38,6 +44,8 @@ export class Door extends GameEnity {
     }
 
     position(model) {
+        model.scale.set(2, 2, 2)
+        model.position.set(50, 0, 20)
 
         return model
     } 

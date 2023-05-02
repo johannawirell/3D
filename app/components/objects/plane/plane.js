@@ -9,6 +9,12 @@ export class Plane {
         this.entityManager = params.entityManager
     }
 
+    getDoorPosition() {
+        if (this.door) {
+            return this.door.getPosition()
+        }
+    }
+
     createOutdoorPlane() {
         this.plane = new OutdoorPlane({
             scene: this.scene,
