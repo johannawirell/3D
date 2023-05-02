@@ -64,14 +64,13 @@ export class Outdoors {
       }
     
     #addObstaclesToPlayer() {
-    const obstacleSpheres = this.plane.getSpheres()
-    this.horseSphere = this.horse.getSphere()
-    this.dogSphere = this.dog.getSphere()
-    if (this.horseSphere && this.dogSphere) {
-    obstacleSpheres.push(this.horseSphere, this.dogSphere)
-    this.player.addObstacleSpheres(obstacleSpheres)
-    this.addedSpheres = true
-    
-    }
+        const obstacleSpheres = this.plane.getSpheres()
+        this.horseSphere = this.horse.getSphere()
+        this.dogSphere = this.dog.getSphere()
+        if (this.horseSphere && this.dogSphere) {
+            obstacleSpheres.push(this.horseSphere, this.dogSphere)
+            this.player.addObstacleSpheres(obstacleSpheres)
+            this.addedSpheres = true
+        }
     }   
-}
+}   

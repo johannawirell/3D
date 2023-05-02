@@ -90,7 +90,6 @@ export class Main {
         this.renderer.render(this.scene, this.camera)
         this.#update(time - this.previousRAF)
         this.previousRAF = time
-        this.outdoors.update(time)
       } 
 
       this.#RAF()
@@ -118,6 +117,10 @@ export class Main {
     }
     if (this.mixers) {
       this.mixers.map(m => m.update(seconds))
+    }
+
+    if (this.outdoors) {
+      this.outdoors.update(time)
     }
   }
 
