@@ -8,12 +8,12 @@ export class Indoors {
           this.loading = params.loading
           this.entityManager = params.entityManager
 
-          this.#createLight()
+          // this.#createLight()
      }
 
      #createLight() {
           const height = window.innerHeight / 4
-          const light = new THREE.PointLight(0xffffff, 1, 100)
+          const light = new THREE.PointLight(0xffffff, 0, 100)
           light.position.set(0, height, 0)
           light.castShadow = true
           light.shadow.mapSize.width = 2048

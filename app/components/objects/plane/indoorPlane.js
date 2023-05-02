@@ -53,45 +53,25 @@ export class IndoorPlane {
         const wallHeight = height / 2
         const wallThickness = 0.1
         
-        const leftWall = this.createWall(-width / 2, wallHeight / 2, 0, wallThickness, wallHeight, height)
-        const rightWall = this.createWall(width / 2, wallHeight / 2, 0, wallThickness, wallHeight, height)
-        const frontWall = this.createWall(0, wallHeight / 2, -height / 2, width, wallHeight, wallThickness)
-        const backWall = this.createWall(0, wallHeight / 2, height / 2, width, wallHeight, wallThickness)
+        const leftWall = this.createWall(-width / 2, wallHeight / 2, 0, wallThickness, wallHeight, height, 0xC7C6C5)
+        const rightWall = this.createWall(width / 2, wallHeight / 2, 0, wallThickness, wallHeight, height, 0x727272)
+        const frontWall = this.createWall(0, wallHeight / 2, -height / 2, width, wallHeight, wallThickness, 0x7A7474)
+        const backWall = this.createWall(0, wallHeight / 2, height / 2, width, wallHeight, wallThickness, 0xBDBDBD)
         
-        const shadowBoxes = this.createShadowBoxes(width, height, wallHeight)
+        // const shadowBoxes = this.createShadowBoxes(width, height, wallHeight)
         
         const walls = [leftWall, rightWall, frontWall, backWall]
         walls.forEach(wall => this.scene.add(wall))
-        shadowBoxes.forEach(box => this.scene.add(box))
+        // shadowBoxes.forEach(box => this.scene.add(box))
     }
         
-    createWall(x, y, z, width, height, depth) {
-        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff })
+    createWall(x, y, z, width, height, depth, color) {
+        const wallMaterial = new THREE.MeshStandardMaterial({ color: color })
         const wallGeometry = new THREE.BoxGeometry(width, height, depth)
         const wall = new THREE.Mesh(wallGeometry, wallMaterial)
         wall.position.set(x, y, z)
         wall.castShadow = true
         return wall
-    }
-        
-    createShadowBoxes(width, height, wallHeight) {
-        const boxSize = 0.05
-        const shadowBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.3, transparent: true })
-        const shadowBoxGeometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize)
-        
-        const shadowBoxes = [
-            this.createShadowBox(-width / 2 + boxSize / 2, wallHeight - boxSize / 2, -height / 2 + boxSize / 2, shadowBoxGeometry, shadowBoxMaterial),
-            this.createShadowBox(-width / 2 + boxSize / 2, wallHeight - boxSize / 2, height / 2 - boxSize / 2, shadowBoxGeometry, shadowBoxMaterial),
-            this.createShadowBox(width / 2 - boxSize / 2, wallHeight - boxSize / 2, -height / 2 + boxSize / 2, shadowBoxGeometry, shadowBoxMaterial),
-            this.createShadowBox(width / 2 - boxSize / 2, wallHeight - boxSize / 2, height / 2 - boxSize / 2, shadowBoxGeometry, shadowBoxMaterial),
-        ]
-        return shadowBoxes
-    }
-        
-    createShadowBox(x, y, z, geometry, material) {
-        const shadowBox = new THREE.Mesh(geometry, material)
-        shadowBox.position.set(x, y, z)
-        return shadowBox
     }
 
     #loadContent() {
