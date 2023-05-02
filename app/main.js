@@ -164,6 +164,7 @@ export class Main {
     })
 
     this.plane.createIndoorPlane()
+    // this.plane.createOutdoorPlane()
   }
 
   #createRenderer() {
