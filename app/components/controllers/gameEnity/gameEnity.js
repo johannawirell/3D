@@ -97,7 +97,7 @@ export class GameEnity {
         }
         const sphereGeometry = new THREE.SphereGeometry(radius, 32, 32)
 
-        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: true, wireframe: true } )
+        const sphereMaterial = new THREE.MeshBasicMaterial( { visible: false, wireframe: true } )
 
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
         sphere.name = model.name

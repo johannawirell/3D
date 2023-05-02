@@ -6,11 +6,11 @@ import './css/index.css'
 import { LoadingManager } from './components/loader/loaderManager'
 import { PlayerController } from './components/controllers/player/playerController'
 import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCamera'
-import { HorseController } from './components/controllers/horse/horseController'
 import { Plane } from './components/objects/plane'
 import { GameDescrition } from './components/html/gameDescription'
 import { ambientLight, directionaLight } from './components/objects/light'
-import { DogController } from './components/controllers/dog/dogController'
+
+import { Outdoors } from './outdoors'
 
 const FIELD_OF_VIEW = 60
 const ASPECT = window.innerWidth / window.innerHeight
@@ -20,7 +20,7 @@ const CAMERA_POSITION_X = 25
 const CAMERA_POSITION_Y = 10
 const CAMERA_POSITION_Z = 25
 
-class Main {
+export class Main {
   constructor() {
     this.renderer = this.#createRenderer()
     this.camera = this.#createPerspectiveCamera()
@@ -90,12 +90,7 @@ class Main {
         this.renderer.render(this.scene, this.camera)
         this.#update(time - this.previousRAF)
         this.previousRAF = time
-        if (!this.obstacles) {
-         this.#addObstaclesToHorse()
-        }
-        if (!this.addedSpheres) {
-          this.#addObstaclesToPlayer()
-        }
+        this.outdoors.update(time)
       } 
 
       this.#RAF()
@@ -103,57 +98,17 @@ class Main {
     })
   }
 
-  #addObstaclesToHorse() {
-    this.obstacles = this.plane.getObstacles()
-    this.horse.addObstacles(this.obstacles)
-  }
-
-  #addObstaclesToPlayer() {
-      const obstacleSpheres = this.plane.getSpheres()
-      this.horseSphere = this.horse.getSphere()
-      this.dogSphere = this.dog.getSphere()
-      if (this.horseSphere && this.dogSphere) {
-        obstacleSpheres.push(this.horseSphere, this.dogSphere)
-        this.player.addObstacleSpheres(obstacleSpheres)
-        this.addedSpheres = true
-        
-      }
-  }
-
   #update(time) {
     const seconds = time * 0.001
-    if (this.mixers) {
-      this.mixers.map(m => m.update(seconds))
+    if (this.gameDescrition) {
+      this.gameDescrition.update(this.camera)
+    }
+    if (this.plane) {
+      this.plane.update(seconds)
     }
     if (this.player) {
       this.player.update(seconds) 
     }
-
-    if (this.horse) {
-      this.horse.update(seconds)
-    }
-
-    if (this.dog) {
-      this.dog.update(seconds)
-    }
-
-    if (this.plane) {
-      this.plane.update(seconds)
-    }
-
-    const playerPosition = this.player.getPosition()
-    const horsePosition = this.horse.getPosition()
-    if (playerPosition.distanceTo(horsePosition) < 50) {
-      if (!this.isNearHorse) {
-        console.log('is near horse')
-      }
-
-      this.isNearHorse = true
-
-    } else if (this.isNearHorse) {
-      this.isNearHorse = false
-    }
-
     if (this.thirdPersonCamera) {
       if (this.isMouseMoving) {
         this.thirdPersonCamera.mouseMove(this.event)
@@ -161,9 +116,8 @@ class Main {
         this.thirdPersonCamera.update(seconds)
       }
     }
-
-    if (this.gameDescrition) {
-      this.gameDescrition.update(this.camera)
+    if (this.mixers) {
+      this.mixers.map(m => m.update(seconds))
     }
   }
 
@@ -175,19 +129,18 @@ class Main {
       entityManager: this.entityManager,
       move: false
     })
-    this.horse = new HorseController({
-      camera: this.camera, 
-      scene: this.scene,
-      entityManager: this.entityManager
-    })
-    this.dog = new DogController({
-      camera: this.camera,
-      scene: this.scene,
-      entityManager: this.entityManager
-    })
+   
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,
       target: this.player
+    })
+
+    this.outdoors = new Outdoors({
+      camera: this.camera,
+      scene: this.scene,
+      plane: this.plane,
+      player: this.player,
+      entityManager: this.entityManager,
     })
   }
 
