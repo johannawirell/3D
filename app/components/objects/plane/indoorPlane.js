@@ -9,14 +9,13 @@ const RESOURCES = {
 
 
 export class IndoorPlane {
-    wallThickness = 0.1
+    wallThickness = 50
     constructor(params) {
         this.scene = params.scene
         this.loadingManager = params.loadingManager
         this.entityManager = params.entityManager
         this.textureLoader = new THREE.TextureLoader(this.loadingManager)
         this.walls = []
-        this.obstacles = []
         this.#createRoom()
     }
 
@@ -27,8 +26,12 @@ export class IndoorPlane {
         }
     }
 
-    getDoor() {
-        return this.door
+    getDoorPosition() {
+        // return this.door.position
+    }
+
+    getComputerPosition() {
+        return this.interior.getComputerPosition()
     }
 
     update(time) {
@@ -90,7 +93,12 @@ export class IndoorPlane {
         return wall
     }
 
-    #loadContent() {
+    async #loadContent() {
+        // this.door = new Door({
+        //     entityManager: this.entityManager,
+        //     camera: this.camera,
+        //     scene: this.scene
+        // })
 
 
         this.interior = new Interior({
@@ -98,9 +106,6 @@ export class IndoorPlane {
             camera: this.camera,
             scene: this.scene
         })
-
-        this.obstacles.push(this.door)
-        
     }
 
     #position() {

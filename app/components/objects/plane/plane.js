@@ -9,12 +9,6 @@ export class Plane {
         this.entityManager = params.entityManager
     }
 
-    getDoorPosition() {
-        if (this.door) {
-            return this.door.getPosition()
-        }
-    }
-
     createOutdoorPlane() {
         this.plane = new OutdoorPlane({
             scene: this.scene,
@@ -29,18 +23,14 @@ export class Plane {
             loadingManager: this.loadingManager,
             entityManager: this.entityManager
         })
+    }
 
-        this.door = this.plane.getDoor()
+    getComputerPosition() {
+        return this.plane.getComputerPosition()
     }
 
     get position () {
         return this.plane.position()
-    }
-
-    update(time, shouldOpen) {
-        if (this.door) {
-            this.door.update(time, shouldOpen)
-        }        
     }
 
     getObstacles() {

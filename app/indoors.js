@@ -10,7 +10,21 @@ export class Indoors {
      }
 
 
-     update(time) {
+     async update(time) {
+          this.playerPosition = this.player.getPosition()
+          // if (!this.doorPosition) {
+          //      this.doorPosition = this.plane.getDoorPosition()
+          // } 
+
+          if (!this.computerPosition) {
+               this.computerPosition = await this.plane.getComputerPosition()
+          }
+
+     }
+
+
+
+     #updateDoor() {
           if (!this.doorPosition) {
                this.doorPosition = this.plane.getDoorPosition()
           } else {
@@ -24,7 +38,6 @@ export class Indoors {
                }
           }
           this.plane.update(time, this.shouldOpen)
-          
      }
 
      shouldMoveOutdoors() {
