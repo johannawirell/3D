@@ -34,13 +34,13 @@ export class Forrest extends GameEnity {
     this.#loadForrest()
   }
 
-   getObstacles () {
-      return this.obstacles
-    }
+  getObstacles () {
+    return this.obstacles
+  }
 
-    getSpheres() {
-      return this.spheres
-    }
+  getSpheres() {
+    return this.spheres
+  }
 
   #loadForrest() {
     const windowWidth = window.innerWidth

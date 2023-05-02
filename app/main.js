@@ -139,21 +139,21 @@ export class Main {
       target: this.player
     })
 
-    // this.indoors = new Indoors({
-    //   camera: this.camera,
-    //   scene: this.scene,
-    //   plane: this.plane,
-    //   player: this.player,
-    //   loading: this.loadingManager
-    // })
-
-    this.outdoors = new Outdoors({
+    this.indoors = new Indoors({
       camera: this.camera,
       scene: this.scene,
       plane: this.plane,
       player: this.player,
-      entityManager: this.entityManager,
+      loading: this.loadingManager
     })
+
+    // this.outdoors = new Outdoors({
+    //   camera: this.camera,
+    //   scene: this.scene,
+    //   plane: this.plane,
+    //   player: this.player,
+    //   entityManager: this.entityManager,
+    // })
   }
 
   #createPlane() {
@@ -163,7 +163,7 @@ export class Main {
       entityManager: this.entityManager,
     })
 
-    this.plane.createOutdoorPlane()
+    this.plane.createIndoorPlane()
   }
 
   #createRenderer() {
