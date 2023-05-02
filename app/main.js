@@ -116,12 +116,8 @@ export class Main {
     if (this.mixers) {
       this.mixers.map(m => m.update(seconds))
     }
-
-    if (this.outdoors) {
-      this.outdoors.update(time)
-    }
     if (this.indoors) {
-      this.indoors.update(time)
+      this.indoors.update(seconds)
     }
   }
 
@@ -146,6 +142,7 @@ export class Main {
       player: this.player,
       loading: this.loadingManager
     })
+
 
     // this.outdoors = new Outdoors({
     //   camera: this.camera,

@@ -23,10 +23,24 @@ export class Plane {
             loadingManager: this.loadingManager,
             entityManager: this.entityManager
         })
+
+        this.door = this.plane.getDoor()
     }
 
     get position () {
         return this.plane.position()
+    }
+
+    update(time) {
+        if (this.door) {
+            this.door.update(time)
+        }
+
+        // if (this.mixer) {
+        //     console.log('eh')
+        //     this.mixer.update(time)
+        // }
+        
     }
 
     getObstacles() {

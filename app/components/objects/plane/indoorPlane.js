@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-
+import { Door } from '../house/door'
 const FLOOR = {
     img: '../../img/texture/floor.png',
 }
+
 
 export class IndoorPlane {
     wallThickness = 0.1
@@ -12,8 +12,8 @@ export class IndoorPlane {
         this.loadingManager = params.loadingManager
         this.entityManager = params.entityManager
         this.textureLoader = new THREE.TextureLoader(this.loadingManager)
-        this.gltfLoader = new GLTFLoader(this.loadingManager)
         this.walls = []
+        this.obstacles = []
         this.#createRoom()
     }
 
@@ -24,19 +24,29 @@ export class IndoorPlane {
         }
     }
 
+    getDoor() {
+        return this.door
+    }
+
     getObstacles() {
-        // return this.forrest.getObstacles()
+        return this.obstacles
     }
 
     getSpheres() {
         // return this.forrest.getSpheres()
     }
 
+    update(time) {
+        if (this.door) {
+            this.door.update(time)
+        }
+    }
+
     #createRoom() {
         this.#createFloor()
         this.#createWalls()
         this.#position()
-        // this.#loadContent()
+        this.#loadContent()
     }
 
     #createFloor() {
@@ -58,11 +68,8 @@ export class IndoorPlane {
         const frontWall = this.createWall(0, wallHeight / 2, -height / 2, width, wallHeight, wallThickness, 0x7A7474)
         const backWall = this.createWall(0, wallHeight / 2, height / 2, width, wallHeight, wallThickness, 0xBDBDBD)
         
-        // const shadowBoxes = this.createShadowBoxes(width, height, wallHeight)
-        
         const walls = [leftWall, rightWall, frontWall, backWall]
         walls.forEach(wall => this.scene.add(wall))
-        // shadowBoxes.forEach(box => this.scene.add(box))
     }
         
     createWall(x, y, z, width, height, depth, color) {
@@ -75,7 +82,14 @@ export class IndoorPlane {
     }
 
     #loadContent() {
-        this.gltfLoader.load('', gltf => {})
+        this.door = new Door({
+            entityManager: this.entityManager,
+            camera: this.camera,
+            scene: this.scene
+        })
+
+        this.obstacles.push(this.door)
+        
     }
 
     #position() {
