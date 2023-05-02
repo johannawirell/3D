@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 export class Indoors {
+     playComputer = false
      constructor(params) {
           this.scene = params.scene
           this.camera = params.camera
@@ -18,26 +19,18 @@ export class Indoors {
 
           if (!this.computerPosition) {
                this.computerPosition = await this.plane.getComputerPosition()
+          } else if (!this.playComputer){
+               if (this.#shouldShowComputer()) {
+                    console.log('play computer')
+                    this.playComputer = true
+               } 
+          } else if (this.playComputer && !this.#shouldShowComputer()) {
+               this.playComputer = false
           }
-
      }
-
-
-
-     #updateDoor() {
-          if (!this.doorPosition) {
-               this.doorPosition = this.plane.getDoorPosition()
-          } else {
-               const playerPosition = this.player.getPosition()
-               const distance = playerPosition.distanceTo(this.doorPosition)
-               // console.log(distance)
-               if (distance <= 61 && distance > 55) {
-                    this.shouldOpen = true
-               } else {
-                    this.shouldOpen = false
-               }
-          }
-          this.plane.update(time, this.shouldOpen)
+     
+     #shouldShowComputer() {
+          return this.playerPosition.distanceTo(this.computerPosition) <= 11
      }
 
      shouldMoveOutdoors() {
