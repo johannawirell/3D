@@ -127,8 +127,11 @@ export class Main {
       scene: this.scene,
       planePosition: this.plane.position,
       entityManager: this.entityManager,
-      move: false
+      move: false,
+      isIndoors: true
     })
+
+    this.player.setIndoors()
    
     this.thirdPersonCamera = new ThirdPersonCamera({
       camera: this.camera,

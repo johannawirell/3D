@@ -31,14 +31,6 @@ export class IndoorPlane {
         return this.door
     }
 
-    getObstacles() {
-        return this.obstacles
-    }
-
-    getSpheres() {
-        // return this.forrest.getSpheres()
-    }
-
     update(time) {
         if (this.door) {
             this.door.update(time)
@@ -71,8 +63,6 @@ export class IndoorPlane {
         planeMesh.position.set(0, 0.1, 0)
         planeMesh.rotation.x = -Math.PI / 2
 
-
-        // Lägg till mattan till scenen
         this.scene.add(planeMesh)
     }
 
@@ -80,7 +70,7 @@ export class IndoorPlane {
         const { width, height } = this.plane.geometry.parameters
         
         const wallHeight = height / 2
-        const wallThickness = 0.1
+        const wallThickness = 5
         
         const leftWall = this.createWall(-width / 2, wallHeight / 2, 0, wallThickness, wallHeight, height, 0xC7C6C5)
         const rightWall = this.createWall(width / 2, wallHeight / 2, 0, wallThickness, wallHeight, height, 0x727272)

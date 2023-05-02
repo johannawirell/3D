@@ -6,19 +6,30 @@ const PATH_TO_PLAYER = '../../models/Soldier.glb'
 const PLAYER_SCALE_VECTOR = new THREE.Vector3(5, 5, 5)
 const COLLISION_TREE= 10
 const COLLISION_ROCK= 15
+const INDOOR_EDGE = 10
 
 export class PlayerController extends GameEnity {
     deceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
     acceleration = new THREE.Vector3(1, 0.25, 20.0)
     velocity = new THREE.Vector3(0, 0, 0)
     currentPosition = new THREE.Vector3()
+    indoors = true
 
     constructor(params) {
         super(params)
         this.planePosition = params.planePosition
-        this.inputController = new InputController()      
+        this.inputController = new InputController()
+        
     
         this.#loadPlayer()
+    }
+
+    setIndoors() {
+        this.indoors = true
+    }
+
+    setOutdoors() {
+        this.indoors = false
     }
 
     async #loadPlayer() {
@@ -136,21 +147,27 @@ export class PlayerController extends GameEnity {
     }
 
     #handleOverEdge(controlObject, velocity) {
+        let ofsett 
+        if (this.indoors) {
+            ofsett = INDOOR_EDGE
+        } else {
+            ofsett = 0
+        }
         if (this.#isOverNegativeX()) {
             velocity.x *= -1
-            controlObject.position.x = (this.planePosition.x) * -1
+            controlObject.position.x = (this.planePosition.x + ofsett) * -1 
         } 
         if (this.#isOverPositiveX()) {
             velocity.x *= -1
-            controlObject.position.x = this.planePosition.x
+            controlObject.position.x = this.planePosition.x + ofsett
         } 
         if (this.#isOverNegativeZ()) {
             velocity.z *= -1
-            controlObject.position.z = (this.planePosition.z) * -1
+            controlObject.position.z = (this.planePosition.z + ofsett) * -1 
         } 
         if (this.#isOverPositiveZ()) {
             velocity.z *= -1
-            controlObject.position.z = this.planePosition.z
+            controlObject.position.z = this.planePosition.z + ofsett
         }    
         
         this.currentPosition.copy(controlObject.position)
@@ -158,20 +175,32 @@ export class PlayerController extends GameEnity {
     }
 
     #isOverNegativeZ() {
-        return this.currentPosition.z < (this.planePosition.z) * -1
+        if (!this.indoors) {
+            return this.currentPosition.z < (this.planePosition.z) * -1
+        }
+        return this.currentPosition.z + INDOOR_EDGE < (this.planePosition.z) * -1
     }
 
     #isOverPositiveZ() {
-        return this.currentPosition.z > this.planePosition.z
+        if (!this.indoors) {
+            return this.currentPosition.z > this.planePosition.z    
+        }
+        return this.currentPosition.z > this.planePosition.z + INDOOR_EDGE
     }
 
     #isOverNegativeX() {
-        return this.currentPosition.x < (this.planePosition.x) * -1
+        if (!this.indoors) {
+            return this.currentPosition.x < (this.planePosition.x) * -1
+        } 
+        return this.currentPosition.x + INDOOR_EDGE < (this.planePosition.x) * -1
 
     }
 
     #isOverPositiveX() {
-        return this.currentPosition.x > this.planePosition.x
+        if (!this.indoors) {
+            return this.currentPosition.x > this.planePosition.x
+        }
+        return this.currentPosition.x > this.planePosition.x + INDOOR_EDGE
     }
 
     #isColliding() {
