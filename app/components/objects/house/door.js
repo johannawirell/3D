@@ -36,10 +36,13 @@ export class Door extends GameEnity {
     }
 
 
-    update(time) {
+    update(time, shouldOpen) {
         if (this.mixer) {
-            this.open()
             this.mixer.update(time)
+        }
+
+        if (shouldOpen) {
+            this.open()
         }
     }
 
@@ -47,8 +50,30 @@ export class Door extends GameEnity {
         model.scale.set(2, 2, 2)
         model.position.set(50, 0, 20)
 
-        return model
+        return this.addTranparency(model)
     } 
+
+    addTranparency(model) {
+        const materialToHide = []
+        materialToHide.push(this.#getMaterial(model, 'Door_Group', 'CTRL_Hole'))
+
+        for (const material of materialToHide) {
+            this.#hide(material)
+        }
+
+        return model
+    }
+
+    #getMaterial(model, groupName, childName) {
+        const group = model.children.find(obj => obj.name === groupName)
+        const child = group.children.find(obj => obj.name === childName)
+        return child.material
+    }
+
+    #hide(material) {
+        material.transparent = true
+        material.opacity = 0
+    }
 
 
 }

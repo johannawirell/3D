@@ -37,16 +37,10 @@ export class Plane {
         return this.plane.position()
     }
 
-    update(time) {
+    update(time, shouldOpen) {
         if (this.door) {
-            this.door.update(time)
-        }
-
-        // if (this.mixer) {
-        //     console.log('eh')
-        //     this.mixer.update(time)
-        // }
-        
+            this.door.update(time, shouldOpen)
+        }        
     }
 
     getObstacles() {

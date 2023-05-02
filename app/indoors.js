@@ -16,13 +16,13 @@ export class Indoors {
           } else {
                const playerPosition = this.player.getPosition()
                const distance = playerPosition.distanceTo(this.doorPosition)
-               // if (distance !== 0)
-                    // console.log(distance)
                if (distance <= 61 && distance > 58) {
-                    console.log('open')
-                    this.plane.update(time)
-             }
+                    this.shouldOpen = true
+               } else {
+                    this.shouldOpen = false
+               }
           }
+          this.plane.update(time, this.shouldOpen)
           
      }
 
