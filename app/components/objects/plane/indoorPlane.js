@@ -2,8 +2,9 @@ import * as THREE from 'three'
 import { Door } from '../house/door'
 import { Interior } from '../house/interior'
 
-const FLOOR = {
-    img: '../../img/texture/floor.png',
+const RESOURCES = {
+    floor: '../../img/texture/floor.png',
+    carpet: '../../img/texture/carpet.png'
 }
 
 
@@ -46,6 +47,7 @@ export class IndoorPlane {
 
     #createRoom() {
         this.#createFloor()
+        this.#createCarpet()
         this.#createWalls()
         this.#position()
         this.#loadContent()
@@ -53,10 +55,25 @@ export class IndoorPlane {
 
     #createFloor() {
         const floorGeometry = new THREE.PlaneGeometry(80, 100)
-        const floorTexture = this.textureLoader.load(FLOOR.img)
+        const floorTexture = this.textureLoader.load(RESOURCES.floor)
         const floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture })
         this.plane = new THREE.Mesh(floorGeometry, floorMaterial)
         this.scene.add(this.plane)
+    }
+
+    #createCarpet() {
+        const planeGeometry = new THREE.PlaneGeometry(50, 50)
+        const textureLoader = new THREE.TextureLoader(this.loadingManager)
+        const texture = textureLoader.load(RESOURCES.carpet)
+        const material = new THREE.MeshBasicMaterial({ map: texture })
+        const planeMesh = new THREE.Mesh(planeGeometry, material)
+
+        planeMesh.position.set(0, 0.1, 0)
+        planeMesh.rotation.x = -Math.PI / 2
+
+
+        // Lägg till mattan till scenen
+        this.scene.add(planeMesh)
     }
 
     #createWalls() {
