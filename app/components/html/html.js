@@ -8,7 +8,7 @@ export class HTMLElement {
         this.CSS2DRenderer = new CSS2DRenderer()
         
         this.#createRenderer()
-        this.#createDiv()
+        this.createDiv()
     }
 
     #createRenderer() {
@@ -18,14 +18,14 @@ export class HTMLElement {
         document.body.appendChild(this.CSS2DRenderer.domElement)
     }
 
-    #createDiv() {
+    createDiv() {
         this.div = document.createElement('div')
 
         this.addContent()
 
-        const object = new CSS2DObject(this.div)
+        this.object = new CSS2DObject(this.div)
         this.div.autofocus = true
-        this.scene.add(object)
+        this.scene.add(this.object)
     }
 
     update(camera) {

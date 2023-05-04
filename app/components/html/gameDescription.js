@@ -4,7 +4,7 @@ export class GameDescrition extends HTMLElement {
     constructor(params) {
         super(params)
         this.handler
-        this.#updateDiv()
+        this.updateDiv()
     }
 
     handleStart(handler) {
@@ -19,7 +19,7 @@ export class GameDescrition extends HTMLElement {
         this.handler = null
     }
 
-    #updateDiv() {
+    updateDiv() {
         this.div.classList.add('game-description-container')
     }
 

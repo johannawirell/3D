@@ -23,18 +23,22 @@ export class Indoors {
                this.computerPosition = await this.plane.getComputerPosition()
           } else if (!this.playComputer){
                if (this.#shouldShowComputer()) {
-                    this.computerDescription = new ComputerDescription({
-                         scene: this.scene,
-                         width: window.innerWidth,
-                         height: window.innerHeight,
-                         player: this.player
-                       })
-                    this.playComputer = true
-                    console.log('show')
+                    if (!this.computerDescription) {
+                         this.computerDescription = new ComputerDescription({
+                              scene: this.scene,
+                              width: window.innerWidth,
+                              height: window.innerHeight,
+                              player: this.player
+                            })
+                    } else {
+                         this.computerDescription.show()
+                    }
+                   
+                       this.playComputer = true
                } 
           } else if (this.playComputer && !this.#shouldShowComputer()) {
                this.playComputer = false
-               this.computerDescription = null
+               this.computerDescription.hide()
           }
 
           if (this.computerDescription) {

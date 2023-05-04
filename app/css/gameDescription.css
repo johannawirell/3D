@@ -61,3 +61,6 @@
   background-color: rgba(6, 22, 88, 0.8);
 }
 
+.hidden {
+  display: none;
+}
