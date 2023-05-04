@@ -30,15 +30,11 @@ export class BackgroundMusic {
         this.backgroundSound = new THREE.Audio(this.listener)
 
         this.audioLoader.load(PATH_TO_AUDIO, buffer => {
-            console.log(buffer)
             this.backgroundSound.setBuffer(buffer)
             this.backgroundSound.setLoop(true),
             this.backgroundSound.setVolume(0.4)
             this.isDone = true
             console.log('done loading audio')
-        })
-
-       
-       
+        })       
     }
 }
