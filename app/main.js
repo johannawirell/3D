@@ -88,11 +88,11 @@ export class Main {
         this.previousRAF = time
       }
 
-      if (this.loadingManager.isDoneLoading) {
-        this.renderer.render(this.scene, this.camera)
-        this.#update(time - this.previousRAF)
-        this.previousRAF = time
-      } 
+      // if (this.loadingManager.isDoneLoading) {
+      //   this.renderer.render(this.scene, this.camera)
+      //   this.#update(time - this.previousRAF)
+      //   this.previousRAF = time
+      // } 
 
       this.#RAF()
     })
@@ -127,7 +127,6 @@ export class Main {
       scene: this.scene,
       planePosition: this.plane.position,
       entityManager: this.entityManager,
-      // loadingManager: this.loadingManager,
       move: false,
       isIndoors: true
     })

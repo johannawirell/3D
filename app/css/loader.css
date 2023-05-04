@@ -6,6 +6,10 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    font-size: 1rem;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
   }
   
   #loading-bar {
@@ -13,9 +17,3 @@
     height: 2%;
   }
 
-  label {
-    font-size: 1rem;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    text-align: center;
-  }

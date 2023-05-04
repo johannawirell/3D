@@ -33,7 +33,7 @@ export class LoadingManager {
     }
 
     #hide() {
-        this.container.style.display = 'none'
+        // this.container.style.display = 'none'
     }
 
     #addContent() {
@@ -50,6 +50,10 @@ export class LoadingManager {
         this.progressBar.setAttribute('value', '0')
         this.progressBar.setAttribute('max', '100')
         this.container.appendChild(this.progressBar)
+
+        const p = document.createElement('p')
+        p.textContent = 'Det kan ta ett tag att ladda första gången du startar spelet...'
+        this.container.appendChild(p)
 
         document.body.appendChild(this.container)
     }
