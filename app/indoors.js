@@ -17,7 +17,8 @@ export class Indoors {
      async update(time) {
           if (!this.addedSpheres) {
                this.#addObstaclesToPlayer()
-             }
+          }
+          this.plane.update(time)
           this.playerPosition = this.player.getPosition()
           // if (!this.doorPosition) {
           //      this.doorPosition = this.plane.getDoorPosition()

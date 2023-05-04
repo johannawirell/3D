@@ -13,6 +13,8 @@ export class Door extends GameEnity {
     async #loadDoor() {
         await this.loadGLTF(PATH_TO_DOOR)
         this.target.name = 'door'
+        this.open = this.animationsMap.get('DoorAction.001')
+        this.open.play()
     }
 
     getPosition() {
@@ -41,14 +43,14 @@ export class Door extends GameEnity {
             this.mixer.update(time)
         }
 
-        if (shouldOpen) {
-            this.open()
-        }
+        // if (shouldOpen) {
+        //     this.open()
+        // }
     }
 
     position(model) {
-        model.scale.set(2, 2, 2)
-        model.position.set(50, 0, 19)
+        model.scale.set(5, 5, 5)
+
 
         return this.addTranparency(model)
     } 

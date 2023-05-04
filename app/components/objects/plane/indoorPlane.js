@@ -98,11 +98,12 @@ export class IndoorPlane {
     }
 
     async #loadContent() {
-        // this.door = new Door({
-        //     entityManager: this.entityManager,
-        //     camera: this.camera,
-        //     scene: this.scene
-        // })
+        this.door = new Door({
+            entityManager: this.entityManager,
+            loadingManager: this.loadingManager,
+            camera: this.camera,
+            scene: this.scene
+        })
 
 
         this.interior = new Interior({

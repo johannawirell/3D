@@ -40,5 +40,9 @@ export class Plane {
     getSpheres() {
         return this.plane.getSpheres()
     }
+
+    update(time) {
+        this.plane.update(time)
+    }
 }
 
