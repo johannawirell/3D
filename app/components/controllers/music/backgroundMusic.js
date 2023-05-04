@@ -8,7 +8,10 @@ export class BackgroundMusic {
         this.#loadAudio()
 
          window.addEventListener('click', () => {
-            this.backgroundSound.play()
+            if (this.isDone) {
+                this.backgroundSound.play()
+            }
+            
         })
     }
 
@@ -31,6 +34,7 @@ export class BackgroundMusic {
             this.backgroundSound.setBuffer(buffer)
             this.backgroundSound.setLoop(true),
             this.backgroundSound.setVolume(0.4)
+            this.isDone = true
             console.log('done loading audio')
         })
 
