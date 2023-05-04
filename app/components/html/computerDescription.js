@@ -32,11 +32,21 @@ export class ComputerDescription extends HTMLElement {
 
     update(camera) {
         this.CSS2DRenderer.render(this.scene, camera)
-        this.div.style.transform = `translate(0%, 0%)`
+      
+        // Hämta spelarens position och rotation
+        const playerPosition = this.player.target.position
+        const playerRotation = this.player.target.rotation.y
+        // Skapa en vektor som pekar framåt från spelarens position
+        const forward = new THREE.Vector3(0, 0, -1)
+        forward.applyEuler(new THREE.Euler(0, playerRotation, 0))
+        const position = playerPosition.clone().add(forward.multiplyScalar(2))
+      
+        // Positionera rutan vid vektorn som pekar framåt från spelaren
+        this.div.style.transform = `translate(${position.x}px, ${position.y}px)`
         this.div.style.top = '0'
-        this.div.style.left = ' 0'
-
-    }
+        this.div.style.left = '0'
+      }
+      
 
 
 }

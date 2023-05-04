@@ -29,13 +29,12 @@ export class Indoors {
                          height: window.innerHeight,
                          player: this.player
                        })
-                    console.log('play computer')
                     this.playComputer = true
+                    console.log('show')
                } 
           } else if (this.playComputer && !this.#shouldShowComputer()) {
                this.playComputer = false
                this.computerDescription = null
-               console.log('stop')
           }
 
           if (this.computerDescription) {
