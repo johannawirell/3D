@@ -5,7 +5,6 @@ export class ComputerDescription extends HTMLElement {
     constructor(params) {
         super(params)
         this.player = params.player
-        this.handler
     }
 
 
