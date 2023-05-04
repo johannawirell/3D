@@ -9,6 +9,7 @@ import { ThirdPersonCamera } from './components/controllers/player/thirdPersonCa
 import { Plane } from './components/objects/plane/plane'
 import { GameDescrition } from './components/html/gameDescription'
 import { ambientLight, directionaLight } from './components/objects/light'
+import { BackgroundMusic } from './components/controllers/music/backgroundMusic'
 
 import { Outdoors } from './outdoors'
 import { Indoors } from './indoors'
@@ -32,14 +33,20 @@ export class Main {
     this.isMouseMoving = false
     this.event
     this.obstacles
-    
     this.entityManager = new YUKA.EntityManager()
-
+    
+    this.#createAudio()
     this.#createPlane()
     this.#loadAnimateModel()
     this.#addEventListeners()
     this.#RAF()
     this.#createGameDescription()
+  }
+
+  #createAudio() {
+    this.backgroundMusic =  new BackgroundMusic({
+      camera: this.camera
+    })
   }
 
   #addEventListeners() {
