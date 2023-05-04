@@ -10,12 +10,38 @@ export class ComputerDescription extends HTMLElement {
 
 
     addContent() {
+        const skills = [
+            'Programmeringsspråk: JavaScript, HTML, CSS, Java, C++, Python',
+            'Ramverk och bibliotek: React, Express.js, Angular, Three.js',
+            'Versionshantering: Git, Github, Gitlab',
+            'Databaser: MongoDB, MySQL',
+            'Continuous Integration/Continuous Deployment (CI/CD): GitLab CI/CD, Github CI/CD',
+            'Verktyg för testning: Jest, Mocha, Chai',
+            'Utvecklingsmiljö: VS Code',
+            'Webbserver: Nginx',
+            'Operativssystem: macOS, Windows, Linux',
+            'Docker och Kubernetes (k8s)'
+        ]
+        
         this.div = document.querySelector('.game-description-container')
         this.div.innerHTML = ''
         const h1 = document.createElement('h1')
-        h1.textContent = 'Dessa programmeringspråk kan jag'
+        h1.textContent = 'Mina kompetenser:'
+
+        const keyDescription = document.createElement('div')
+        keyDescription.classList.add('info-list')
+        const ul = document.createElement('ul')
+
+        for (let i = 0; i < skills.length; i++) {
+            const li = document.createElement('li');
+            li.textContent = skills[i];
+            ul.appendChild(li);
+          }
 
         this.div.appendChild(h1)
+        keyDescription.appendChild(ul)
+        this.div.appendChild(keyDescription)
+        
     }
 
     hide() {

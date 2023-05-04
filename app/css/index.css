@@ -1,4 +1,5 @@
 @import './gameDescription.css';
+@import './computerDescription.css';
 @import './loader.css';
 body {
     background-color: black;
