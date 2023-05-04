@@ -88,11 +88,11 @@ export class Main {
         this.previousRAF = time
       }
 
-      // if (this.loadingManager.isDoneLoading) {
-      //   this.renderer.render(this.scene, this.camera)
-      //   this.#update(time - this.previousRAF)
-      //   this.previousRAF = time
-      // } 
+      if (this.loadingManager.isDoneLoading) {
+        this.renderer.render(this.scene, this.camera)
+        this.#update(time - this.previousRAF)
+        this.previousRAF = time
+      } 
 
       this.#RAF()
     })

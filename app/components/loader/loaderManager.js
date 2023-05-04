@@ -33,7 +33,7 @@ export class LoadingManager {
     }
 
     #hide() {
-        // this.container.style.display = 'none'
+        this.container.style.display = 'none'
     }
 
     #addContent() {
