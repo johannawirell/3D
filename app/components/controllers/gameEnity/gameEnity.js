@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 export class GameEnity {
     constructor(params) {
         this.entityManager = params.entityManager
+        this.loadingManager = params.loadingManager
         this.camera = params.camera
         this.scene = params.scene
         this.states = {}
@@ -40,7 +41,7 @@ export class GameEnity {
 
     async loadGLTF(path) {
        await new Promise(resolve => {
-        new GLTFLoader().load(path, gltf => {
+        new GLTFLoader(this.loadingManager).load(path, gltf => {
             let model = gltf.scene
             model = this.position(model)
             model.traverse(obj => {

@@ -127,6 +127,7 @@ export class Main {
       scene: this.scene,
       planePosition: this.plane.position,
       entityManager: this.entityManager,
+      // loadingManager: this.loadingManager,
       move: false,
       isIndoors: true
     })

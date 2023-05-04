@@ -107,7 +107,7 @@ export class IndoorPlane {
 
         this.interior = new Interior({
             entityManager: this.entityManager,
-            camera: this.camera,
+            loadingManager: this.loadingManager,
             scene: this.scene
         })
     }
