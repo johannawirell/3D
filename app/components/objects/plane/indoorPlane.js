@@ -34,6 +34,10 @@ export class IndoorPlane {
         return this.interior.getComputerPosition()
     }
 
+    getSpheres() {
+        return this.interior.getSpheres()
+    }
+
     update(time) {
         if (this.door) {
             this.door.update(time)

@@ -58,9 +58,9 @@ export class GameEnity {
             if (path.includes('horse') || path.includes('dog')) {
                 const box = new THREE.Box3().setFromObject(model)
                 const sphereRadius = box.getBoundingSphere(new THREE.Sphere()).radius
-                this.sphere = this.#createBoundingSphere(model, sphereRadius)
+                this.sphere = this.createBoundingSphere(model, sphereRadius)
             } else {
-                this.sphere = this.#createBoundingSphere(model)
+                this.sphere = this.createBoundingSphere(model)
             }
 
             this.target = model
@@ -81,7 +81,7 @@ export class GameEnity {
 
     
 
-    #createBoundingSphere(model, radius) {
+    createBoundingSphere(model, radius) {
         if (!radius) {
             const boundingSphere = new THREE.Sphere()
             const box = new THREE.Box3().setFromObject(model)
@@ -199,7 +199,7 @@ export class GameEnity {
         const obstacle = new YUKA.GameEntity()
         obstacle.position.copy(model.position)
         this.entityManager.add(obstacle)
-        this.sphere = this.#createBoundingSphere(model)
+        this.sphere = this.createBoundingSphere(model)
  
         return obstacle
     }

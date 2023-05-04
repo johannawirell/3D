@@ -10,10 +10,14 @@ export class Indoors {
           this.player = params.player
           this.loading = params.loading
           this.entityManager = params.entityManager
+
      }
 
 
      async update(time) {
+          if (!this.addedSpheres) {
+               this.#addObstaclesToPlayer()
+             }
           this.playerPosition = this.player.getPosition()
           // if (!this.doorPosition) {
           //      this.doorPosition = this.plane.getDoorPosition()
@@ -47,7 +51,7 @@ export class Indoors {
      }
      
      #shouldShowComputer() {
-          return this.playerPosition.distanceTo(this.computerPosition) <= 11
+          return this.playerPosition.distanceTo(this.computerPosition) <= 15
      }
 
      shouldMoveOutdoors() {
@@ -55,4 +59,12 @@ export class Indoors {
      }
 
      moveOutdoors() {}
+
+     #addObstaclesToPlayer() {
+          const obstacleSpheres = this.plane.getSpheres()
+          if (obstacleSpheres) {
+              this.player.addObstacleSpheres(obstacleSpheres)
+              this.addedSpheres = true
+          }
+     }
 }
