@@ -25,6 +25,10 @@ export class Plane {
         })
     }
 
+    getDoorPosition() {
+        return this.plane.getDoorPosition()
+    }
+
     getComputerPosition() {
         return this.plane.getComputerPosition()
     }

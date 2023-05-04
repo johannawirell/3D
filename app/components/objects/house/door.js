@@ -7,6 +7,7 @@ export class Door extends GameEnity {
     currentState = null
     constructor(params) {
         super(params)
+        this.states = {Idle: 'Idle', Open: 'Open'}
         this.#loadDoor()
     }
 
@@ -14,7 +15,6 @@ export class Door extends GameEnity {
         await this.loadGLTF(PATH_TO_DOOR)
         this.target.name = 'door'
         this.open = this.animationsMap.get('DoorAction.001')
-        this.open.play()
     }
 
     getPosition() {
@@ -23,33 +23,27 @@ export class Door extends GameEnity {
         }
     }
 
-    open() {
-        const newAction = this.states.DoorAction
+    #open() {
+        const newAction = this.states.Open
 
         if (this.currentState !== newAction) {
-            this.#updateAnimation(newAction)
+            this.open.play()
+            this.currentState = newAction
         }
     }
 
-    #updateAnimation(newAction) {
-        const toPlay = this.animationsMap.get(newAction)
-        toPlay.play()
-        this.setState(newAction)
-    }
 
-
-    update(time, shouldOpen) {
+    update(time) {
         if (this.mixer) {
             this.mixer.update(time)
         }
 
-        // if (shouldOpen) {
-        //     this.open()
-        // }
+        this.#open()
     }
 
     position(model) {
         model.scale.set(5, 5, 5)
+        model.position.set(0, 0, 45)
 
 
         return this.addTranparency(model)

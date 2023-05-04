@@ -27,7 +27,7 @@ export class IndoorPlane {
     }
 
     getDoorPosition() {
-        // return this.door.position
+        return this.door.getPosition()
     }
 
     getComputerPosition() {

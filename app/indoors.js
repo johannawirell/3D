@@ -18,12 +18,11 @@ export class Indoors {
           if (!this.addedSpheres) {
                this.#addObstaclesToPlayer()
           }
-          this.plane.update(time)
+          
           this.playerPosition = this.player.getPosition()
-          // if (!this.doorPosition) {
-          //      this.doorPosition = this.plane.getDoorPosition()
-          // } 
-
+          if (!this.doorPosition) {
+               this.doorPosition = this.plane.getDoorPosition()
+          } 
           if (!this.computerPosition) {
                this.computerPosition = await this.plane.getComputerPosition()
           } else if (!this.playComputer){
@@ -46,6 +45,11 @@ export class Indoors {
                this.computerDescription.hide()
           }
 
+          if (this.#shouldOpenDoor()) {
+               console.log('open')
+               this.plane.update(time)
+          }
+
           if (this.computerDescription) {
                this.computerDescription.update(this.camera)
           }
@@ -55,10 +59,9 @@ export class Indoors {
           return this.playerPosition.distanceTo(this.computerPosition) <= 15
      }
 
-     shouldMoveOutdoors() {
-
+     #shouldOpenDoor() {
+          return this.playerPosition.distanceTo(this.doorPosition) <= 15
      }
-
      moveOutdoors() {}
 
      #addObstaclesToPlayer() {
