@@ -125,7 +125,7 @@ export class Main {
     }
     if (this.indoors) {
       this.indoors.update(seconds)
-      if(this.indoors.shouldMoveOutdoors() && !this.hasMoved) {
+      if (this.indoors.shouldMoveOutdoors() && !this.hasMoved) {
         this.#moveOutdoors()
         this.hasMoved = true
       }
@@ -146,7 +146,22 @@ export class Main {
 
     this.plane.delete()
 
+
     this.indoors = null
+    this.#createOutdoors()
+   
+  }
+
+  #createOutdoors() {
+    this.outdoors = new Outdoors({
+      camera: this.camera,
+      scene: this.scene,
+      plane: this.plane,
+      player: this.player,
+      entityManager: this.entityManager,
+    })
+
+    this.plane.createOutdoorPlane()
   }
 
   #loadAnimateModel() {
@@ -174,14 +189,7 @@ export class Main {
       loading: this.loadingManager
     })
 
-
-    // this.outdoors = new Outdoors({
-    //   camera: this.camera,
-    //   scene: this.scene,
-    //   plane: this.plane,
-    //   player: this.player,
-    //   entityManager: this.entityManager,
-    // })
+    
   }
 
   #createPlane() {
@@ -192,7 +200,7 @@ export class Main {
     })
 
     this.plane.createIndoorPlane()
-    // this.plane.createOutdoorPlane()
+    
   }
 
   #createRenderer() {
