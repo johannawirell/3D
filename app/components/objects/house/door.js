@@ -14,7 +14,7 @@ export class Door extends GameEnity {
     async #loadDoor() {
         await this.loadGLTF(PATH_TO_DOOR)
         this.target.name = 'door'
-        this.open = this.animationsMap.get('DoorAction.001')
+        this.open = this.animationsMap.get('DoorAction')
     }
 
     getPosition() {
@@ -42,7 +42,7 @@ export class Door extends GameEnity {
     }
 
     position(model) {
-        model.scale.set(5, 5, 5)
+        model.scale.set(6, 6, 6)
         model.position.set(0, 0, 45)
 
 
