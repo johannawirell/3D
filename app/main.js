@@ -125,7 +125,28 @@ export class Main {
     }
     if (this.indoors) {
       this.indoors.update(seconds)
+      if(this.indoors.shouldMoveOutdoors() && !this.hasMoved) {
+        this.#moveOutdoors()
+        this.hasMoved = true
+      }
     }
+
+    
+  }
+
+  #moveOutdoors() {
+    for (const child of this.scene.children) {
+      console.log(child.name)
+      if(!child.type.includes('Light')) {
+        if (child.name !== 'Scene') {
+          child.parent.remove(child)
+        }        
+      }
+    }
+
+    this.plane.delete()
+
+    this.indoors = null
   }
 
   #loadAnimateModel() {

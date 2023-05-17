@@ -13,7 +13,6 @@ export class Indoors {
 
      }
 
-
      async update(time) {
           if (!this.addedSpheres) {
                this.#addObstaclesToPlayer()
@@ -37,8 +36,7 @@ export class Indoors {
                     } else {
                          this.computerDescription.show()
                     }
-                   
-                       this.playComputer = true
+                    this.playComputer = true
                } 
           } else if (this.playComputer && !this.#shouldShowComputer()) {
                this.playComputer = false
@@ -46,7 +44,7 @@ export class Indoors {
           }
 
           if (this.#shouldOpenDoor()) {
-               console.log('open')
+               this.outdoors = true
                this.plane.update(time)
           }
 
@@ -62,7 +60,10 @@ export class Indoors {
      #shouldOpenDoor() {
           return this.playerPosition.distanceTo(this.doorPosition) <= 15
      }
-     moveOutdoors() {}
+
+     shouldMoveOutdoors() {
+          return this.outdoors
+     }
 
      #addObstaclesToPlayer() {
           const obstacleSpheres = this.plane.getSpheres()

@@ -64,7 +64,10 @@ export class GameEnity {
                 this.sphere = this.createBoundingSphere(model)
             }
 
+           
+
             this.target = model
+            this.target.name = model.name
             this.scene.add(model)
             this.gltfAnimation = gltf.animations
             this.mixer = new THREE.AnimationMixer(model)

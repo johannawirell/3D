@@ -9,6 +9,10 @@ export class Plane {
         this.entityManager = params.entityManager
     }
 
+    delete() {
+        this.plane.delete()
+    }
+
     createOutdoorPlane() {
         this.plane = new OutdoorPlane({
             scene: this.scene,

@@ -65,12 +65,12 @@ export class IndoorPlane {
         const textureLoader = new THREE.TextureLoader(this.loadingManager)
         const texture = textureLoader.load(RESOURCES.carpet)
         const material = new THREE.MeshBasicMaterial({ map: texture })
-        const planeMesh = new THREE.Mesh(planeGeometry, material)
+        this.carpet = new THREE.Mesh(planeGeometry, material)
 
-        planeMesh.position.set(0, 0.1, 0)
-        planeMesh.rotation.x = -Math.PI / 2
+        this.carpet.position.set(0, 0.1, 0)
+        this.carpet.rotation.x = -Math.PI / 2
 
-        this.scene.add(planeMesh)
+        this.scene.add(this.carpet)
     }
 
     #createWalls() {
@@ -84,8 +84,8 @@ export class IndoorPlane {
         const frontWall = this.createWall(0, wallHeight / 2, -height / 2, width, wallHeight, wallThickness, 0x7A7474)
         const backWall = this.createWall(0, wallHeight / 2, height / 2, width, wallHeight, wallThickness, 0xBDBDBD)
         
-        const walls = [leftWall, rightWall, frontWall, backWall]
-        walls.forEach(wall => this.scene.add(wall))
+        this.walls = [leftWall, rightWall, frontWall, backWall]
+        this.walls.forEach(wall => this.scene.add(wall))
     }
         
     createWall(x, y, z, width, height, depth, color) {
@@ -95,6 +95,11 @@ export class IndoorPlane {
         wall.position.set(x, y, z)
         wall.castShadow = true
         return wall
+    }
+
+    delete() {
+        this.walls.forEach(wall => this.scene.remove(wall))
+        this.scene.remove(this.carpet)
     }
 
     async #loadContent() {
